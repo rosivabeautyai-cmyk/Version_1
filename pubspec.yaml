@@ -12,6 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_localizations:
+    sdk: flutter
+
   cupertino_icons: ^1.0.8
 
   # Firebase
@@ -36,7 +39,7 @@ dependencies:
   google_fonts: ^6.3.1
   flutter_screenutil: ^5.9.3
 
-  # Localization & Formatting
+  # Localization
   intl: ^0.20.2
 
   # Local Storage
@@ -45,7 +48,7 @@ dependencies:
   # Icons
   flutter_svg: ^2.2.0
 
-  # URL Launcher (Affiliate Links)
+  # URL Launcher
   url_launcher: ^6.3.2
 
   # Loading Animations
@@ -58,8 +61,19 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 flutter:
+  generate: true
+
   uses-material-design: true
 
   assets:
-    - assets/images/
+    - assets/image/
     - assets/icons/
+
+  fonts:
+    - family: BeVietnamPro
+      fonts:
+        - asset: assets/fonts/BeVietnamPro-Regular.ttf
+
+    - family: PlayfairDisplaySC
+      fonts:
+        - asset: assets/fonts/PlayfairDisplaySC-Regular.ttf

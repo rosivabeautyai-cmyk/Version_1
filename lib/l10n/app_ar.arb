@@ -1,0 +1,20 @@
+{
+  "@@locale": "ar",
+
+  "welcome": "مرحباً بك في ROSIVA",
+  "chooseLanguage": "اختر لغتك المفضلة",
+  "continueButton": "استمرار",
+  "skip":"تخطي",
+
+  "next": "التالي",
+  "getStarted": "ابدئي الآن",
+
+  "onboardingTitle1": "اكتشفي عالم الجمال بالذكاء الاصطناعي",
+  "onboardingDescription1": "مساعدكِ الذكي يساعدكِ على العثور على أفضل منتجات العناية بالبشرة والمكياج المناسبة لكِ.",
+
+  "onboardingTitle2": "نصائح مخصصة لكِ",
+  "onboardingDescription2": "تحدثي مع ROSIVA في أي وقت للحصول على نصائح وروتين عناية يناسب احتياجاتكِ.",
+
+  "onboardingTitle3": "تسوقي بثقة",
+  "onboardingDescription3": "اكتشفي منتجات موثوقة وتسوقي بسهولة وأمان."
+}

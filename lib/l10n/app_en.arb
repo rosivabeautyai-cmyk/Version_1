@@ -1,0 +1,20 @@
+{
+  "@@locale": "en",
+
+  "welcome": "Welcome to ROSIVA",
+  "chooseLanguage": "Choose your preferred language",
+  "continueButton": "Continue",
+  "skip":"skip",
+
+  "next": "Next",
+  "getStarted": "Get Started",
+
+  "onboardingTitle1": "Discover Beauty with AI",
+  "onboardingDescription1": "Your smart beauty assistant helps you find the best skincare and makeup products for you.",
+
+  "onboardingTitle2": "Personalized Beauty Advice",
+  "onboardingDescription2": "Chat with ROSIVA anytime to receive personalized beauty tips and routines.",
+
+  "onboardingTitle3": "Shop with Confidence",
+  "onboardingDescription3": "Explore trusted beauty products and shop securely."
+}
