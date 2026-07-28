@@ -1,0 +1,287 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+import '../../../core/services/remember_me_service.dart';
+import '../data/repositories/auth_repository.dart';
+import '../data/services/auth_service.dart';
+
+/// Central ChangeNotifier that drives every screen in the auth module.
+///
+/// Holds text controllers, UI flags, and orchestrates calls into
+/// [AuthRepository]. Screens should only ever read from / call into
+/// this provider — never touch Firebase or the repository directly.
+class AuthProvider extends ChangeNotifier {
+  final AuthRepository _repository;
+
+  AuthProvider({AuthRepository? repository})
+      : _repository = repository ?? AuthRepository() {
+    _restoreRememberedEmail();
+  }
+
+  // ---------------------------------------------------------------------
+  // Controllers
+  // ---------------------------------------------------------------------
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController forgotEmailController = TextEditingController();
+
+  // ---------------------------------------------------------------------
+  // UI State
+  // ---------------------------------------------------------------------
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  bool _obscurePassword = true;
+  bool get obscurePassword => _obscurePassword;
+
+  bool _obscureConfirmPassword = true;
+  bool get obscureConfirmPassword => _obscureConfirmPassword;
+
+  bool _rememberMe = false;
+  bool get rememberMe => _rememberMe;
+
+  bool _agreedToTerms = false;
+  bool get agreedToTerms => _agreedToTerms;
+
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
+  bool _isResendingEmail = false;
+  bool get isResendingEmail => _isResendingEmail;
+
+  bool _isCheckingVerification = false;
+  bool get isCheckingVerification => _isCheckingVerification;
+
+  bool get isAppleSignInAvailable => _repository.isAppleSignInAvailable;
+
+  User? get currentUser => _repository.currentUser;
+
+  Stream<User?> get authStateChanges => _repository.authStateChanges;
+
+  // ---------------------------------------------------------------------
+  // UI togglers
+  // ---------------------------------------------------------------------
+  void togglePassword() {
+    _obscurePassword = !_obscurePassword;
+    notifyListeners();
+  }
+
+  void toggleConfirmPassword() {
+    _obscureConfirmPassword = !_obscureConfirmPassword;
+    notifyListeners();
+  }
+
+  void toggleRememberMe() {
+    _rememberMe = !_rememberMe;
+    notifyListeners();
+  }
+
+  void toggleAgreedToTerms() {
+    _agreedToTerms = !_agreedToTerms;
+    notifyListeners();
+  }
+
+  void clearError() {
+    _errorMessage = null;
+    notifyListeners();
+  }
+
+  void _setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  Future<void> _restoreRememberedEmail() async {
+    final remembered = await RememberMeService.getRememberMe();
+    if (remembered) {
+      final savedEmail = await RememberMeService.getSavedEmail();
+      _rememberMe = true;
+      if (savedEmail != null) {
+        emailController.text = savedEmail;
+      }
+      notifyListeners();
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Actions
+  // ---------------------------------------------------------------------
+
+  /// Logs in with email + password. Returns true on success.
+  Future<bool> login() async {
+    _errorMessage = null;
+    _setLoading(true);
+    try {
+      await _repository.login(
+        email: emailController.text.trim(),
+        password: passwordController.text,
+      );
+      await RememberMeService.setRememberMe(
+        _rememberMe,
+        email: emailController.text.trim(),
+      );
+      return true;
+    } on AuthFailure catch (e) {
+      _errorMessage = e.message;
+      return false;
+    } catch (_) {
+      _errorMessage = 'Something went wrong. Please try again.';
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Registers a new account, creates the Firestore doc, and sends
+  /// the verification email. Returns true on success.
+  Future<bool> register() async {
+    _errorMessage = null;
+    _setLoading(true);
+    try {
+      await _repository.register(
+        fullName: nameController.text.trim(),
+        email: emailController.text.trim(),
+        password: passwordController.text,
+      );
+      return true;
+    } on AuthFailure catch (e) {
+      _errorMessage = e.message;
+      return false;
+    } catch (_) {
+      _errorMessage = 'Something went wrong. Please try again.';
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Signs in with Google. Returns true on success.
+  Future<bool> googleSignIn() async {
+    _errorMessage = null;
+    _setLoading(true);
+    try {
+      await _repository.googleSignIn();
+      return true;
+    } on AuthFailure catch (e) {
+      _errorMessage = e.message;
+      return false;
+    } catch (_) {
+      _errorMessage = 'Google sign-in failed. Please try again.';
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Signs in with Apple. Returns true on success.
+  Future<bool> appleSignIn() async {
+    _errorMessage = null;
+    _setLoading(true);
+    try {
+      await _repository.appleSignIn();
+      return true;
+    } on AuthFailure catch (e) {
+      _errorMessage = e.message;
+      return false;
+    } catch (_) {
+      _errorMessage = 'Apple sign-in failed. Please try again.';
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Signs the current user out and clears all controllers.
+  Future<void> logout() async {
+    _setLoading(true);
+    try {
+      await _repository.logout();
+      _clearControllers();
+    } on AuthFailure catch (e) {
+      _errorMessage = e.message;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Sends a password reset email. Returns true on success.
+  Future<bool> forgotPassword() async {
+    _errorMessage = null;
+    _setLoading(true);
+    try {
+      await _repository.forgotPassword(
+        email: forgotEmailController.text.trim(),
+      );
+      return true;
+    } on AuthFailure catch (e) {
+      _errorMessage = e.message;
+      return false;
+    } catch (_) {
+      _errorMessage = 'Something went wrong. Please try again.';
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  /// Resends the verification email to the current user.
+  Future<bool> sendVerificationEmail() async {
+    _errorMessage = null;
+    _isResendingEmail = true;
+    notifyListeners();
+    try {
+      await _repository.sendVerificationEmail();
+      return true;
+    } on AuthFailure catch (e) {
+      _errorMessage = e.message;
+      return false;
+    } catch (_) {
+      _errorMessage = 'Failed to resend email. Please try again.';
+      return false;
+    } finally {
+      _isResendingEmail = false;
+      notifyListeners();
+    }
+  }
+
+  /// Reloads the current user and returns whether the email is verified.
+  Future<bool> reloadUser() async {
+    _isCheckingVerification = true;
+    notifyListeners();
+    try {
+      return await _repository.reloadAndCheckVerification();
+    } on AuthFailure catch (e) {
+      _errorMessage = e.message;
+      return false;
+    } catch (_) {
+      return false;
+    } finally {
+      _isCheckingVerification = false;
+      notifyListeners();
+    }
+  }
+
+  void _clearControllers() {
+    emailController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+    nameController.clear();
+    forgotEmailController.clear();
+    _agreedToTerms = false;
+    _obscurePassword = true;
+    _obscureConfirmPassword = true;
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    nameController.dispose();
+    forgotEmailController.dispose();
+    super.dispose();
+  }
+}

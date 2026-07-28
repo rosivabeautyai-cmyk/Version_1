@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1075173890462",
+    "project_id": "rosiva-24fa4",
+    "storage_bucket": "rosiva-24fa4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075173890462:android:65f766344257a2144a9e8f",
+        "android_client_info": {
+          "package_name": "com.example.rosivia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRO5OnSCIqeIRt-hyKANQwz9I0plu8TMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

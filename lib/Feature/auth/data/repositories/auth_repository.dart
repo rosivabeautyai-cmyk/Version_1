@@ -1,0 +1,173 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../models/user_model.dart';
+import '../services/auth_service.dart';
+
+/// AuthRepository contains the business logic for authentication.
+///
+/// It calls into [AuthService] for raw Firebase operations and into
+/// Cloud Firestore for user document persistence. Presentation code
+/// (the provider) should only ever talk to this repository — never
+/// directly to Firebase.
+class AuthRepository {
+  final AuthService _authService;
+  final FirebaseFirestore _firestore;
+
+  static const String _usersCollection = 'users';
+
+  AuthRepository({
+    AuthService? authService,
+    FirebaseFirestore? firestore,
+  })  : _authService = authService ?? AuthService(),
+        _firestore = firestore ?? FirebaseFirestore.instance;
+
+  Stream<User?> get authStateChanges => _authService.authStateChanges;
+
+  User? get currentUser => _authService.currentUser;
+
+  bool get isAppleSignInAvailable => AuthService.isAppleSignInAvailable;
+
+  CollectionReference<Map<String, dynamic>> get _usersRef =>
+      _firestore.collection(_usersCollection);
+
+  /// Logs in a user and updates their `lastLogin` timestamp.
+  Future<User> login({
+    required String email,
+    required String password,
+  }) async {
+    final credential = await _authService.login(email: email, password: password);
+    final user = credential.user;
+    if (user == null) {
+      throw const AuthFailure('unknown', 'Login failed. Please try again.');
+    }
+    await _touchLastLogin(user.uid);
+    return user;
+  }
+
+  /// Registers a new user, creates their Firestore document, and
+  /// sends the email verification link.
+  Future<User> register({
+    required String fullName,
+    required String email,
+    required String password,
+  }) async {
+    final credential = await _authService.register(
+      email: email,
+      password: password,
+    );
+    final user = credential.user;
+    if (user == null) {
+      throw const AuthFailure(
+        'unknown',
+        'Registration failed. Please try again.',
+      );
+    }
+
+    await user.updateDisplayName(fullName);
+
+    final newUser = UserModel.newUser(
+      uid: user.uid,
+      fullName: fullName,
+      email: email.trim(),
+      photoUrl: user.photoURL,
+      isEmailVerified: user.emailVerified,
+    );
+
+    await _usersRef.doc(user.uid).set(newUser.toCreateMap());
+    await _authService.verifyEmail();
+
+    return user;
+  }
+
+  /// Signs out the current user from Firebase, Google, and Apple.
+  Future<void> logout() => _authService.logout();
+
+  /// Sends a password reset email.
+  Future<void> forgotPassword({required String email}) =>
+      _authService.forgotPassword(email: email);
+
+  /// Resends the email verification link to the current user.
+  Future<void> sendVerificationEmail() => _authService.verifyEmail();
+
+  /// Reloads the current user and returns whether their email is
+  /// now verified. Also syncs the flag to Firestore when it flips.
+  Future<bool> reloadAndCheckVerification() async {
+    final user = await _authService.reloadUser();
+    if (user == null) return false;
+
+    if (user.emailVerified) {
+      await _usersRef.doc(user.uid).update({'isEmailVerified': true});
+    }
+
+    return user.emailVerified;
+  }
+
+  /// Signs in with Google, creating a Firestore document on first login.
+  Future<User> googleSignIn() async {
+    final credential = await _authService.googleSignIn();
+    final user = credential.user;
+    if (user == null) {
+      throw const AuthFailure(
+        'unknown',
+        'Google sign-in failed. Please try again.',
+      );
+    }
+    await _createUserDocIfMissing(
+      user: user,
+      isFirstLogin: credential.additionalUserInfo?.isNewUser ?? false,
+    );
+    await _touchLastLogin(user.uid);
+    return user;
+  }
+
+  /// Signs in with Apple, creating a Firestore document on first login.
+  Future<User> appleSignIn() async {
+    final credential = await _authService.appleSignIn();
+    final user = credential.user;
+    if (user == null) {
+      throw const AuthFailure(
+        'unknown',
+        'Apple sign-in failed. Please try again.',
+      );
+    }
+    await _createUserDocIfMissing(
+      user: user,
+      isFirstLogin: credential.additionalUserInfo?.isNewUser ?? false,
+    );
+    await _touchLastLogin(user.uid);
+    return user;
+  }
+
+  /// Fetches the Firestore user document for the given uid.
+  Future<UserModel?> getUserData(String uid) async {
+    final doc = await _usersRef.doc(uid).get();
+    if (!doc.exists) return null;
+    return UserModel.fromSnapshot(doc);
+  }
+
+  Future<void> _createUserDocIfMissing({
+    required User user,
+    required bool isFirstLogin,
+  }) async {
+    final docRef = _usersRef.doc(user.uid);
+    final doc = await docRef.get();
+
+    if (!doc.exists) {
+      final newUser = UserModel.newUser(
+        uid: user.uid,
+        fullName: user.displayName ?? 'ROSIVA User',
+        email: user.email ?? '',
+        photoUrl: user.photoURL,
+        isEmailVerified: user.emailVerified,
+      );
+      await docRef.set(newUser.toCreateMap());
+    }
+  }
+
+  Future<void> _touchLastLogin(String uid) async {
+    await _usersRef.doc(uid).update({
+      'lastLogin': FieldValue.serverTimestamp(),
+    });
+  }
+}

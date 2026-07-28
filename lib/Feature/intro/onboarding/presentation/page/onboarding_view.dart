@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rosivia/Feature/auth/presentation/auth_gate/auth_gate.dart';
 import 'package:rosivia/Feature/intro/onboarding/data/onboarding_data.dart';
 import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/core/widgets/main_button.dart';
@@ -23,7 +24,9 @@ class _OnboardingViewState extends State<OnboardingView> {
   }
 
   void finishOnboarding() {
-    // Navigator.pushReplacement(...)
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const AuthGate()),
+    );
   }
 
   void nextPage() {

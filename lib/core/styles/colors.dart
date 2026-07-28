@@ -7,4 +7,5 @@ abstract class AppColors {
   static const Color bordercolor = Color(0xffF6F3F2);
   static const Color errorcolor = Color(0xffFF0000);
   static const Color blackcolor = Color(0xff1B1B1C);
+  
 }
