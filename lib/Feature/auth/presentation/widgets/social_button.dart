@@ -38,11 +38,9 @@ class SocialButton extends StatelessWidget {
             ? SizedBox(
                 height: 20.h,
                 width: 20.h,
-                child: CircularProgressIndicator(
+                child: const CircularProgressIndicator(
                   strokeWidth: 2.2,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    isDark ? AppColors.primary : AppColors.primary,
-                  ),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                 ),
               )
             : Row(

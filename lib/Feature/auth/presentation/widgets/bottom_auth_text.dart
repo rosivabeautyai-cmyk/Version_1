@@ -35,7 +35,7 @@ class BottomAuthText extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w700,
-                color: AppColors.background,
+                color: AppColors.primary,
               ),
             ),
           ),

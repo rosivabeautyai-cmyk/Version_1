@@ -143,7 +143,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   height: 140.h,
                   width: 140.h,
                   decoration: BoxDecoration(
-                    
+                    color: AppColors.primary,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(

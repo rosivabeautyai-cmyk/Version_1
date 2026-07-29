@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rosivia/core/styles/colors.dart';
 
-
 /// A themed text field used across the auth flow (name, email, etc.).
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -37,15 +36,10 @@ class AuthTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+        Text(label, style: Theme.of(context).textTheme.labelLarge),
         SizedBox(height: 8.h),
         TextFormField(
           controller: controller,
@@ -57,19 +51,10 @@ class AuthTextField extends StatelessWidget {
           onFieldSubmitted: onFieldSubmitted,
           onChanged: onChanged,
           enabled: enabled,
-          style: TextStyle(
-            fontSize: 15.sp,
-            color: isDark
-                ? AppColors.primary
-                : AppColors.primary,
-          ),
+          style: TextStyle(fontSize: 15.sp, color: AppColors.blackcolor),
           decoration: InputDecoration(
             hintText: hint,
-            prefixIcon: Icon(
-              prefixIcon,
-              size: 20.sp,
-              color: AppColors.background,
-            ),
+            prefixIcon: Icon(prefixIcon, size: 20.sp, color: AppColors.primary),
           ),
         ),
       ],

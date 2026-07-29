@@ -32,8 +32,6 @@ class PasswordTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -52,9 +50,7 @@ class PasswordTextField extends StatelessWidget {
           onChanged: onChanged,
           style: TextStyle(
             fontSize: 15.sp,
-            color: isDark
-                ? AppColors.primary
-                : AppColors.primary,
+            color: AppColors.blackcolor,
           ),
           decoration: InputDecoration(
             hintText: hint,

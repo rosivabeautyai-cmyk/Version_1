@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rosivia/core/styles/colors.dart';
 
-
 /// A primary button that shows a loading spinner in place of its
 /// label while an async action is in progress, and disables itself.
 class LoadingButton extends StatelessWidget {
@@ -28,14 +27,14 @@ class LoadingButton extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
-          color: disabled ? AppColors.bordercolor: null,
+          color: disabled ? AppColors.bordercolor : null,
           boxShadow: disabled
               ? null
               : [
                   BoxShadow(
-                    color: AppColors.bordercolor,
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
+                    color: AppColors.primary,
+                    blurRadius: 0,
+                    offset: const Offset(0, 0),
                   ),
                 ],
         ),
@@ -55,8 +54,7 @@ class LoadingButton extends StatelessWidget {
                     width: 22.h,
                     child: const CircularProgressIndicator(
                       strokeWidth: 2.4,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
                 : Row(

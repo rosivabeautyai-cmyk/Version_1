@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rosivia/core/styles/colors.dart';
 
 class CustomSvg extends StatelessWidget {
   const CustomSvg({
@@ -22,7 +21,7 @@ class CustomSvg extends StatelessWidget {
       width: width,
       height: height,
       colorFilter: color != null
-          ? ColorFilter.mode(AppColors.primary, BlendMode.srcIn)
+          ? ColorFilter.mode(color!, BlendMode.srcIn)
           : null,
     );
   }

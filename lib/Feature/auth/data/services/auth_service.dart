@@ -1,12 +1,12 @@
-import 'dart:io' show Platform;
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'dart:math';
+
+import 'package:crypto/crypto.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 /// A thin wrapper around a [FirebaseAuthException] that carries a
 /// human-readable message already mapped from the Firebase error code.
@@ -236,7 +236,8 @@ class AuthService {
   /// Whether Apple Sign-In should be offered on this platform.
   static bool get isAppleSignInAvailable {
     if (kIsWeb) return false;
-    return Platform.isIOS || Platform.isMacOS;
+    return defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS;
   }
 
   String _generateNonce([int length = 32]) {
