@@ -4,7 +4,7 @@
   "welcome": "Welcome to ROSIVA",
   "chooseLanguage": "Choose your preferred language",
   "continueButton": "Continue",
-  "skip":"skip",
+  "skip": "Skip",
 
   "next": "Next",
   "getStarted": "Get Started",
@@ -16,5 +16,48 @@
   "onboardingDescription2": "Chat with ROSIVA anytime to receive personalized beauty tips and routines.",
 
   "onboardingTitle3": "Shop with Confidence",
-  "onboardingDescription3": "Explore trusted beauty products and shop securely."
+  "onboardingDescription3": "Explore trusted beauty products and shop securely.",
+
+  "welcomeBack": "Welcome back",
+  "loginSubtitle": "Sign in to continue your ROSIVA journey",
+
+  "email": "Email",
+  "emailHint": "you@example.com",
+
+  "password": "Password",
+  "passwordHint": "Enter your password",
+
+  "rememberMe": "Remember me",
+  "forgotPassword": "Forgot Password?",
+
+  "login": "Log In",
+
+  "orContinueWith": "Or continue with",
+
+  "dontHaveAccount": "Don't have an account?",
+  "signUp": "Sign Up",
+
+  "createAccount": "Create account",
+  "registerSubtitle": "Join ROSIVA and start your beauty ritual",
+
+  "fullName": "Full Name",
+  "fullNameHint": "Jane Doe",
+
+  "createStrongPassword": "Create a strong password",
+
+  "confirmPassword": "Confirm Password",
+  "confirmPasswordHint": "Re-enter your password",
+
+  "createAccountButton": "Create Account",
+
+  "alreadyHaveAccount": "Already have an account?",
+  "logIn": "Log In",
+
+  "agreeTermsMessage": "Please agree to the Terms of Service and Privacy Policy.",
+
+  "registrationFailed": "Registration failed. Please try again.",
+  "loginFailed": "Login failed. Please try again.",
+
+  "termsOfService": "Terms of Service",
+  "privacyPolicy": "Privacy Policy"
 }

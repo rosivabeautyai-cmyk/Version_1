@@ -4,7 +4,7 @@
   "welcome": "مرحباً بك في ROSIVA",
   "chooseLanguage": "اختر لغتك المفضلة",
   "continueButton": "استمرار",
-  "skip":"تخطي",
+  "skip": "تخطي",
 
   "next": "التالي",
   "getStarted": "ابدئي الآن",
@@ -16,6 +16,48 @@
   "onboardingDescription2": "تحدثي مع ROSIVA في أي وقت للحصول على نصائح وروتين عناية يناسب احتياجاتكِ.",
 
   "onboardingTitle3": "تسوقي بثقة",
-  "onboardingDescription3": "اكتشفي منتجات موثوقة وتسوقي بسهولة وأمان."
-  
+  "onboardingDescription3": "اكتشفي منتجات موثوقة وتسوقي بسهولة وأمان.",
+
+  "welcomeBack": "مرحباً بعودتك",
+  "loginSubtitle": "سجلي الدخول لمتابعة رحلتك مع ROSIVA",
+
+  "email": "البريد الإلكتروني",
+  "emailHint": "you@example.com",
+
+  "password": "كلمة المرور",
+  "passwordHint": "أدخلي كلمة المرور",
+
+  "rememberMe": "تذكرني",
+  "forgotPassword": "نسيتِ كلمة المرور؟",
+
+  "login": "تسجيل الدخول",
+
+  "orContinueWith": "أو تابعي باستخدام",
+
+  "dontHaveAccount": "ليس لديكِ حساب؟",
+  "signUp": "إنشاء حساب",
+
+  "createAccount": "إنشاء حساب",
+  "registerSubtitle": "انضمي إلى ROSIVA وابدئي روتين جمالك",
+
+  "fullName": "الاسم الكامل",
+  "fullNameHint": "نورهان ياسر",
+
+  "createStrongPassword": "أنشئي كلمة مرور قوية",
+
+  "confirmPassword": "تأكيد كلمة المرور",
+  "confirmPasswordHint": "أعيدي إدخال كلمة المرور",
+
+  "createAccountButton": "إنشاء الحساب",
+
+  "alreadyHaveAccount": "لديكِ حساب بالفعل؟",
+  "logIn": "تسجيل الدخول",
+
+  "agreeTermsMessage": "يرجى الموافقة على شروط الاستخدام وسياسة الخصوصية.",
+
+  "registrationFailed": "فشل إنشاء الحساب، يرجى المحاولة مرة أخرى.",
+  "loginFailed": "فشل تسجيل الدخول، يرجى المحاولة مرة أخرى.",
+
+  "termsOfService": "شروط الاستخدام",
+  "privacyPolicy": "سياسة الخصوصية"
 }
