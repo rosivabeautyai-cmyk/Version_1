@@ -328,6 +328,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy Policy'**
   String get privacyPolicy;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No worries, we\'ll send you reset instructions.'**
+  String get forgotPasswordSubtitle;
+
+  /// No description provided for @sendResetLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Reset Link'**
+  String get sendResetLink;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Login'**
+  String get backToLogin;
+
+  /// No description provided for @checkYourInbox.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your inbox'**
+  String get checkYourInbox;
+
+  /// No description provided for @resetLinkSentMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a password reset link to {email}. Follow the instructions to create a new password.'**
+  String resetLinkSentMessage(String email);
+
+  /// No description provided for @forgotPasswordFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send reset email.'**
+  String get forgotPasswordFailed;
+
+  /// No description provided for @continueWithGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get continueWithGoogle;
+
+  /// No description provided for @continueWithApple.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Apple'**
+  String get continueWithApple;
+
+  /// No description provided for @agreeToThe.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the '**
+  String get agreeToThe;
+
+  /// No description provided for @termsAnd.
+  ///
+  /// In en, this message translates to:
+  /// **' and '**
+  String get termsAnd;
+
+  /// No description provided for @signedInAndVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re signed in and verified.'**
+  String get signedInAndVerified;
+
+  /// No description provided for @logOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get logOut;
+
+  /// No description provided for @appName.
+  ///
+  /// In en, this message translates to:
+  /// **'ROSIVA'**
+  String get appName;
+
+  /// No description provided for @verifyYourEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your email'**
+  String get verifyYourEmail;
+
+  /// No description provided for @verifyEmailMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ve sent a verification link to\n{email}.\nTap the link in that email to activate your account.'**
+  String verifyEmailMessage(String email);
+
+  /// No description provided for @openMailApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Mail App'**
+  String get openMailApp;
+
+  /// No description provided for @iveVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ve Verified'**
+  String get iveVerified;
+
+  /// No description provided for @sending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending...'**
+  String get sending;
+
+  /// No description provided for @resendInSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {seconds}s'**
+  String resendInSeconds(int seconds);
+
+  /// No description provided for @resendEmailPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t get the email? Resend'**
+  String get resendEmailPrompt;
+
+  /// No description provided for @openMailManually.
+  ///
+  /// In en, this message translates to:
+  /// **'Please open your mail app manually.'**
+  String get openMailManually;
+
+  /// No description provided for @emailNotVerifiedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Your email is not verified yet. Please tap the link we sent you.'**
+  String get emailNotVerifiedYet;
+
+  /// No description provided for @resendEmailFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to resend email.'**
+  String get resendEmailFailed;
+
+  /// No description provided for @verificationEmailSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification email sent!'**
+  String get verificationEmailSent;
+
+  /// No description provided for @yourEmailFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'your email'**
+  String get yourEmailFallback;
+
+  /// No description provided for @emailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get emailRequired;
+
+  /// No description provided for @emailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get emailInvalid;
+
+  /// No description provided for @passwordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get passwordRequired;
+
+  /// No description provided for @passwordMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordMinLength;
+
+  /// No description provided for @passwordUppercase.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one uppercase letter'**
+  String get passwordUppercase;
+
+  /// No description provided for @passwordLowercase.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one lowercase letter'**
+  String get passwordLowercase;
+
+  /// No description provided for @passwordNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one number'**
+  String get passwordNumber;
+
+  /// No description provided for @passwordSpecialChar.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one special character'**
+  String get passwordSpecialChar;
+
+  /// No description provided for @loginPasswordMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters'**
+  String get loginPasswordMinLength;
+
+  /// No description provided for @confirmPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm your password'**
+  String get confirmPasswordRequired;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @fullNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name is required'**
+  String get fullNameRequired;
+
+  /// No description provided for @fullNameInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid full name'**
+  String get fullNameInvalid;
+
+  /// No description provided for @fullNameLettersOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Name can only contain letters'**
+  String get fullNameLettersOnly;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

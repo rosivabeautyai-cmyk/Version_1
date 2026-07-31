@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rosivia/core/styles/colors.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 
 /// A labeled divider used to separate email auth from social auth,
 /// e.g. "or continue with".
 class AuthDivider extends StatelessWidget {
-  final String label;
+  final String? label;
 
-  const AuthDivider({super.key, this.label = 'or continue with'});
+  const AuthDivider({super.key, this.label});
 
   @override
   Widget build(BuildContext context) {
     const lineColor = AppColors.bordercolor;
+    final lang = AppLocalizations.of(context)!;
+    final resolvedLabel = label ?? lang.orContinueWith;
 
     return Row(
       children: [
@@ -20,7 +23,7 @@ class AuthDivider extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
           child: Text(
-            label,
+            resolvedLabel,
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ),

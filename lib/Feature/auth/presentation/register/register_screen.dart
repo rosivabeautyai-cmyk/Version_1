@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/functions/validators.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../../../core/services/snackbar_service.dart';
 import '../../auth_routes.dart';
@@ -30,13 +31,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isAppleLoading = false;
 
   Future<void> _handleRegister(AuthProvider auth) async {
+    final lang = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
 
     if (!auth.agreedToTerms) {
       SnackbarService.warning(
         context,
-        'Please agree to the Terms of Service and Privacy Policy.',
+        lang.agreeTermsMessage,
       );
       return;
     }
@@ -49,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } else {
       SnackbarService.error(
         context,
-        auth.errorMessage ?? 'Registration failed. Please try again.',
+        auth.errorMessage ?? lang.registrationFailed,
       );
     }
   }
@@ -87,6 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
+    final lang = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SafeArea(
@@ -98,10 +101,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(height: 24.h),
-                const AuthHeader(
+                AuthHeader(
                   icon: Icons.auto_awesome_rounded,
-                  title: 'Create account',
-                  subtitle: 'Join ROSIVA and start your beauty ritual',
+                  title: lang.createAccount,
+                  subtitle: lang.registerSubtitle,
                 ),
                 SizedBox(height: 32.h),
 
@@ -127,48 +130,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       AuthTextField(
                         controller: auth.nameController,
-                        label: 'Full Name',
-                        hint: 'Jane Doe',
+                        label: lang.fullName,
+                        hint: lang.fullNameHint,
                         prefixIcon: Icons.person_outline_rounded,
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.next,
-                        validator: Validators.fullName,
+                        validator: (value) =>
+                            Validators.fullName(value, lang),
                       ),
 
                       SizedBox(height: 18.h),
 
                       AuthTextField(
                         controller: auth.emailController,
-                        label: 'Email',
-                        hint: 'you@example.com',
+                        label: lang.email,
+                        hint: lang.emailHint,
                         prefixIcon: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
-                        validator: Validators.email,
+                        validator: (value) => Validators.email(value, lang),
                       ),
 
                       SizedBox(height: 18.h),
 
                       PasswordTextField(
                         controller: auth.passwordController,
-                        label: 'Password',
-                        hint: 'Create a strong password',
+                        label: lang.password,
+                        hint: lang.createStrongPassword,
                         obscureText: auth.obscurePassword,
                         onToggleVisibility: auth.togglePassword,
-                        validator: Validators.password,
+                        validator: (value) =>
+                            Validators.password(value, lang),
                       ),
 
                       SizedBox(height: 18.h),
 
                       PasswordTextField(
                         controller: auth.confirmPasswordController,
-                        label: 'Confirm Password',
-                        hint: 'Re-enter your password',
+                        label: lang.confirmPassword,
+                        hint: lang.confirmPasswordHint,
                         obscureText: auth.obscureConfirmPassword,
                         onToggleVisibility: auth.toggleConfirmPassword,
                         textInputAction: TextInputAction.done,
                         validator: (value) => Validators.confirmPassword(
                           value,
                           auth.passwordController.text,
+                          lang,
                         ),
                         onFieldSubmitted: (_) => _handleRegister(auth),
                       ),
@@ -185,7 +191,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       SizedBox(height: 24.h),
 
                       LoadingButton(
-                        label: 'Create Account',
+                        label: lang.createAccountButton,
                         isLoading: auth.isLoading,
                         onPressed: () => _handleRegister(auth),
                       ),
@@ -217,8 +223,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
                 SizedBox(height: 32.h),
                 BottomAuthText(
-                  question: 'Already have an account? ',
-                  actionLabel: 'Log In',
+                  question: '${lang.alreadyHaveAccount} ',
+                  actionLabel: lang.logIn,
                   onPressed: () {
                     Navigator.of(
                       context,

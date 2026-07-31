@@ -1,7 +1,13 @@
+import 'package:rosivia/l10n/app_localizations.dart';
+
 /// Centralized form validation logic for ROSIVA.
 ///
 /// Keeping validators in one place avoids duplicated logic across
 /// the login, register, and forgot password screens.
+///
+/// Validation rules are unchanged from before — only the returned
+/// messages now come from [AppLocalizations] so they are shown in
+/// the user's selected language.
 class Validators {
   Validators._();
 
@@ -10,20 +16,20 @@ class Validators {
   );
 
   /// Validates that a field is not empty.
-  static String? required(String? value, {String fieldName = 'This field'}) {
+  static String? required(String? value, AppLocalizations lang) {
     if (value == null || value.trim().isEmpty) {
-      return '$fieldName is required';
+      return lang.emailRequired;
     }
     return null;
   }
 
   /// Validates an email address format.
-  static String? email(String? value) {
+  static String? email(String? value, AppLocalizations lang) {
     if (value == null || value.trim().isEmpty) {
-      return 'Email is required';
+      return lang.emailRequired;
     }
     if (!_emailRegex.hasMatch(value.trim())) {
-      return 'Enter a valid email address';
+      return lang.emailInvalid;
     }
     return null;
   }
@@ -31,61 +37,65 @@ class Validators {
   /// Validates a strong password:
   /// at least 8 characters, one uppercase, one lowercase,
   /// one digit, and one special character.
-  static String? password(String? value) {
+  static String? password(String? value, AppLocalizations lang) {
     if (value == null || value.isEmpty) {
-      return 'Password is required';
+      return lang.passwordRequired;
     }
     if (value.length < 8) {
-      return 'Password must be at least 8 characters';
+      return lang.passwordMinLength;
     }
     if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      return 'Add at least one uppercase letter';
+      return lang.passwordUppercase;
     }
     if (!RegExp(r'[a-z]').hasMatch(value)) {
-      return 'Add at least one lowercase letter';
+      return lang.passwordLowercase;
     }
     if (!RegExp(r'[0-9]').hasMatch(value)) {
-      return 'Add at least one number';
+      return lang.passwordNumber;
     }
     if (!RegExp(r'[!@#$%^&*(),.?":{}|<>_\-+=\[\]/;~`]').hasMatch(value)) {
-      return 'Add at least one special character';
+      return lang.passwordSpecialChar;
     }
     return null;
   }
 
   /// Validates a simpler login password (existence only).
   /// Strength rules only apply during registration.
-  static String? loginPassword(String? value) {
+  static String? loginPassword(String? value, AppLocalizations lang) {
     if (value == null || value.isEmpty) {
-      return 'Password is required';
+      return lang.passwordRequired;
     }
     if (value.length < 6) {
-      return 'Password must be at least 6 characters';
+      return lang.loginPasswordMinLength;
     }
     return null;
   }
 
   /// Validates that confirm password matches the original password.
-  static String? confirmPassword(String? value, String originalPassword) {
+  static String? confirmPassword(
+    String? value,
+    String originalPassword,
+    AppLocalizations lang,
+  ) {
     if (value == null || value.isEmpty) {
-      return 'Please confirm your password';
+      return lang.confirmPasswordRequired;
     }
     if (value != originalPassword) {
-      return 'Passwords do not match';
+      return lang.passwordsDoNotMatch;
     }
     return null;
   }
 
   /// Validates a full name field.
-  static String? fullName(String? value) {
+  static String? fullName(String? value, AppLocalizations lang) {
     if (value == null || value.trim().isEmpty) {
-      return 'Full name is required';
+      return lang.fullNameRequired;
     }
     if (value.trim().length < 2) {
-      return 'Enter a valid full name';
+      return lang.fullNameInvalid;
     }
     if (!RegExp(r"^[a-zA-Z\s'-]+$").hasMatch(value.trim())) {
-      return 'Name can only contain letters';
+      return lang.fullNameLettersOnly;
     }
     return null;
   }

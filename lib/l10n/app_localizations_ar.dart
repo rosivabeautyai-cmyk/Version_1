@@ -124,4 +124,130 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get privacyPolicy => 'سياسة الخصوصية';
+
+  @override
+  String get forgotPasswordTitle => 'نسيتِ كلمة المرور؟';
+
+  @override
+  String get forgotPasswordSubtitle => 'لا داعي للقلق، سنرسل لكِ تعليمات إعادة التعيين.';
+
+  @override
+  String get sendResetLink => 'إرسال رابط إعادة التعيين';
+
+  @override
+  String get backToLogin => 'العودة لتسجيل الدخول';
+
+  @override
+  String get checkYourInbox => 'تحققي من بريدك';
+
+  @override
+  String resetLinkSentMessage(String email) {
+    return 'لقد أرسلنا رابط إعادة تعيين كلمة المرور إلى $email. اتبعي التعليمات لإنشاء كلمة مرور جديدة.';
+  }
+
+  @override
+  String get forgotPasswordFailed => 'فشل إرسال رسالة إعادة التعيين.';
+
+  @override
+  String get continueWithGoogle => 'تابعي باستخدام Google';
+
+  @override
+  String get continueWithApple => 'تابعي باستخدام Apple';
+
+  @override
+  String get agreeToThe => 'أوافق على ';
+
+  @override
+  String get termsAnd => ' و';
+
+  @override
+  String get signedInAndVerified => 'تم تسجيل دخولكِ والتحقق من حسابكِ.';
+
+  @override
+  String get logOut => 'تسجيل الخروج';
+
+  @override
+  String get appName => 'ROSIVA';
+
+  @override
+  String get verifyYourEmail => 'تحققي من بريدكِ الإلكتروني';
+
+  @override
+  String verifyEmailMessage(String email) {
+    return 'لقد أرسلنا رابط تحقق إلى\n$email.\nاضغطي على الرابط الموجود في الرسالة لتفعيل حسابكِ.';
+  }
+
+  @override
+  String get openMailApp => 'فتح تطبيق البريد';
+
+  @override
+  String get iveVerified => 'لقد قمت بالتحقق';
+
+  @override
+  String get sending => 'جارٍ الإرسال...';
+
+  @override
+  String resendInSeconds(int seconds) {
+    return 'إعادة الإرسال خلال $seconds ثانية';
+  }
+
+  @override
+  String get resendEmailPrompt => 'لم تستلمي البريد؟ إعادة الإرسال';
+
+  @override
+  String get openMailManually => 'يرجى فتح تطبيق البريد يدويًا.';
+
+  @override
+  String get emailNotVerifiedYet => 'لم يتم التحقق من بريدكِ الإلكتروني بعد. يرجى الضغط على الرابط الذي أرسلناه لكِ.';
+
+  @override
+  String get resendEmailFailed => 'فشل في إعادة إرسال البريد.';
+
+  @override
+  String get verificationEmailSent => 'تم إرسال رسالة التحقق!';
+
+  @override
+  String get yourEmailFallback => 'بريدكِ الإلكتروني';
+
+  @override
+  String get emailRequired => 'البريد الإلكتروني مطلوب';
+
+  @override
+  String get emailInvalid => 'أدخلي بريدًا إلكترونيًا صحيحًا';
+
+  @override
+  String get passwordRequired => 'كلمة المرور مطلوبة';
+
+  @override
+  String get passwordMinLength => 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل';
+
+  @override
+  String get passwordUppercase => 'أضيفي حرفًا كبيرًا واحدًا على الأقل';
+
+  @override
+  String get passwordLowercase => 'أضيفي حرفًا صغيرًا واحدًا على الأقل';
+
+  @override
+  String get passwordNumber => 'أضيفي رقمًا واحدًا على الأقل';
+
+  @override
+  String get passwordSpecialChar => 'أضيفي رمزًا خاصًا واحدًا على الأقل';
+
+  @override
+  String get loginPasswordMinLength => 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل';
+
+  @override
+  String get confirmPasswordRequired => 'يرجى تأكيد كلمة المرور';
+
+  @override
+  String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get fullNameRequired => 'الاسم الكامل مطلوب';
+
+  @override
+  String get fullNameInvalid => 'أدخلي اسمًا كاملاً صحيحًا';
+
+  @override
+  String get fullNameLettersOnly => 'يجب أن يحتوي الاسم على حروف فقط';
 }

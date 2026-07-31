@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/functions/validators.dart';
 import 'package:rosivia/core/styles/colors.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../../../core/services/snackbar_service.dart';
 import '../../provider/auth_provider.dart';
@@ -23,6 +24,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
 
   Future<void> _handleReset(AuthProvider auth) async {
+    final lang = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
 
@@ -34,12 +36,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     } else {
       SnackbarService.error(
         context,
-        auth.errorMessage ?? 'Failed to send reset email.',
+        auth.errorMessage ?? lang.forgotPasswordFailed,
       );
     }
   }
 
   void _showSuccessDialog(String email) {
+    final lang = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -68,14 +71,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
                 SizedBox(height: 20.h),
                 Text(
-                  'Check your inbox',
+                  lang.checkYourInbox,
                   style: Theme.of(dialogContext).textTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 10.h),
                 Text(
-                  'We sent a password reset link to $email. '
-                  'Follow the instructions to create a new password.',
+                  lang.resetLinkSentMessage(email),
                   textAlign: TextAlign.center,
                   style: Theme.of(dialogContext).textTheme.bodyMedium,
                 ),
@@ -83,7 +85,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: LoadingButton(
-                    label: 'Back to Login',
+                    label: lang.backToLogin,
                     isLoading: false,
                     onPressed: () {
                       Navigator.of(dialogContext).pop();
@@ -102,6 +104,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
+    final lang = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -119,26 +122,25 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(height: 12.h),
-                const AuthHeader(
+                AuthHeader(
                   icon: Icons.lock_reset_rounded,
-                  title: 'Forgot password?',
-                  subtitle:
-                      "No worries, we'll send you reset instructions.",
+                  title: lang.forgotPasswordTitle,
+                  subtitle: lang.forgotPasswordSubtitle,
                 ),
                 SizedBox(height: 36.h),
                 AuthTextField(
                   controller: auth.forgotEmailController,
-                  label: 'Email',
-                  hint: 'you@example.com',
+                  label: lang.email,
+                  hint: lang.emailHint,
                   prefixIcon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,
-                  validator: Validators.email,
+                  validator: (value) => Validators.email(value, lang),
                   onFieldSubmitted: (_) => _handleReset(auth),
                 ),
                 SizedBox(height: 28.h),
                 LoadingButton(
-                  label: 'Send Reset Link',
+                  label: lang.sendResetLink,
                   isLoading: auth.isLoading,
                   onPressed: () => _handleReset(auth),
                 ),
@@ -147,7 +149,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: TextButton.icon(
                     onPressed: () => Navigator.of(context).pop(),
                     icon: Icon(Icons.arrow_back_rounded, size: 18.sp),
-                    label: const Text('Back to Login'),
+                    label: Text(lang.backToLogin),
                   ),
                 ),
               ],

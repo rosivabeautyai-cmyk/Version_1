@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rosivia/core/styles/colors.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 
 /// A checkbox row for agreeing to the Terms of Service and Privacy
@@ -21,6 +22,8 @@ class TermsCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -38,13 +41,13 @@ class TermsCheckbox extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Text(
-                'I agree to the ',
+                lang.agreeToThe,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               GestureDetector(
                 onTap: onTermsTap,
                 child: Text(
-                  'Terms of Service',
+                  lang.termsOfService,
                   style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
@@ -53,13 +56,13 @@ class TermsCheckbox extends StatelessWidget {
                 ),
               ),
               Text(
-                ' and ',
+                lang.termsAnd,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               GestureDetector(
                 onTap: onPrivacyTap,
                 child: Text(
-                  'Privacy Policy',
+                  lang.privacyPolicy,
                   style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w700,

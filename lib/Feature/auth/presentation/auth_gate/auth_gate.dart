@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/styles/colors.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../provider/auth_provider.dart';
 import '../login/login_screen.dart';
@@ -116,9 +117,10 @@ class HomeScreenPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = context.read<AuthProvider>();
+    final lang = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('ROSIVA')),
+      appBar: AppBar(title: Text(lang.appName)),
       body: Center(
         child: Padding(
           padding: EdgeInsets.all(24.w),
@@ -132,14 +134,14 @@ class HomeScreenPlaceholder extends StatelessWidget {
               ),
               SizedBox(height: 16.h),
               Text(
-                "You're signed in and verified.",
+                lang.signedInAndVerified,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               SizedBox(height: 24.h),
               OutlinedButton(
                 onPressed: () => auth.logout(),
-                child: const Text('Log Out'),
+                child: Text(lang.logOut),
               ),
             ],
           ),

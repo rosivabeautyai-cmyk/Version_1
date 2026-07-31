@@ -59,5 +59,72 @@
   "loginFailed": "فشل تسجيل الدخول، يرجى المحاولة مرة أخرى.",
 
   "termsOfService": "شروط الاستخدام",
-  "privacyPolicy": "سياسة الخصوصية"
+  "privacyPolicy": "سياسة الخصوصية",
+
+  "forgotPasswordTitle": "نسيتِ كلمة المرور؟",
+  "forgotPasswordSubtitle": "لا داعي للقلق، سنرسل لكِ تعليمات إعادة التعيين.",
+  "sendResetLink": "إرسال رابط إعادة التعيين",
+  "backToLogin": "العودة لتسجيل الدخول",
+  "checkYourInbox": "تحققي من بريدك",
+  "resetLinkSentMessage": "لقد أرسلنا رابط إعادة تعيين كلمة المرور إلى {email}. اتبعي التعليمات لإنشاء كلمة مرور جديدة.",
+  "@resetLinkSentMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "forgotPasswordFailed": "فشل إرسال رسالة إعادة التعيين.",
+
+  "continueWithGoogle": "تابعي باستخدام Google",
+  "continueWithApple": "تابعي باستخدام Apple",
+
+  "agreeToThe": "أوافق على ",
+  "termsAnd": " و",
+
+  "signedInAndVerified": "تم تسجيل دخولكِ والتحقق من حسابكِ.",
+  "logOut": "تسجيل الخروج",
+  "appName": "ROSIVA",
+
+  "verifyYourEmail": "تحققي من بريدكِ الإلكتروني",
+  "verifyEmailMessage": "لقد أرسلنا رابط تحقق إلى\n{email}.\nاضغطي على الرابط الموجود في الرسالة لتفعيل حسابكِ.",
+  "@verifyEmailMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "openMailApp": "فتح تطبيق البريد",
+  "iveVerified": "لقد قمت بالتحقق",
+  "sending": "جارٍ الإرسال...",
+  "resendInSeconds": "إعادة الإرسال خلال {seconds} ثانية",
+  "@resendInSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "resendEmailPrompt": "لم تستلمي البريد؟ إعادة الإرسال",
+  "openMailManually": "يرجى فتح تطبيق البريد يدويًا.",
+  "emailNotVerifiedYet": "لم يتم التحقق من بريدكِ الإلكتروني بعد. يرجى الضغط على الرابط الذي أرسلناه لكِ.",
+  "resendEmailFailed": "فشل في إعادة إرسال البريد.",
+  "verificationEmailSent": "تم إرسال رسالة التحقق!",
+  "yourEmailFallback": "بريدكِ الإلكتروني",
+
+  "emailRequired": "البريد الإلكتروني مطلوب",
+  "emailInvalid": "أدخلي بريدًا إلكترونيًا صحيحًا",
+  "passwordRequired": "كلمة المرور مطلوبة",
+  "passwordMinLength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+  "passwordUppercase": "أضيفي حرفًا كبيرًا واحدًا على الأقل",
+  "passwordLowercase": "أضيفي حرفًا صغيرًا واحدًا على الأقل",
+  "passwordNumber": "أضيفي رقمًا واحدًا على الأقل",
+  "passwordSpecialChar": "أضيفي رمزًا خاصًا واحدًا على الأقل",
+  "loginPasswordMinLength": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+  "confirmPasswordRequired": "يرجى تأكيد كلمة المرور",
+  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
+  "fullNameRequired": "الاسم الكامل مطلوب",
+  "fullNameInvalid": "أدخلي اسمًا كاملاً صحيحًا",
+  "fullNameLettersOnly": "يجب أن يحتوي الاسم على حروف فقط"
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/styles/colors.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/services/snackbar_service.dart';
@@ -74,21 +75,23 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   }
 
   Future<void> _handleOpenMail() async {
+    final lang = AppLocalizations.of(context)!;
     // Best-effort deep link into the default mail app.
     final uri = Uri(scheme: 'mailto');
     try {
       final launched = await launchUrl(uri);
       if (!launched && mounted) {
-        SnackbarService.info(context, 'Please open your mail app manually.');
+        SnackbarService.info(context, lang.openMailManually);
       }
     } catch (_) {
       if (mounted) {
-        SnackbarService.info(context, 'Please open your mail app manually.');
+        SnackbarService.info(context, lang.openMailManually);
       }
     }
   }
 
   Future<void> _handleIveVerified(AuthProvider auth) async {
+    final lang = AppLocalizations.of(context)!;
     final verified = await auth.reloadUser();
     if (!mounted) return;
 
@@ -97,23 +100,24 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     } else {
       SnackbarService.warning(
         context,
-        'Your email is not verified yet. Please tap the link we sent you.',
+        lang.emailNotVerifiedYet,
       );
     }
   }
 
   Future<void> _handleResend(AuthProvider auth) async {
+    final lang = AppLocalizations.of(context)!;
     if (_resendCooldown > 0) return;
     final success = await auth.sendVerificationEmail();
     if (!mounted) return;
 
     if (success) {
-      SnackbarService.success(context, 'Verification email sent!');
+      SnackbarService.success(context, lang.verificationEmailSent);
       _startCooldown();
     } else {
       SnackbarService.error(
         context,
-        auth.errorMessage ?? 'Failed to resend email.',
+        auth.errorMessage ?? lang.resendEmailFailed,
       );
     }
   }
@@ -128,7 +132,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
-    final email = auth.currentUser?.email ?? 'your email';
+    final lang = AppLocalizations.of(context)!;
+    final email = auth.currentUser?.email ?? lang.yourEmailFallback;
 
     return Scaffold(
       body: SafeArea(
@@ -162,27 +167,26 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               ),
               SizedBox(height: 36.h),
               Text(
-                'Verify your email',
+                lang.verifyYourEmail,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.displayMedium,
               ),
               SizedBox(height: 12.h),
               Text(
-                "We've sent a verification link to\n$email.\n"
-                'Tap the link in that email to activate your account.',
+                lang.verifyEmailMessage(email),
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               SizedBox(height: 40.h),
               LoadingButton(
-                label: 'Open Mail App',
+                label: lang.openMailApp,
                 isLoading: false,
                 onPressed: _handleOpenMail,
                 icon: Icons.open_in_new_rounded,
               ),
               SizedBox(height: 14.h),
               LoadingButton(
-                label: "I've Verified",
+                label: lang.iveVerified,
                 isLoading: auth.isCheckingVerification,
                 onPressed: () => _handleIveVerified(auth),
                 icon: Icons.check_circle_outline_rounded,
@@ -195,10 +199,10 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                       : () => _handleResend(auth),
                   child: Text(
                     auth.isResendingEmail
-                        ? 'Sending...'
+                        ? lang.sending
                         : _resendCooldown > 0
-                            ? 'Resend in ${_resendCooldown}s'
-                            : "Didn't get the email? Resend",
+                            ? lang.resendInSeconds(_resendCooldown)
+                            : lang.resendEmailPrompt,
                   ),
                 ),
               ),

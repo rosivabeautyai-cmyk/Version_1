@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rosivia/core/styles/colors.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 enum SocialProvider { google, apple }
 
@@ -22,6 +23,7 @@ class SocialButton extends StatelessWidget {
     final bool isGoogle = provider == SocialProvider.google;
     final bool disabled = isLoading || onPressed == null;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final lang = AppLocalizations.of(context)!;
 
     return SizedBox(
       height: 54.h,
@@ -49,7 +51,9 @@ class SocialButton extends StatelessWidget {
                   _ProviderIcon(isGoogle: isGoogle, isDark: isDark),
                   SizedBox(width: 10.w),
                   Text(
-                    isGoogle ? 'Continue with Google' : 'Continue with Apple',
+                    isGoogle
+                        ? lang.continueWithGoogle
+                        : lang.continueWithApple,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ],

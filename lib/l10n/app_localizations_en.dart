@@ -124,4 +124,130 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get forgotPasswordTitle => 'Forgot password?';
+
+  @override
+  String get forgotPasswordSubtitle => 'No worries, we\'ll send you reset instructions.';
+
+  @override
+  String get sendResetLink => 'Send Reset Link';
+
+  @override
+  String get backToLogin => 'Back to Login';
+
+  @override
+  String get checkYourInbox => 'Check your inbox';
+
+  @override
+  String resetLinkSentMessage(String email) {
+    return 'We sent a password reset link to $email. Follow the instructions to create a new password.';
+  }
+
+  @override
+  String get forgotPasswordFailed => 'Failed to send reset email.';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String get agreeToThe => 'I agree to the ';
+
+  @override
+  String get termsAnd => ' and ';
+
+  @override
+  String get signedInAndVerified => 'You\'re signed in and verified.';
+
+  @override
+  String get logOut => 'Log Out';
+
+  @override
+  String get appName => 'ROSIVA';
+
+  @override
+  String get verifyYourEmail => 'Verify your email';
+
+  @override
+  String verifyEmailMessage(String email) {
+    return 'We\'ve sent a verification link to\n$email.\nTap the link in that email to activate your account.';
+  }
+
+  @override
+  String get openMailApp => 'Open Mail App';
+
+  @override
+  String get iveVerified => 'I\'ve Verified';
+
+  @override
+  String get sending => 'Sending...';
+
+  @override
+  String resendInSeconds(int seconds) {
+    return 'Resend in ${seconds}s';
+  }
+
+  @override
+  String get resendEmailPrompt => 'Didn\'t get the email? Resend';
+
+  @override
+  String get openMailManually => 'Please open your mail app manually.';
+
+  @override
+  String get emailNotVerifiedYet => 'Your email is not verified yet. Please tap the link we sent you.';
+
+  @override
+  String get resendEmailFailed => 'Failed to resend email.';
+
+  @override
+  String get verificationEmailSent => 'Verification email sent!';
+
+  @override
+  String get yourEmailFallback => 'your email';
+
+  @override
+  String get emailRequired => 'Email is required';
+
+  @override
+  String get emailInvalid => 'Enter a valid email address';
+
+  @override
+  String get passwordRequired => 'Password is required';
+
+  @override
+  String get passwordMinLength => 'Password must be at least 8 characters';
+
+  @override
+  String get passwordUppercase => 'Add at least one uppercase letter';
+
+  @override
+  String get passwordLowercase => 'Add at least one lowercase letter';
+
+  @override
+  String get passwordNumber => 'Add at least one number';
+
+  @override
+  String get passwordSpecialChar => 'Add at least one special character';
+
+  @override
+  String get loginPasswordMinLength => 'Password must be at least 6 characters';
+
+  @override
+  String get confirmPasswordRequired => 'Please confirm your password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get fullNameRequired => 'Full name is required';
+
+  @override
+  String get fullNameInvalid => 'Enter a valid full name';
+
+  @override
+  String get fullNameLettersOnly => 'Name can only contain letters';
 }
