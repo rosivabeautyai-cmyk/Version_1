@@ -17,7 +17,8 @@ class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  State<ForgotPasswordScreen> createState() =>
+      _ForgotPasswordScreenState();
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
@@ -26,9 +27,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Future<void> _handleReset(AuthProvider auth) async {
     final lang = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
+
     if (!_formKey.currentState!.validate()) return;
 
     final success = await auth.forgotPassword();
+
     if (!mounted) return;
 
     if (success) {
@@ -43,6 +46,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   void _showSuccessDialog(String email) {
     final lang = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -70,18 +74,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                 ),
                 SizedBox(height: 20.h),
+
                 Text(
                   lang.checkYourInbox,
-                  style: Theme.of(dialogContext).textTheme.headlineSmall,
+                  style: Theme.of(dialogContext)
+                      .textTheme
+                      .headlineSmall,
                   textAlign: TextAlign.center,
                 ),
+
                 SizedBox(height: 10.h),
+
                 Text(
                   lang.resetLinkSentMessage(email),
                   textAlign: TextAlign.center,
-                  style: Theme.of(dialogContext).textTheme.bodyMedium,
+                  style: Theme.of(dialogContext)
+                      .textTheme
+                      .bodyMedium,
                 ),
+
                 SizedBox(height: 24.h),
+
                 SizedBox(
                   width: double.infinity,
                   child: LoadingButton(
@@ -115,43 +128,84 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 12.h),
+                SizedBox(height: 24.h),
+
                 AuthHeader(
                   icon: Icons.lock_reset_rounded,
                   title: lang.forgotPasswordTitle,
                   subtitle: lang.forgotPasswordSubtitle,
                 ),
-                SizedBox(height: 36.h),
-                AuthTextField(
-                  controller: auth.forgotEmailController,
-                  label: lang.email,
-                  hint: lang.emailHint,
-                  prefixIcon: Icons.email_outlined,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.done,
-                  validator: (value) => Validators.email(value, lang),
-                  onFieldSubmitted: (_) => _handleReset(auth),
+
+                SizedBox(height: 32.h),
+
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24.w,
+                    vertical: 24.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.circular(30.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                        blurRadius: 30,
+                        spreadRadius: 2,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment.stretch,
+                    children: [
+                      AuthTextField(
+                        controller: auth.forgotEmailController,
+                        label: lang.email,
+                        hint: lang.emailHint,
+                        prefixIcon: Icons.email_outlined,
+                        keyboardType:
+                            TextInputType.emailAddress,
+                        textInputAction:
+                            TextInputAction.done,
+                        validator: (value) =>
+                            Validators.email(value, lang),
+                        onFieldSubmitted: (_) =>
+                            _handleReset(auth),
+                      ),
+
+                      SizedBox(height: 24.h),
+
+                      LoadingButton(
+                        label: lang.sendResetLink,
+                        isLoading: auth.isLoading,
+                        onPressed: () => _handleReset(auth),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 28.h),
-                LoadingButton(
-                  label: lang.sendResetLink,
-                  isLoading: auth.isLoading,
-                  onPressed: () => _handleReset(auth),
-                ),
+
                 SizedBox(height: 24.h),
+
                 Center(
                   child: TextButton.icon(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: Icon(Icons.arrow_back_rounded, size: 18.sp),
+                    onPressed: () =>
+                        Navigator.of(context).pop(),
+                    icon: Icon(
+                      Icons.arrow_back_rounded,
+                      size: 18.sp,
+                    ),
                     label: Text(lang.backToLogin),
                   ),
                 ),
+
+                SizedBox(height: 24.h),
               ],
             ),
           ),

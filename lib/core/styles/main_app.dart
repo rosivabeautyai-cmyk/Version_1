@@ -63,11 +63,11 @@ class MainApp extends StatelessWidget {
     return ThemeData(
       useMaterial3: true,
       fontFamily: AppFonts.beVietnamPro,
-      scaffoldBackgroundColor: AppColors.bordercolor,
+      scaffoldBackgroundColor: AppColors.continerbg,
       colorScheme: colorScheme,
 
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.bordercolor,
+        backgroundColor: AppColors.continerbg,
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: AppColors.primary),

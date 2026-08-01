@@ -90,7 +90,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fullName => 'Full Name';
 
   @override
-  String get fullNameHint => 'Jane Doe';
+  String get fullNameHint => 'Full Name';
 
   @override
   String get createStrongPassword => 'Create a strong password';

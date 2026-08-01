@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/functions/validators.dart';
+import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
-
 import '../../../../core/services/snackbar_service.dart';
 import '../../auth_routes.dart';
 import '../../provider/auth_provider.dart';
@@ -36,10 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     if (!auth.agreedToTerms) {
-      SnackbarService.warning(
-        context,
-        lang.agreeTermsMessage,
-      );
+      SnackbarService.warning(context, lang.agreeTermsMessage);
       return;
     }
 
@@ -110,18 +107,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: 20.w,
+                    horizontal: 24.w,
                     vertical: 24.h,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.background,
                     borderRadius: BorderRadius.circular(30.r),
+                    
+                    
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.06),
+                        color: AppColors.primary.withValues(alpha: 0.2),
                         blurRadius: 30,
                         spreadRadius: 2,
-                        offset: const Offset(0, 12),
+
+                        offset: const Offset(0, 6),
                       ),
                     ],
                   ),
@@ -135,8 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         prefixIcon: Icons.person_outline_rounded,
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.next,
-                        validator: (value) =>
-                            Validators.fullName(value, lang),
+                        validator: (value) => Validators.fullName(value, lang),
                       ),
 
                       SizedBox(height: 18.h),
@@ -158,8 +157,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hint: lang.createStrongPassword,
                         obscureText: auth.obscurePassword,
                         onToggleVisibility: auth.togglePassword,
-                        validator: (value) =>
-                            Validators.password(value, lang),
+                        validator: (value) => Validators.password(value, lang),
                       ),
 
                       SizedBox(height: 18.h),

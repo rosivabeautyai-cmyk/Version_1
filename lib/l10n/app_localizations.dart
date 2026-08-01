@@ -260,7 +260,7 @@ abstract class AppLocalizations {
   /// No description provided for @fullNameHint.
   ///
   /// In en, this message translates to:
-  /// **'Jane Doe'**
+  /// **'Full Name'**
   String get fullNameHint;
 
   /// No description provided for @createStrongPassword.

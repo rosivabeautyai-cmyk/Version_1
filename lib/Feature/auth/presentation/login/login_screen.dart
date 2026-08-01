@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/functions/validators.dart';
+import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../../../core/services/snackbar_service.dart';
@@ -37,10 +38,9 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
 
     if (success) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        AuthRoutes.gate,
-        (route) => false,
-      );
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(AuthRoutes.gate, (route) => false);
     } else {
       SnackbarService.error(
         context,
@@ -56,10 +56,9 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isGoogleLoading = false);
 
     if (success) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        AuthRoutes.gate,
-        (route) => false,
-      );
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(AuthRoutes.gate, (route) => false);
     } else if (auth.errorMessage != null) {
       SnackbarService.error(context, auth.errorMessage!);
     }
@@ -72,10 +71,9 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isAppleLoading = false);
 
     if (success) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        AuthRoutes.gate,
-        (route) => false,
-      );
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(AuthRoutes.gate, (route) => false);
     } else if (auth.errorMessage != null) {
       SnackbarService.error(context, auth.errorMessage!);
     }
@@ -89,99 +87,143 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 32.h),
+                SizedBox(height: 24.h),
+
                 AuthHeader(
                   icon: Icons.spa_rounded,
                   title: lang.welcomeBack,
                   subtitle: lang.loginSubtitle,
                 ),
-                SizedBox(height: 36.h),
-                AuthTextField(
-                  controller: auth.emailController,
-                  label: lang.email,
-                  hint: lang.emailHint,
-                  prefixIcon: Icons.email_outlined,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) => Validators.email(value, lang),
-                ),
-                SizedBox(height: 18.h),
-                PasswordTextField(
-                  controller: auth.passwordController,
-                  label: lang.password,
-                  hint: lang.passwordHint,
-                  obscureText: auth.obscurePassword,
-                  onToggleVisibility: auth.togglePassword,
-                  validator: (value) =>
-                      Validators.loginPassword(value, lang),
-                  textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (_) => _handleLogin(auth),
-                ),
-                SizedBox(height: 12.h),
-                Row(
-                  children: [
-                    SizedBox(
-                      height: 22.h,
-                      width: 22.h,
-                      child: Checkbox(
-                        value: auth.rememberMe,
-                        onChanged: (_) => auth.toggleRememberMe(),
+
+                SizedBox(height: 32.h),
+
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24.w,
+                    vertical: 24.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.circular(30.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                        blurRadius: 30,
+                        spreadRadius: 2,
+                        offset: const Offset(0, 6),
                       ),
-                    ),
-                    SizedBox(width: 6.w),
-                    Text(
-                      lang.rememberMe,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed(AuthRoutes.forgotPassword);
-                      },
-                      child: Text(lang.forgotPassword),
-                    ),
-                  ],
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      AuthTextField(
+                        controller: auth.emailController,
+                        label: lang.email,
+                        hint: lang.emailHint,
+                        prefixIcon: Icons.email_outlined,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) =>
+                            Validators.email(value, lang),
+                      ),
+
+                      SizedBox(height: 18.h),
+
+                      PasswordTextField(
+                        controller: auth.passwordController,
+                        label: lang.password,
+                        hint: lang.passwordHint,
+                        obscureText: auth.obscurePassword,
+                        onToggleVisibility: auth.togglePassword,
+                        validator: (value) =>
+                            Validators.loginPassword(value, lang),
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) => _handleLogin(auth),
+                      ),
+
+                      SizedBox(height: 12.h),
+
+                      Row(
+                        children: [
+                          SizedBox(
+                            height: 22.h,
+                            width: 22.h,
+                            child: Checkbox(
+                              value: auth.rememberMe,
+                              onChanged: (_) => auth.toggleRememberMe(),
+                            ),
+                          ),
+                          SizedBox(width: 6.w),
+                          Text(
+                            lang.rememberMe,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          const Spacer(),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                AuthRoutes.forgotPassword,
+                              );
+                            },
+                            child: Text(lang.forgotPassword),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 12.h),
+
+                      LoadingButton(
+                        label: lang.login,
+                        isLoading: auth.isLoading,
+                        onPressed: () => _handleLogin(auth),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 8.h),
-                LoadingButton(
-                  label: lang.login,
-                  isLoading: auth.isLoading,
-                  onPressed: () => _handleLogin(auth),
-                ),
-                SizedBox(height: 28.h),
+
+                SizedBox(height: 30.h),
+
                 const AuthDivider(),
+
                 SizedBox(height: 20.h),
+
                 SocialButton(
                   provider: SocialProvider.google,
                   isLoading: _isGoogleLoading,
-                  onPressed:
-                      auth.isLoading ? null : () => _handleGoogleLogin(auth),
+                  onPressed: auth.isLoading
+                      ? null
+                      : () => _handleGoogleLogin(auth),
                 ),
+
                 if (auth.isAppleSignInAvailable) ...[
                   SizedBox(height: 14.h),
                   SocialButton(
                     provider: SocialProvider.apple,
                     isLoading: _isAppleLoading,
-                    onPressed:
-                        auth.isLoading ? null : () => _handleAppleLogin(auth),
+                    onPressed: auth.isLoading
+                        ? null
+                        : () => _handleAppleLogin(auth),
                   ),
                 ],
+
                 SizedBox(height: 32.h),
+
                 BottomAuthText(
                   question: '${lang.dontHaveAccount} ',
                   actionLabel: lang.signUp,
                   onPressed: () {
-                    Navigator.of(context).pushReplacementNamed(
-                      AuthRoutes.register,
-                    );
+                    Navigator.of(
+                      context,
+                    ).pushReplacementNamed(AuthRoutes.register);
                   },
                 ),
+
                 SizedBox(height: 24.h),
               ],
             ),

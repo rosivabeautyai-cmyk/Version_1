@@ -90,7 +90,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get fullName => 'الاسم الكامل';
 
   @override
-  String get fullNameHint => 'نورهان ياسر';
+  String get fullNameHint => 'الاسم بالكامل';
 
   @override
   String get createStrongPassword => 'أنشئي كلمة مرور قوية';

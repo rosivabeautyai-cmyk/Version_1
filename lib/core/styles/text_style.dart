@@ -19,7 +19,7 @@ abstract class TextStyles {
   static const TextStyle caption2 = TextStyle(fontSize: 12);
 
   static const TextStyle splash = TextStyle(
-    fontSize: 56,
+    fontSize: 60,
     fontWeight: FontWeight.bold,
     color: AppColors.primary,
     fontFamily: AppFonts.playfairDisplaySC,

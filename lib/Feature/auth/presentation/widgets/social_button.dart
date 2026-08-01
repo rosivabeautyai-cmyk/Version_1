@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rosivia/core/constants/app_images.dart';
 import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -51,10 +52,11 @@ class SocialButton extends StatelessWidget {
                   _ProviderIcon(isGoogle: isGoogle, isDark: isDark),
                   SizedBox(width: 10.w),
                   Text(
-                    isGoogle
-                        ? lang.continueWithGoogle
-                        : lang.continueWithApple,
-                    style: Theme.of(context).textTheme.titleSmall,
+                    isGoogle ? lang.continueWithGoogle : lang.continueWithApple,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
@@ -72,29 +74,19 @@ class _ProviderIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isGoogle) {
-      // Simplified 'G' glyph to avoid bundling brand image assets.
       return Container(
-        height: 20.sp,
-        width: 20.sp,
+        height: 30.sp,
+        width: 30.sp,
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: AppColors.bordercolor, width: 1),
-        ),
-        child: Text(
-          'G',
-          style: TextStyle(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w700,
-            color: AppColors.errorcolor,
-          ),
-        ),
+        decoration: BoxDecoration(shape: BoxShape.circle),
+        child: Image.asset(AppImages.google),
       );
     }
     return Icon(
       Icons.apple_rounded,
-      size: 22.sp,
-      color: isDark ? Colors.white : AppColors.blackcolor,
+      size: 50.sp,
+      color: isDark ? Colors.black : AppColors.blackcolor,
+      
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rosivia/core/styles/colors.dart';
 
 class LanguageTile extends StatelessWidget {
   final String title;
@@ -24,17 +25,12 @@ class LanguageTile extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 18,
-          vertical: 16,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: isSelected
-                ? const Color(0xffB76E79)
-                : Colors.grey.shade300,
+            color: isSelected ? AppColors.primary : Colors.grey.shade300,
             width: 2,
           ),
           boxShadow: [
@@ -47,10 +43,7 @@ class LanguageTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text(
-              flag,
-              style: const TextStyle(fontSize: 30),
-            ),
+            Text(flag, style: const TextStyle(fontSize: 30)),
 
             const SizedBox(width: 16),
 
@@ -70,10 +63,7 @@ class LanguageTile extends StatelessWidget {
 
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                   ),
                 ],
               ),
@@ -85,20 +75,11 @@ class LanguageTile extends StatelessWidget {
               height: 24,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isSelected
-                    ? const Color(0xffB76E79)
-                    : Colors.white,
-                border: Border.all(
-                  color: const Color(0xffB76E79),
-                  width: 2,
-                ),
+                color: isSelected ? AppColors.primary : Colors.white,
+                border: Border.all(color: AppColors.primary, width: 2),
               ),
               child: isSelected
-                  ? const Icon(
-                      Icons.check,
-                      size: 15,
-                      color: Colors.white,
-                    )
+                  ? const Icon(Icons.check, size: 15, color: Colors.white)
                   : null,
             ),
           ],

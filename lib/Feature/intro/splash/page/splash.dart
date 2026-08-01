@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.continerbg,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
               opacity: _opacity,
               duration: const Duration(seconds: 2),
 
-              child: Image.asset(AppImages.splash, width: 300, height: 300),
+              child: Image.asset(AppImages.splash, width: 400, height: 400),
             ),
 
             const SizedBox(height: 1),
