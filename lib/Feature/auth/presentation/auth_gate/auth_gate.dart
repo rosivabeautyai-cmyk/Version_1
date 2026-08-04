@@ -1,12 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/styles/colors.dart';
-
 import '../../../admin/presentation/admin_home_screen.dart';
 import '../../../home/presentation/home_screen.dart';
-import '../../data/models/user_model.dart';
 import '../../provider/auth_provider.dart';
 import '../login/login_screen.dart';
 import '../verify_email/verify_email_screen.dart';
