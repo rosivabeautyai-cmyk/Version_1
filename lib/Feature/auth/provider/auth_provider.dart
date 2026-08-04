@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/services/remember_me_service.dart';
+import '../data/models/user_model.dart';
 import '../data/repositories/auth_repository.dart';
 import '../data/services/auth_service.dart';
 
@@ -245,6 +246,25 @@ class AuthProvider extends ChangeNotifier {
       _isResendingEmail = false;
       notifyListeners();
     }
+  }
+
+  /// Fetches the Firestore document (including `role`) for the given
+  /// uid, or for the current user if no uid is passed. Used by
+  /// [AuthGate] to decide between the admin and user home screens.
+  Future<UserModel?> fetchUserData([String? uid]) {
+    final targetUid = uid ?? currentUser?.uid;
+    if (targetUid == null) return Future.value(null);
+    return _repository.getUserData(targetUid);
+  }
+
+  /// Repairs the current user's Firestore doc if it's missing or
+  /// incomplete (e.g. missing the `role` field). Safe to call every
+  /// time the app resumes an existing session, not just right after
+  /// a fresh sign-in.
+  Future<void> ensureUserDoc() async {
+    final user = currentUser;
+    if (user == null) return;
+    await _repository.ensureUserDoc(user);
   }
 
   /// Reloads the current user and returns whether the email is verified.

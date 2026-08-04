@@ -32,6 +32,10 @@ class AuthRepository {
       _firestore.collection(_usersCollection);
 
   /// Logs in a user and updates their `lastLogin` timestamp.
+  ///
+  /// Also self-heals accounts whose Firestore document never got
+  /// created (e.g. if Firestore was disabled/misconfigured at the
+  /// time they first signed up) by creating it here if missing.
   Future<User> login({
     required String email,
     required String password,
@@ -41,6 +45,7 @@ class AuthRepository {
     if (user == null) {
       throw const AuthFailure('unknown', 'Login failed. Please try again.');
     }
+    await _createUserDocIfMissing(user: user, isFirstLogin: false);
     await _touchLastLogin(user.uid);
     return user;
   }
@@ -97,7 +102,9 @@ class AuthRepository {
     if (user == null) return false;
 
     if (user.emailVerified) {
-      await _usersRef.doc(user.uid).update({'isEmailVerified': true});
+      await _usersRef
+          .doc(user.uid)
+          .set({'isEmailVerified': true}, SetOptions(merge: true));
     }
 
     return user.emailVerified;
@@ -146,14 +153,35 @@ class AuthRepository {
     return UserModel.fromSnapshot(doc);
   }
 
+  /// Public entry point so callers like [AuthGate] can repair an
+  /// incomplete Firestore doc for the currently signed-in user even
+  /// on a resumed session — not just right after a fresh sign-in
+  /// call (login/googleSignIn/appleSignIn already do this on their
+  /// own).
+  Future<void> ensureUserDoc(User user) =>
+      _createUserDocIfMissing(user: user, isFirstLogin: false);
+
+  /// Creates (or repairs) the Firestore user document.
+  ///
+  /// This used to only check `doc.exists`, which meant a doc that
+  /// already existed but was missing its core fields — e.g. one
+  /// created by a partial write like `_touchLastLogin` merging in
+  /// just `lastLogin` before the full document ever got created —
+  /// would silently stay incomplete forever. Now it checks for the
+  /// `role` field specifically (the one every account must have) and
+  /// backfills the full profile with `merge: true` whenever it's
+  /// missing, without clobbering fields that are already correct
+  /// (like an existing `lastLogin` or `isEmailVerified`).
   Future<void> _createUserDocIfMissing({
     required User user,
     required bool isFirstLogin,
   }) async {
     final docRef = _usersRef.doc(user.uid);
     final doc = await docRef.get();
+    final data = doc.data();
+    final isIncomplete = !doc.exists || data == null || !data.containsKey('role');
 
-    if (!doc.exists) {
+    if (isIncomplete) {
       final newUser = UserModel.newUser(
         uid: user.uid,
         fullName: user.displayName ?? 'ROSIVA User',
@@ -161,13 +189,19 @@ class AuthRepository {
         photoUrl: user.photoURL,
         isEmailVerified: user.emailVerified,
       );
-      await docRef.set(newUser.toCreateMap());
+      await docRef.set(newUser.toCreateMap(), SetOptions(merge: true));
     }
   }
 
   Future<void> _touchLastLogin(String uid) async {
-    await _usersRef.doc(uid).update({
-      'lastLogin': FieldValue.serverTimestamp(),
-    });
+    // `set` + merge instead of `update`: `update` throws NOT_FOUND if
+    // the document doesn't exist yet (e.g. a race with doc creation,
+    // or a legacy account from before Firestore was enabled). `set`
+    // with merge creates it if missing and just updates the field
+    // otherwise — either way this never throws NOT_FOUND.
+    await _usersRef.doc(uid).set(
+      {'lastLogin': FieldValue.serverTimestamp()},
+      SetOptions(merge: true),
+    );
   }
 }

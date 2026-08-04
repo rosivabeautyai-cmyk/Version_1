@@ -16,6 +16,18 @@ class UserModel {
   final DateTime? lastLogin;
   final bool isEmailVerified;
 
+  /// Access role for this account. Either `'user'` or `'admin'`.
+  ///
+  /// Every account is created as `'user'` — there is no public sign-up
+  /// path that can produce an admin account. To promote an account,
+  /// change this field to `'admin'` directly in the Firestore console
+  /// (users/{uid} -> role). See also `firestore.rules`, which blocks
+  /// clients from ever editing this field themselves.
+  final String role;
+
+  static const String roleAdmin = 'admin';
+  static const String roleUser = 'user';
+
   const UserModel({
     required this.uid,
     required this.fullName,
@@ -28,10 +40,14 @@ class UserModel {
     this.createdAt,
     this.lastLogin,
     this.isEmailVerified = false,
+    this.role = roleUser,
   });
 
+  bool get isAdmin => role == roleAdmin;
+
   /// Creates a new [UserModel] for first-time registration, using
-  /// server timestamps for the date fields.
+  /// server timestamps for the date fields. Always created with the
+  /// default `'user'` role — admin accounts are never self-assigned.
   factory UserModel.newUser({
     required String uid,
     required String fullName,
@@ -51,6 +67,7 @@ class UserModel {
       createdAt: null,
       lastLogin: null,
       isEmailVerified: isEmailVerified,
+      role: roleUser,
     );
   }
 
@@ -71,6 +88,7 @@ class UserModel {
       createdAt: _toDateTime(map['createdAt']),
       lastLogin: _toDateTime(map['lastLogin']),
       isEmailVerified: map['isEmailVerified'] as bool? ?? false,
+      role: map['role'] as String? ?? roleUser,
     );
   }
 
@@ -100,6 +118,7 @@ class UserModel {
       'createdAt': FieldValue.serverTimestamp(),
       'lastLogin': FieldValue.serverTimestamp(),
       'isEmailVerified': isEmailVerified,
+      'role': role,
     };
   }
 
@@ -117,6 +136,7 @@ class UserModel {
       'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
       'lastLogin': lastLogin != null ? Timestamp.fromDate(lastLogin!) : null,
       'isEmailVerified': isEmailVerified,
+      'role': role,
     };
   }
 
@@ -132,6 +152,7 @@ class UserModel {
     DateTime? createdAt,
     DateTime? lastLogin,
     bool? isEmailVerified,
+    String? role,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -145,6 +166,7 @@ class UserModel {
       createdAt: createdAt ?? this.createdAt,
       lastLogin: lastLogin ?? this.lastLogin,
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
+      role: role ?? this.role,
     );
   }
 

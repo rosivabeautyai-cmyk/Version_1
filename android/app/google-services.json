@@ -12,7 +12,20 @@
           "package_name": "com.example.rosivia"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1075173890462-qavmquipr53sqcckno63i98vfh4a0hog.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rosivia",
+            "certificate_hash": "98518104355c13f13c409553f026e4576d879729"
+          }
+        },
+        {
+          "client_id": "1075173890462-rf1slr0utfo2lrdq1i45q93lk0hfp6rk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDRO5OnSCIqeIRt-hyKANQwz9I0plu8TMQ"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075173890462-rf1slr0utfo2lrdq1i45q93lk0hfp6rk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1075173890462-ctl9cmbtneee7gr0f5r5b094mav2c52k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.rosivia"
+              }
+            }
+          ]
         }
       }
     }

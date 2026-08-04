@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/styles/colors.dart';
-import 'package:rosivia/l10n/app_localizations.dart';
 
+import '../../../admin/presentation/admin_home_screen.dart';
+import '../../../home/presentation/home_screen.dart';
+import '../../data/models/user_model.dart';
 import '../../provider/auth_provider.dart';
 import '../login/login_screen.dart';
 import '../verify_email/verify_email_screen.dart';
@@ -16,10 +18,8 @@ import '../verify_email/verify_email_screen.dart';
 ///
 ///   Not logged in            -> [LoginScreen]
 ///   Logged in, not verified  -> [VerifyEmailScreen]
-///   Logged in, verified      -> the app's Home screen
-///
-/// Replace [HomeScreenPlaceholder] with your actual home screen
-/// widget once it exists in your app.
+///   Logged in, verified, user  -> [HomeScreen]
+///   Logged in, verified, admin -> [AdminHomeScreen]
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
@@ -61,19 +61,39 @@ class _EmailVerificationCheck extends StatefulWidget {
 class _EmailVerificationCheckState extends State<_EmailVerificationCheck> {
   bool _checking = true;
   bool _isVerified = false;
+  bool _isAdmin = false;
 
   @override
   void initState() {
     super.initState();
-    _checkVerification();
+    // IMPORTANT: this used to call _checkVerification() directly,
+    // which calls AuthProvider.reloadUser() -> notifyListeners()
+    // synchronously, before any `await`. Since initState() runs
+    // *during* AuthGate's StreamBuilder build, that notifyListeners()
+    // tried to rebuild the same provider scope mid-build and Flutter
+    // threw "setState() or markNeedsBuild() called during build."
+    // Scheduling it for the next frame (post-build) fixes that.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkVerification());
   }
 
   Future<void> _checkVerification() async {
     final auth = context.read<AuthProvider>();
     final verified = await auth.reloadUser();
+
+    // Only bother reading the Firestore role once the email is
+    // actually verified — an unverified user will see the
+    // VerifyEmailScreen regardless of their role.
+    bool isAdmin = false;
+    if (verified) {
+      await auth.ensureUserDoc();
+      final userData = await auth.fetchUserData(widget.user.uid);
+      isAdmin = userData?.isAdmin ?? false;
+    }
+
     if (!mounted) return;
     setState(() {
       _isVerified = verified;
+      _isAdmin = isAdmin;
       _checking = false;
     });
   }
@@ -88,7 +108,7 @@ class _EmailVerificationCheckState extends State<_EmailVerificationCheck> {
       return const VerifyEmailScreen();
     }
 
-    return const HomeScreenPlaceholder();
+    return _isAdmin ? const AdminHomeScreen() : const HomeScreen();
   }
 }
 
@@ -101,50 +121,6 @@ class _AuthGateLoading extends StatelessWidget {
       body: Center(
         child: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-        ),
-      ),
-    );
-  }
-}
-
-/// Temporary placeholder shown once a user is signed in and verified.
-///
-/// Replace this widget with your app's real Home screen — it exists
-/// here only so the auth module compiles and runs standalone.
-class HomeScreenPlaceholder extends StatelessWidget {
-  const HomeScreenPlaceholder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final auth = context.read<AuthProvider>();
-    final lang = AppLocalizations.of(context)!;
-
-    return Scaffold(
-      appBar: AppBar(title: Text(lang.appName)),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.check_circle_rounded,
-                color: AppColors.primary,
-                size: 56.sp,
-              ),
-              SizedBox(height: 16.h),
-              Text(
-                lang.signedInAndVerified,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              SizedBox(height: 24.h),
-              OutlinedButton(
-                onPressed: () => auth.logout(),
-                child: Text(lang.logOut),
-              ),
-            ],
-          ),
         ),
       ),
     );

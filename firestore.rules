@@ -1,0 +1,38 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{uid} {
+      // A user can only read their own document.
+      // (Change this if you later need admins to read other users'
+      // documents from the app itself — e.g. add an isAdmin() check.)
+      allow read: if request.auth != null && request.auth.uid == uid;
+
+      // A user may create their own document on sign-up, but ONLY
+      // with role == "user". This is what stops anyone from signing
+      // up and giving themselves the admin role from the client.
+      allow create: if request.auth != null
+                    && request.auth.uid == uid
+                    && request.resource.data.role == 'user';
+
+      // A user may update their own document, but the role field can
+      // never CHANGE through this rule — so no client can promote or
+      // demote an account. The one exception is a doc that has no
+      // role field yet at all (e.g. one left incomplete by an old
+      // partial write): that can only be backfilled with role ==
+      // "user", never "admin". To make someone an admin, edit the
+      // `role` field for their document directly in the Firebase
+      // console (or from a trusted backend / Cloud Function).
+      allow update: if request.auth != null
+                    && request.auth.uid == uid
+                    && (
+                         ('role' in resource.data)
+                           ? request.resource.data.role == resource.data.role
+                           : request.resource.data.role == 'user'
+                       );
+
+      allow delete: if false;
+    }
+  }
+}

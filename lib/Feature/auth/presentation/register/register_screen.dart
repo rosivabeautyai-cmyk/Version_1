@@ -6,6 +6,8 @@ import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 import '../../../../core/services/snackbar_service.dart';
 import '../../auth_routes.dart';
+import '../../presentation/legal/privacy_policy_screen.dart';
+import '../../presentation/legal/terms_of_service_screen.dart';
 import '../../provider/auth_provider.dart';
 import '../widgets/auth_divider.dart';
 import '../widgets/auth_header.dart';
@@ -30,15 +32,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isGoogleLoading = false;
   bool _isAppleLoading = false;
 
+  /// Shared guard used by manual, Google, and Apple sign-up: no path
+  /// creates an account unless the Terms/Privacy checkbox is ticked.
+  bool _requireTermsAgreement(AuthProvider auth) {
+    if (auth.agreedToTerms) return true;
+    final lang = AppLocalizations.of(context)!;
+    SnackbarService.warning(context, lang.agreeTermsMessage);
+    return false;
+  }
+
   Future<void> _handleRegister(AuthProvider auth) async {
     final lang = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
 
-    if (!auth.agreedToTerms) {
-      SnackbarService.warning(context, lang.agreeTermsMessage);
-      return;
-    }
+    if (!_requireTermsAgreement(auth)) return;
 
     final success = await auth.register();
     if (!mounted) return;
@@ -54,6 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _handleGoogleSignUp(AuthProvider auth) async {
+    if (!_requireTermsAgreement(auth)) return;
     setState(() => _isGoogleLoading = true);
     final success = await auth.googleSignIn();
     if (!mounted) return;
@@ -69,6 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _handleAppleSignUp(AuthProvider auth) async {
+    if (!_requireTermsAgreement(auth)) return;
     setState(() => _isAppleLoading = true);
     final success = await auth.appleSignIn();
     if (!mounted) return;
@@ -182,8 +192,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       TermsCheckbox(
                         value: auth.agreedToTerms,
                         onChanged: (_) => auth.toggleAgreedToTerms(),
-                        onTermsTap: () {},
-                        onPrivacyTap: () {},
+                        onTermsTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const TermsOfServiceScreen(),
+                          ),
+                        ),
+                        onPrivacyTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const PrivacyPolicyScreen(),
+                          ),
+                        ),
                       ),
 
                       SizedBox(height: 24.h),
