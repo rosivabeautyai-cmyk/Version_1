@@ -17,9 +17,6 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      // Base design size the auth screens (and the rest of the UI) were
-      // designed against. Every `.w` / `.h` / `.sp` / `.r` call in the
-      // app scales relative to this.
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
@@ -27,24 +24,30 @@ class MainApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
 
+          // ==============================
+          // APP THEME
+          // ==============================
           theme: appTheme(),
 
-          /// اللغة الحالية
+          // ==============================
+          // LANGUAGE
+          // ==============================
           locale: context.watch<LanguageProvider>().locale,
 
-          /// اللغات المدعومة
           supportedLocales: AppLocalizations.supportedLocales,
 
-          /// ملفات الترجمة
           localizationsDelegates: AppLocalizations.localizationsDelegates,
 
-          /// جميع مسارات التطبيق مسجلة مركزيًا في AuthRoutes
+          // ==============================
+          // ROUTES
+          // ==============================
           initialRoute: AuthRoutes.splash,
           routes: AuthRoutes.routes,
 
+          // ==============================
+          // GLOBAL BUILDER
+          // ==============================
           builder: (context, child) {
-            // Keep ScreenUtil's own builder in the tree so text scaling
-            // keeps working, then apply the app-wide SafeArea handling.
             return SafeArea(
               top: false,
               bottom:
@@ -58,21 +61,47 @@ class MainApp extends StatelessWidget {
   }
 
   ThemeData appTheme() {
-    final colorScheme = ColorScheme.fromSeed(seedColor: AppColors.primary);
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: AppColors.primary,
+    );
 
     return ThemeData(
+      // ==============================
+      // MATERIAL 3
+      // ==============================
       useMaterial3: true,
+
+      // ==============================
+      // FONT
+      // ==============================
       fontFamily: AppFonts.beVietnamPro,
+
+      // ==============================
+      // BACKGROUND
+      // ==============================
       scaffoldBackgroundColor: AppColors.continerbg,
+
+      // ==============================
+      // COLOR SCHEME
+      // ==============================
       colorScheme: colorScheme,
 
-      appBarTheme: const AppBarTheme(
+      // ==============================
+      // APP BAR
+      // ==============================
+      appBarTheme: AppBarTheme(
         backgroundColor: AppColors.continerbg,
+        foregroundColor: AppColors.blackcolor,
         elevation: 0,
         centerTitle: true,
-        iconTheme: IconThemeData(color: AppColors.primary),
+        iconTheme: IconThemeData(
+          color: AppColors.primary,
+        ),
       ),
 
+      // ==============================
+      // TEXT THEME
+      // ==============================
       textTheme: const TextTheme(
         displayMedium: TextStyle(
           fontSize: 24,
@@ -99,33 +128,107 @@ class MainApp extends StatelessWidget {
           fontWeight: FontWeight.w600,
           color: AppColors.blackcolor,
         ),
-        bodyMedium: TextStyle(fontSize: 14, color: AppColors.graycolor),
-        bodySmall: TextStyle(fontSize: 12, color: AppColors.graycolor),
+        bodyMedium: TextStyle(
+          fontSize: 14,
+          color: AppColors.graycolor,
+        ),
+        bodySmall: TextStyle(
+          fontSize: 12,
+          color: AppColors.graycolor,
+        ),
       ),
 
+      // ==============================
+      // BOTTOM NAVIGATION BAR
+      // ==============================
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: AppColors.continerbg,
+        elevation: 0,
+        height: 72.h,
+
+        indicatorColor: AppColors.primary.withValues(
+          alpha: 0.12,
+        ),
+
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (states) {
+            final isSelected = states.contains(
+              WidgetState.selected,
+            );
+
+            return TextStyle(
+              fontFamily: AppFonts.beVietnamPro,
+              fontSize: 11.sp,
+              fontWeight: isSelected
+                  ? FontWeight.w700
+                  : FontWeight.w500,
+              color: isSelected
+                  ? AppColors.primary
+                  : AppColors.graycolor,
+            );
+          },
+        ),
+
+        iconTheme: WidgetStateProperty.resolveWith(
+          (states) {
+            final isSelected = states.contains(
+              WidgetState.selected,
+            );
+
+            return IconThemeData(
+              size: isSelected ? 25.sp : 24.sp,
+              color: isSelected
+                  ? AppColors.primary
+                  : AppColors.graycolor,
+            );
+          },
+        ),
+      ),
+
+      // ==============================
+      // CHECKBOX
+      // ==============================
       checkboxTheme: CheckboxThemeData(
         fillColor: WidgetStateProperty.resolveWith(
-          (states) => states.contains(WidgetState.selected)
-              ? AppColors.primary
-              : Colors.transparent,
+          (states) {
+            return states.contains(WidgetState.selected)
+                ? AppColors.primary
+                : Colors.transparent;
+          },
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
       ),
 
+      // ==============================
+      // TEXT BUTTON
+      // ==============================
       textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(foregroundColor: AppColors.primary),
+        style: TextButton.styleFrom(
+          foregroundColor: AppColors.primary,
+        ),
       ),
 
+      // ==============================
+      // OUTLINED BUTTON
+      // ==============================
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
-          side: const BorderSide(color: AppColors.bordercolor, width: 1.2),
+          side: const BorderSide(
+            color: AppColors.bordercolor,
+            width: 1.2,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
         ),
       ),
 
+      // ==============================
+      // ELEVATED BUTTON
+      // ==============================
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
@@ -136,34 +239,60 @@ class MainApp extends StatelessWidget {
         ),
       ),
 
+      // ==============================
+      // INPUT FIELDS
+      // ==============================
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
+
         fillColor: Colors.white,
+
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
         ),
+
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.bordercolor),
+          borderSide: const BorderSide(
+            color: AppColors.bordercolor,
+          ),
         ),
+
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.bordercolor),
+          borderSide: const BorderSide(
+            color: AppColors.bordercolor,
+          ),
         ),
+
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
+          borderSide: const BorderSide(
+            color: AppColors.primary,
+            width: 1.4,
+          ),
         ),
+
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.errorcolor),
+          borderSide: const BorderSide(
+            color: AppColors.errorcolor,
+          ),
         ),
+
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.errorcolor, width: 1.4),
+          borderSide: const BorderSide(
+            color: AppColors.errorcolor,
+            width: 1.4,
+          ),
         ),
-        hintStyle: const TextStyle(color: AppColors.graycolor, fontSize: 14),
+
+        hintStyle: const TextStyle(
+          color: AppColors.graycolor,
+          fontSize: 14,
+        ),
       ),
     );
   }

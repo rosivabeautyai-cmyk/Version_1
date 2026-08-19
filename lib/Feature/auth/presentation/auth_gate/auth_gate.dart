@@ -1,22 +1,33 @@
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rosivia/core/styles/colors.dart';
-import '../../../admin/presentation/admin_home_screen.dart';
-import '../../../home/presentation/home_screen.dart';
+
+import 'package:rosivia/Feature/admin/presentation/admin_home_screen.dart';
+import 'package:rosivia/Feature/home/presentation/screens/main_screen.dart';
+
 import '../../provider/auth_provider.dart';
 import '../login/login_screen.dart';
 import '../verify_email/verify_email_screen.dart';
 
 /// AuthGate is the root routing widget for ROSIVA.
 ///
-/// It listens to [FirebaseAuth.authStateChanges] and decides which
-/// screen to show:
+/// Routing logic:
 ///
-///   Not logged in            -> [LoginScreen]
-///   Logged in, not verified  -> [VerifyEmailScreen]
-///   Logged in, verified, user  -> [HomeScreen]
-///   Logged in, verified, admin -> [AdminHomeScreen]
+///   Not logged in
+///       ↓
+///   LoginScreen
+///
+///   Logged in + Email not verified
+///       ↓
+///   VerifyEmailScreen
+///
+///   Logged in + Verified + Normal User
+///       ↓
+///   MainScreen
+///
+///   Logged in + Verified + Admin
+///       ↓
+///   AdminHomeScreen
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
@@ -27,24 +38,29 @@ class AuthGate extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: auth.authStateChanges,
       builder: (context, snapshot) {
+        // Firebase is still checking the current authentication state.
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const _AuthGateLoading();
         }
 
         final user = snapshot.data;
 
+        // No authenticated user.
         if (user == null) {
           return const LoginScreen();
         }
 
+        // Authenticated user.
         return _EmailVerificationCheck(user: user);
       },
     );
   }
 }
 
-/// Reloads the user once on entry to get a fresh `emailVerified`
-/// value, then routes to Home or the verification screen.
+/// Checks the user's email verification status and admin status.
+///
+/// The Firebase user is reloaded once so that we get the latest
+/// emailVerified value.
 class _EmailVerificationCheck extends StatefulWidget {
   final User user;
 
@@ -63,62 +79,83 @@ class _EmailVerificationCheckState extends State<_EmailVerificationCheck> {
   @override
   void initState() {
     super.initState();
-    // IMPORTANT: this used to call _checkVerification() directly,
-    // which calls AuthProvider.reloadUser() -> notifyListeners()
-    // synchronously, before any `await`. Since initState() runs
-    // *during* AuthGate's StreamBuilder build, that notifyListeners()
-    // tried to rebuild the same provider scope mid-build and Flutter
-    // threw "setState() or markNeedsBuild() called during build."
-    // Scheduling it for the next frame (post-build) fixes that.
-    WidgetsBinding.instance.addPostFrameCallback((_) => _checkVerification());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkUserStatus();
+    });
   }
 
-  Future<void> _checkVerification() async {
-    final auth = context.read<AuthProvider>();
-    final verified = await auth.reloadUser();
+  Future<void> _checkUserStatus() async {
+    try {
+      final auth = context.read<AuthProvider>();
 
-    // Only bother reading the Firestore role once the email is
-    // actually verified — an unverified user will see the
-    // VerifyEmailScreen regardless of their role.
-    bool isAdmin = false;
-    if (verified) {
-      await auth.ensureUserDoc();
-      final userData = await auth.fetchUserData(widget.user.uid);
-      isAdmin = userData?.isAdmin ?? false;
+      // Refresh Firebase user information.
+      final verified = await auth.reloadUser();
+
+      bool isAdmin = false;
+
+      if (verified) {
+        // Make sure the user's Firestore document exists.
+        await auth.ensureUserDoc();
+
+        // Get the user's latest data from Firestore.
+        final userData = await auth.fetchUserData(widget.user.uid);
+
+        isAdmin = userData?.isAdmin ?? false;
+      }
+
+      if (!mounted) return;
+
+      setState(() {
+        _isVerified = verified;
+        _isAdmin = isAdmin;
+        _checking = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        _isVerified = false;
+        _isAdmin = false;
+        _checking = false;
+      });
     }
-
-    if (!mounted) return;
-    setState(() {
-      _isVerified = verified;
-      _isAdmin = isAdmin;
-      _checking = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Still checking Firebase / Firestore.
     if (_checking) {
       return const _AuthGateLoading();
     }
 
+    // Email is not verified.
     if (!_isVerified) {
       return const VerifyEmailScreen();
     }
 
-    return _isAdmin ? const AdminHomeScreen() : const HomeScreen();
+    // Verified Admin.
+    if (_isAdmin) {
+      return const AdminHomeScreen();
+    }
+
+    // Verified normal user.
+    return const MainScreen();
   }
 }
 
+/// Loading screen shown while Firebase authentication
+/// and user information are being checked.
 class _AuthGateLoading extends StatelessWidget {
   const _AuthGateLoading();
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-        ),
+        child: CircularProgressIndicator(color: colorScheme.primary),
       ),
     );
   }
