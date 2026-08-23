@@ -69,15 +69,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     SizedBox(height: 28.h),
 
-                    const HomeSectionTitle(title: 'ابدأي من هنا'),
+                    HomeSectionTitle(title: lang.homeStartHere),
 
                     SizedBox(height: 14.h),
 
                     HomeFeatureCard(
                       icon: Icons.auto_awesome_rounded,
-                      title: 'اكتشفي المزيد',
-                      description:
-                          'استكشفي مميزات ROSIVA واكتشفي كل ما يمكن أن تقدمه لكِ.',
+                      title: lang.homeDiscoverMoreTitle,
+                      description: lang.homeDiscoverMoreDesc,
                       onTap: () {},
                     ),
 
@@ -85,9 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     HomeFeatureCard(
                       icon: Icons.favorite_rounded,
-                      title: 'المفضلة',
-                      description:
-                          'احتفظي بالأشياء التي تهمكِ للوصول إليها بسهولة.',
+                      title: lang.favorites,
+                      description: lang.homeFavoritesDesc,
                       onTap: () {},
                     ),
 
@@ -95,9 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     HomeFeatureCard(
                       icon: Icons.person_rounded,
-                      title: 'حسابي',
-                      description:
-                          'يمكنكِ إدارة بيانات حسابكِ وتفضيلاتكِ من هنا.',
+                      title: lang.homeMyAccountTitle,
+                      description: lang.homeMyAccountDesc,
                       onTap: () {},
                     ),
 

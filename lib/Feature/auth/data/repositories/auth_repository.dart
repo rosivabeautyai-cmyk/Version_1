@@ -153,6 +153,38 @@ class AuthRepository {
     return UserModel.fromSnapshot(doc);
   }
 
+  /// Streams the Firestore user document for the given uid, used by
+  /// [FavoritesProvider] to react instantly to favorite changes.
+  Stream<UserModel?> watchUserData(String uid) {
+    return _usersRef.doc(uid).snapshots().map((doc) {
+      if (!doc.exists) return null;
+      return UserModel.fromSnapshot(doc);
+    });
+  }
+
+  /// Adds [productId] to the current user's `favorites` array.
+  Future<void> addFavorite({required String uid, required String productId}) {
+    return _usersRef.doc(uid).set(
+      {
+        'favorites': FieldValue.arrayUnion([productId]),
+      },
+      SetOptions(merge: true),
+    );
+  }
+
+  /// Removes [productId] from the current user's `favorites` array.
+  Future<void> removeFavorite({
+    required String uid,
+    required String productId,
+  }) {
+    return _usersRef.doc(uid).set(
+      {
+        'favorites': FieldValue.arrayRemove([productId]),
+      },
+      SetOptions(merge: true),
+    );
+  }
+
   /// Public entry point so callers like [AuthGate] can repair an
   /// incomplete Firestore doc for the currently signed-in user even
   /// on a resumed session — not just right after a fresh sign-in

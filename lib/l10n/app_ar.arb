@@ -1,66 +1,44 @@
 {
   "@@locale": "ar",
-
   "welcome": "مرحباً بك في ROSIVA",
   "chooseLanguage": "اختر لغتك المفضلة",
   "continueButton": "استمرار",
   "skip": "تخطي",
-
   "next": "التالي",
   "getStarted": "ابدئي الآن",
-
   "onboardingTitle1": "اكتشفي عالم الجمال بالذكاء الاصطناعي",
   "onboardingDescription1": "مساعدكِ الذكي يساعدكِ على العثور على أفضل منتجات العناية بالبشرة والمكياج المناسبة لكِ.",
-
   "onboardingTitle2": "نصائح مخصصة لكِ",
   "onboardingDescription2": "تحدثي مع ROSIVA في أي وقت للحصول على نصائح وروتين عناية يناسب احتياجاتكِ.",
-
   "onboardingTitle3": "تسوقي بثقة",
   "onboardingDescription3": "اكتشفي منتجات موثوقة وتسوقي بسهولة وأمان.",
-
   "welcomeBack": "مرحباً بعودتك",
   "loginSubtitle": "سجلي الدخول لمتابعة رحلتك مع ROSIVA",
-
   "email": "البريد الإلكتروني",
   "emailHint": "you@example.com",
-
   "password": "كلمة المرور",
   "passwordHint": "أدخلي كلمة المرور",
-
   "rememberMe": "تذكرني",
   "forgotPassword": "نسيتِ كلمة المرور؟",
-
   "login": "تسجيل الدخول",
-
   "orContinueWith": "أو تابعي باستخدام",
-
   "dontHaveAccount": "ليس لديكِ حساب؟",
   "signUp": "إنشاء حساب",
-
   "createAccount": "إنشاء حساب",
   "registerSubtitle": "انضمي إلى ROSIVA وابدئي روتين جمالك",
-
   "fullName": "الاسم الكامل",
   "fullNameHint": "الاسم بالكامل",
-
   "createStrongPassword": "أنشئي كلمة مرور قوية",
-
   "confirmPassword": "تأكيد كلمة المرور",
   "confirmPasswordHint": "أعيدي إدخال كلمة المرور",
-
   "createAccountButton": "إنشاء الحساب",
-
   "alreadyHaveAccount": "لديكِ حساب بالفعل؟",
   "logIn": "تسجيل الدخول",
-
   "agreeTermsMessage": "يرجى الموافقة على شروط الاستخدام وسياسة الخصوصية.",
-
   "registrationFailed": "فشل إنشاء الحساب، يرجى المحاولة مرة أخرى.",
   "loginFailed": "فشل تسجيل الدخول، يرجى المحاولة مرة أخرى.",
-
   "termsOfService": "شروط الاستخدام",
   "privacyPolicy": "سياسة الخصوصية",
-
   "forgotPasswordTitle": "نسيتِ كلمة المرور؟",
   "forgotPasswordSubtitle": "لا داعي للقلق، سنرسل لكِ تعليمات إعادة التعيين.",
   "sendResetLink": "إرسال رابط إعادة التعيين",
@@ -75,17 +53,13 @@
     }
   },
   "forgotPasswordFailed": "فشل إرسال رسالة إعادة التعيين.",
-
   "continueWithGoogle": "تابعي باستخدام Google",
   "continueWithApple": "تابعي باستخدام Apple",
-
   "agreeToThe": "أوافق على ",
   "termsAnd": " و",
-
   "signedInAndVerified": "تم تسجيل دخولكِ والتحقق من حسابكِ.",
   "logOut": "تسجيل الخروج",
   "appName": "ROSIVA",
-
   "verifyYourEmail": "تحققي من بريدكِ الإلكتروني",
   "verifyEmailMessage": "لقد أرسلنا رابط تحقق إلى\n{email}.\nاضغطي على الرابط الموجود في الرسالة لتفعيل حسابكِ.",
   "@verifyEmailMessage": {
@@ -112,7 +86,6 @@
   "resendEmailFailed": "فشل في إعادة إرسال البريد.",
   "verificationEmailSent": "تم إرسال رسالة التحقق!",
   "yourEmailFallback": "بريدكِ الإلكتروني",
-
   "emailRequired": "البريد الإلكتروني مطلوب",
   "emailInvalid": "أدخلي بريدًا إلكترونيًا صحيحًا",
   "passwordRequired": "كلمة المرور مطلوبة",
@@ -126,5 +99,173 @@
   "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
   "fullNameRequired": "الاسم الكامل مطلوب",
   "fullNameInvalid": "أدخلي اسمًا كاملاً صحيحًا",
-  "fullNameLettersOnly": "يجب أن يحتوي الاسم على حروف فقط"
+  "fullNameLettersOnly": "يجب أن يحتوي الاسم على حروف فقط",
+  "home": "الرئيسية",
+  "explore": "استكشاف",
+  "favorites": "المفضلة",
+  "profile": "الملف الشخصي",
+  "homeStartHere": "ابدأي من هنا",
+  "homeDiscoverMoreTitle": "اكتشفي المزيد",
+  "homeDiscoverMoreDesc": "استكشفي مميزات ROSIVA واكتشفي كل ما يمكن أن تقدمه لكِ.",
+  "homeFavoritesDesc": "احتفظي بالأشياء التي تهمكِ للوصول إليها بسهولة.",
+  "homeMyAccountTitle": "حسابي",
+  "homeMyAccountDesc": "يمكنكِ إدارة بيانات حسابكِ وتفضيلاتكِ من هنا.",
+  "welcomeGreeting": "أهلًا، {name}",
+  "@welcomeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "rosivaUserFallback": "مستخدمة ROSIVA",
+  "yourProfile": "ملفكِ الشخصي",
+  "profileManageSubtitle": "إدارة حسابك وتفضيلاتك.",
+  "favoritesSubtitle": "ستظهر عناصرك المفضلة هنا.",
+  "noFavoritesYetTitle": "لا توجد مفضلات بعد",
+  "noFavoritesYetDesc": "ابدئي بإضافة العناصر المفضلة لديكِ وستظهر هنا.",
+  "exploreSubtitle": "اكتشفي كل ما تقدمه ROSIVA.",
+  "exploreComingSoonTitle": "قسم الاستكشاف قريبًا",
+  "exploreComingSoonDesc": "سيتم إضافة قسم الاستكشاف هنا قريبًا.",
+  "adminDashboardTitle": "لوحة تحكم الأدمن",
+  "totalUsers": "إجمالي المستخدمين",
+  "verifiedEmails": "إيميلات موثّقة",
+  "adminToolsTitle": "أدوات الأدمن",
+  "adminToolsPlaceholder": "أدوات إدارة المستخدمين والمحتوى هتتضاف هنا لاحقًا.",
+  "legalLastUpdatedPlaceholder": "آخر تحديث: أضيفي التاريخ هنا",
+  "tosSection1Title": "١. الموافقة على الشروط",
+  "tosSection1Body": "باستخدامك لتطبيق ROSIVA فإنك توافقين على هذه الشروط. إذا كنتِ لا توافقين عليها، يرجى عدم استخدام التطبيق.",
+  "tosSection2Title": "٢. استخدام التطبيق",
+  "tosSection2Body": "يجب استخدام التطبيق للأغراض الشخصية المشروعة فقط، وعدم محاولة إساءة استخدامه أو الوصول غير المصرح به إلى حسابات أخرى.",
+  "tosSection3Title": "٣. الحساب والمسؤولية",
+  "tosSection3Body": "أنتِ مسؤولة عن الحفاظ على سرية بيانات حسابك، وعن أي نشاط يتم من خلاله.",
+  "tosSection4Title": "٤. التعديلات على الخدمة",
+  "tosSection4Body": "نحتفظ بحق تعديل أو إيقاف أي جزء من التطبيق في أي وقت دون إشعار مسبق.",
+  "tosSection5Title": "٥. إنهاء الحساب",
+  "tosSection5Body": "يحق لنا تعليق أو إنهاء أي حساب يخالف هذه الشروط أو يُستخدم بشكل غير قانوني.",
+  "tosSection6Title": "٦. التواصل معنا",
+  "tosSection6Body": "لأي استفسار حول شروط الاستخدام، راسلينا على: أضيفي بريدك هنا.",
+  "privacySection1Title": "١. البيانات التي نجمعها",
+  "privacySection1Body": "نجمع بيانات مثل الاسم، البريد الإلكتروني، وأي معلومات تقومين بإدخالها داخل التطبيق (مثل نوع البشرة أو المفضلة). عدّلي هذا النص ليعكس البيانات الفعلية التي يجمعها تطبيقك.",
+  "privacySection2Title": "٢. كيف نستخدم بياناتك",
+  "privacySection2Body": "نستخدم بياناتك لتقديم خدمات التطبيق، تحسين تجربة الاستخدام، والتواصل معك عند الحاجة. لا نبيع بياناتك لأي طرف ثالث.",
+  "privacySection3Title": "٣. مشاركة البيانات",
+  "privacySection3Body": "قد تتم مشاركة بعض البيانات مع مزودي خدمات موثوقين (مثل Firebase من جوجل) لتشغيل التطبيق فقط، وليس لأي غرض تسويقي.",
+  "privacySection4Title": "٤. أمان البيانات",
+  "privacySection4Body": "نتخذ إجراءات معقولة لحماية بياناتك، لكن لا يمكن ضمان الأمان الكامل لأي نظام إلكتروني بنسبة ١٠٠٪.",
+  "privacySection5Title": "٥. حقوقك",
+  "privacySection5Body": "يمكنك طلب تعديل أو حذف بياناتك في أي وقت عن طريق التواصل معنا من داخل التطبيق أو عبر البريد الإلكتروني.",
+  "privacySection6Title": "٦. التواصل معنا",
+  "privacySection6Body": "لأي استفسار حول سياسة الخصوصية، راسلينا على: أضيفي بريدك هنا.",
+  "search": "بحث",
+  "searchHint": "ابحثي عن منتج أو ماركة...",
+  "seeAll": "عرض الكل",
+  "cancel": "إلغاء",
+  "retry": "إعادة المحاولة",
+  "save": "حفظ",
+  "apply": "تطبيق",
+  "done": "تم",
+  "comingSoon": "قريبًا",
+  "aiAssistant": "المساعد الذكي",
+  "categories": "الفئات",
+  "helloBeautiful": "أهلاً أيتها الجميلة",
+  "elevateYourRitual": "ارتقِ بروتينك اليومي.",
+  "askRosivaAnything": "اسألي ROSIVA أي شيء...",
+  "curatedEssentials": "أساسيات مختارة",
+  "trendingNow": "الأكثر رواجًا",
+  "skincare": "العناية بالبشرة",
+  "makeup": "مكياج",
+  "perfume": "عطور",
+  "affiliateDisclosureShort": "روزيفيا منصة تسويق بالعمولة. تتم عمليات الشراء عبر مواقع خارجية. قد نحصل على عمولة عن عمليات الشراء المؤهلة عبر روابطنا.",
+  "loadingProducts": "جارِ تحميل المنتجات...",
+  "somethingWentWrong": "حدث خطأ ما",
+  "somethingWentWrongDesc": "تعذر تحميل هذا المحتوى. يرجى التحقق من الاتصال والمحاولة مرة أخرى.",
+  "noResultsFound": "لا توجد نتائج",
+  "noResultsFoundDesc": "جربي كلمة بحث مختلفة أو تصفحي الفئات بدلاً من ذلك.",
+  "noProductsYet": "لا توجد منتجات بعد",
+  "noProductsYetDesc": "ستظهر المنتجات هنا بمجرد إضافتها.",
+  "startSearching": "ابدئي البحث",
+  "startSearchingDesc": "ابحثي عن منتجات العناية بالبشرة والمكياج والعطور.",
+  "browseCategories": "تصفح الفئات",
+  "allProducts": "كل المنتجات",
+  "filter": "تصفية",
+  "sortBy": "ترتيب حسب",
+  "productDetails": "تفاصيل المنتج",
+  "reviews": "التقييمات",
+  "editorsChoice": "اختيار المحررين",
+  "whyRosivaRecommends": "لماذا توصي روزيفيا بهذا",
+  "ingredients": "المكونات",
+  "benefits": "الفوائد",
+  "howToUse": "طريقة الاستخدام",
+  "openStore": "فتح المتجر",
+  "priceAvailabilityDisclaimer": "قد تختلف الأسعار والتوفر على المواقع الخارجية. بصفتها منصة تسويق بالعمولة، قد تحصل روزيفيا على عمولة صغيرة عن عمليات الشراء المؤهلة.",
+  "patchTestDisclaimer": "يحتوي هذا المنتج على مكونات فعالة. نوصي بإجراء اختبار حساسية قبل الاستخدام الكامل. استشيري طبيب الجلدية إذا كانت لديكِ مشكلات جلدية محددة.",
+  "addToFavorites": "إضافة للمفضلة",
+  "removeFromFavorites": "إزالة من المفضلة",
+  "addedToFavorites": "أُضيف إلى المفضلة",
+  "removedFromFavorites": "أُزيل من المفضلة",
+  "rosivaAiTitle": "مساعد الجمال الذكي روزيفيا",
+  "aiWelcomeMessage": "مرحبًا! أنا مساعد الجمال الذكي من روزيفيا. كيف يمكنني مساعدتكِ لتحقيق أهداف بشرتكِ اليوم؟",
+  "aiInputHint": "اسألي روزيفيا أي شيء...",
+  "aiNotConfigured": "لم يتم توصيل المساعد الذكي بعد. يرجى المحاولة لاحقًا.",
+  "aiAccuracyTitle": "دقة الذكاء الاصطناعي",
+  "aiAccuracyDesc": "يتم إنشاء توصياتنا من خلال نمذجة بيانات معقدة استنادًا إلى التفضيلات التي تشاركينها. نسعى للدقة المطلقة في مطابقة الألوان واقتراح الروتين، لكن النتائج الفردية قد تختلف بسبب العوامل البيئية وخصوصية بشرة كل شخص.",
+  "medicalAdviceDisclaimerTitle": "إخلاء مسؤولية طبي",
+  "medicalAdviceDisclaimerDesc": "لا تقدم روزيفيا تشخيصًا طبيًا أو استشارة جلدية. الاقتراحات المقدمة هي لأغراض تجميلية فقط. إذا كانت لديكِ حالات جلدية نشطة أو حساسية أو تخضعين لعلاج طبي، ننصح بشدة باستشارة أخصائي رعاية صحية مؤهل قبل إدخال مكونات فعالة جديدة إلى روتينكِ.",
+  "requiredLegalDisclosure": "إفصاح قانوني مطلوب",
+  "settings": "الإعدادات",
+  "settingsSubtitle": "خصصي تجربتكِ وطريقة عملنا.",
+  "localization": "الإعدادات المحلية",
+  "country": "الدولة",
+  "language": "اللغة",
+  "currency": "العملة",
+  "autoBasedOnLocation": "تلقائي حسب الموقع",
+  "notifications": "الإشعارات",
+  "aiRecommendations": "توصيات الذكاء الاصطناعي",
+  "aiRecommendationsDesc": "اقتراحات منتجات مخصصة",
+  "priceDrops": "انخفاض الأسعار",
+  "priceDropsDesc": "احصلي على إشعار بالعناصر المحفوظة",
+  "newDiscoveries": "اكتشافات جديدة",
+  "newDiscoveriesDesc": "علامات ومنتجات جديدة",
+  "transparencyAndLegal": "الشفافية والقوانين",
+  "affiliateTransparency": "شفافية العمولة",
+  "affiliateTransparencyDesc": "روزيفيا محرك توصيات ذكي وليست بائعًا مباشرًا. عند الضغط على \"تسوقي الآن\"، يتم توجيهكِ إلى بائع خارجي. قد نحصل على عمولة عبر تلك الروابط دون أي تكلفة إضافية عليكِ. هذا يمكّننا من إبقاء مساعد الجمال الذكي المتميز مجانيًا للجميع.",
+  "medicalDisclaimer": "إخلاء مسؤولية طبي",
+  "requiredLegalDisclosureShort": "إفصاح قانوني مطلوب",
+  "darkMode": "الوضع الداكن",
+  "accountSettings": "إعدادات الحساب",
+  "editProfile": "تعديل الملف الشخصي",
+  "security": "الأمان",
+  "preferences": "التفضيلات",
+  "support": "الدعم",
+  "helpCenter": "مركز المساعدة",
+  "contactUs": "تواصلي معنا",
+  "legalAndDisclaimers": "الجوانب القانونية وإخلاء المسؤولية",
+  "affiliateDisclosure": "إفصاح العمولة",
+  "aiAndMedicalDisclaimer": "إخلاء مسؤولية الذكاء الاصطناعي والطب",
+  "termsOfServiceShort": "شروط الخدمة",
+  "appVersion": "الإصدار {version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "myBeautyProfile": "ملفي الجمالي",
+  "myBeautyProfileDesc": "نوع البشرة، الأهداف",
+  "favoritesAndCollections": "المفضلة والمجموعات",
+  "personalization": "التخصيص",
+  "memberSince": "عضو منذ {year}",
+  "@memberSince": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmLogout": "هل أنتِ متأكدة من تسجيل الخروج؟",
+  "categorySkincare": "العناية بالبشرة",
+  "categoryMakeup": "مكياج",
+  "categoryPerfume": "العطور"
 }

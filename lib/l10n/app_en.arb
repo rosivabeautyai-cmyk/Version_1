@@ -1,66 +1,44 @@
 {
   "@@locale": "en",
-
   "welcome": "Welcome to ROSIVA",
   "chooseLanguage": "Choose your preferred language",
   "continueButton": "Continue",
   "skip": "Skip",
-
   "next": "Next",
   "getStarted": "Get Started",
-
   "onboardingTitle1": "Discover Beauty with AI",
   "onboardingDescription1": "Your smart beauty assistant helps you find the best skincare and makeup products for you.",
-
   "onboardingTitle2": "Personalized Beauty Advice",
   "onboardingDescription2": "Chat with ROSIVA anytime to receive personalized beauty tips and routines.",
-
   "onboardingTitle3": "Shop with Confidence",
   "onboardingDescription3": "Explore trusted beauty products and shop securely.",
-
   "welcomeBack": "Welcome back",
   "loginSubtitle": "Sign in to continue your ROSIVA journey",
-
   "email": "Email",
   "emailHint": "you@example.com",
-
   "password": "Password",
   "passwordHint": "Enter your password",
-
   "rememberMe": "Remember me",
   "forgotPassword": "Forgot Password?",
-
   "login": "Log In",
-
   "orContinueWith": "Or continue with",
-
   "dontHaveAccount": "Don't have an account?",
   "signUp": "Sign Up",
-
   "createAccount": "Create account",
   "registerSubtitle": "Join ROSIVA and start your beauty ritual",
-
   "fullName": "Full Name",
   "fullNameHint": "Full Name",
-
   "createStrongPassword": "Create a strong password",
-
   "confirmPassword": "Confirm Password",
   "confirmPasswordHint": "Re-enter your password",
-
   "createAccountButton": "Create Account",
-
   "alreadyHaveAccount": "Already have an account?",
   "logIn": "Log In",
-
   "agreeTermsMessage": "Please agree to the Terms of Service and Privacy Policy.",
-
   "registrationFailed": "Registration failed. Please try again.",
   "loginFailed": "Login failed. Please try again.",
-
   "termsOfService": "Terms of Service",
   "privacyPolicy": "Privacy Policy",
-
   "forgotPasswordTitle": "Forgot password?",
   "forgotPasswordSubtitle": "No worries, we'll send you reset instructions.",
   "sendResetLink": "Send Reset Link",
@@ -75,17 +53,13 @@
     }
   },
   "forgotPasswordFailed": "Failed to send reset email.",
-
   "continueWithGoogle": "Continue with Google",
   "continueWithApple": "Continue with Apple",
-
   "agreeToThe": "I agree to the ",
   "termsAnd": " and ",
-
   "signedInAndVerified": "You're signed in and verified.",
   "logOut": "Log Out",
   "appName": "ROSIVA",
-
   "verifyYourEmail": "Verify your email",
   "verifyEmailMessage": "We've sent a verification link to\n{email}.\nTap the link in that email to activate your account.",
   "@verifyEmailMessage": {
@@ -112,7 +86,6 @@
   "resendEmailFailed": "Failed to resend email.",
   "verificationEmailSent": "Verification email sent!",
   "yourEmailFallback": "your email",
-
   "emailRequired": "Email is required",
   "emailInvalid": "Enter a valid email address",
   "passwordRequired": "Password is required",
@@ -126,5 +99,173 @@
   "passwordsDoNotMatch": "Passwords do not match",
   "fullNameRequired": "Full name is required",
   "fullNameInvalid": "Enter a valid full name",
-  "fullNameLettersOnly": "Name can only contain letters"
+  "fullNameLettersOnly": "Name can only contain letters",
+  "home": "Home",
+  "explore": "Explore",
+  "favorites": "Favorites",
+  "profile": "Profile",
+  "homeStartHere": "Start here",
+  "homeDiscoverMoreTitle": "Discover more",
+  "homeDiscoverMoreDesc": "Explore ROSIVA's features and discover everything it can offer you.",
+  "homeFavoritesDesc": "Keep the things you care about for easy access.",
+  "homeMyAccountTitle": "My Account",
+  "homeMyAccountDesc": "Manage your account details and preferences from here.",
+  "welcomeGreeting": "Hi, {name}",
+  "@welcomeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "rosivaUserFallback": "ROSIVA User",
+  "yourProfile": "Your Profile",
+  "profileManageSubtitle": "Manage your account and preferences.",
+  "favoritesSubtitle": "Your favorite items will appear here.",
+  "noFavoritesYetTitle": "No favorites yet",
+  "noFavoritesYetDesc": "Start adding your favorite items and they will appear here.",
+  "exploreSubtitle": "Discover everything ROSIVA has to offer.",
+  "exploreComingSoonTitle": "Explore coming soon",
+  "exploreComingSoonDesc": "The explore section will be added here.",
+  "adminDashboardTitle": "Admin Dashboard",
+  "totalUsers": "Total Users",
+  "verifiedEmails": "Verified Emails",
+  "adminToolsTitle": "Admin Tools",
+  "adminToolsPlaceholder": "User and content management tools will be added here soon.",
+  "legalLastUpdatedPlaceholder": "Last updated: add the date here",
+  "tosSection1Title": "1. Acceptance of Terms",
+  "tosSection1Body": "By using the ROSIVA app, you agree to these terms. If you do not agree with them, please do not use the app.",
+  "tosSection2Title": "2. Using the App",
+  "tosSection2Body": "The app must be used only for lawful personal purposes. You must not attempt to misuse it or gain unauthorized access to other accounts.",
+  "tosSection3Title": "3. Account & Responsibility",
+  "tosSection3Body": "You are responsible for keeping your account credentials confidential, and for any activity carried out through your account.",
+  "tosSection4Title": "4. Changes to the Service",
+  "tosSection4Body": "We reserve the right to modify or discontinue any part of the app at any time without prior notice.",
+  "tosSection5Title": "5. Account Termination",
+  "tosSection5Body": "We may suspend or terminate any account that violates these terms or is used unlawfully.",
+  "tosSection6Title": "6. Contact Us",
+  "tosSection6Body": "For any questions about the Terms of Service, contact us at: add your email here.",
+  "privacySection1Title": "1. Data We Collect",
+  "privacySection1Body": "We collect data such as your name, email address, and any information you enter within the app (such as skin type or favorites). Edit this text to reflect the data your app actually collects.",
+  "privacySection2Title": "2. How We Use Your Data",
+  "privacySection2Body": "We use your data to provide the app's services, improve the user experience, and contact you when needed. We do not sell your data to any third party.",
+  "privacySection3Title": "3. Data Sharing",
+  "privacySection3Body": "Some data may be shared with trusted service providers (such as Google Firebase) solely to operate the app, and not for any marketing purpose.",
+  "privacySection4Title": "4. Data Security",
+  "privacySection4Body": "We take reasonable measures to protect your data, but complete security cannot be guaranteed for any electronic system 100%.",
+  "privacySection5Title": "5. Your Rights",
+  "privacySection5Body": "You may request to modify or delete your data at any time by contacting us from within the app or by email.",
+  "privacySection6Title": "6. Contact Us",
+  "privacySection6Body": "For any questions about the Privacy Policy, contact us at: add your email here.",
+  "search": "Search",
+  "searchHint": "Search products, brands...",
+  "seeAll": "View All",
+  "cancel": "Cancel",
+  "retry": "Retry",
+  "save": "Save",
+  "apply": "Apply",
+  "done": "Done",
+  "comingSoon": "Coming soon",
+  "aiAssistant": "AI Assistant",
+  "categories": "Categories",
+  "helloBeautiful": "Hello, Beautiful",
+  "elevateYourRitual": "Elevate your ritual.",
+  "askRosivaAnything": "Ask ROSIVA anything...",
+  "curatedEssentials": "Curated Essentials",
+  "trendingNow": "Trending Now",
+  "skincare": "Skincare",
+  "makeup": "Makeup",
+  "perfume": "Perfume",
+  "affiliateDisclosureShort": "ROSIVA is an affiliate platform. Purchases occur on third-party sites. We may earn a commission on qualifying purchases made through our links.",
+  "loadingProducts": "Loading products...",
+  "somethingWentWrong": "Something went wrong",
+  "somethingWentWrongDesc": "We couldn't load this content. Please check your connection and try again.",
+  "noResultsFound": "No results found",
+  "noResultsFoundDesc": "Try a different search term or browse our categories instead.",
+  "noProductsYet": "No products yet",
+  "noProductsYetDesc": "Products will appear here once they are added.",
+  "startSearching": "Start searching",
+  "startSearchingDesc": "Search for skincare, makeup, and perfume products.",
+  "browseCategories": "Browse Categories",
+  "allProducts": "All Products",
+  "filter": "Filter",
+  "sortBy": "Sort By",
+  "productDetails": "Product Details",
+  "reviews": "Reviews",
+  "editorsChoice": "Editor's Choice",
+  "whyRosivaRecommends": "Why ROSIVA recommends this",
+  "ingredients": "Ingredients",
+  "benefits": "Benefits",
+  "howToUse": "How to Use",
+  "openStore": "Open Store",
+  "priceAvailabilityDisclaimer": "Prices and availability on third-party sites may vary. As an affiliate, ROSIVA may earn a small commission on qualifying purchases.",
+  "patchTestDisclaimer": "This product contains active ingredients. We recommend a patch test before full application. Consult a dermatologist if you have specific skin concerns.",
+  "addToFavorites": "Add to Favorites",
+  "removeFromFavorites": "Remove from Favorites",
+  "addedToFavorites": "Added to favorites",
+  "removedFromFavorites": "Removed from favorites",
+  "rosivaAiTitle": "ROSIVA AI Beauty Assistant",
+  "aiWelcomeMessage": "Hello! I'm your ROSIVA AI Beauty Assistant. How can I help you achieve your skin goals today?",
+  "aiInputHint": "Ask ROSIVA anything...",
+  "aiNotConfigured": "The AI assistant isn't connected yet. Please check back soon.",
+  "aiAccuracyTitle": "AI Accuracy",
+  "aiAccuracyDesc": "Our recommendations are generated through complex data modeling based on the preferences you share. We strive for absolute precision in color matching and routine suggestions, but individual results may vary due to environmental factors and skin's unique nuances.",
+  "medicalAdviceDisclaimerTitle": "Medical Advice Disclaimer",
+  "medicalAdviceDisclaimerDesc": "ROSIVA does not provide medical diagnosis or dermatological advice. The product suggestions provided are for cosmetic guidance only. If you have active skin conditions, allergies, or are undergoing medical treatment, we strongly advise consulting with a qualified healthcare professional before introducing new active ingredients into your routine.",
+  "requiredLegalDisclosure": "Required Legal Disclosure",
+  "settings": "Settings",
+  "settingsSubtitle": "Customize your experience and how we work.",
+  "localization": "Localization",
+  "country": "Country",
+  "language": "Language",
+  "currency": "Currency",
+  "autoBasedOnLocation": "Auto based on location",
+  "notifications": "Notifications",
+  "aiRecommendations": "AI Recommendations",
+  "aiRecommendationsDesc": "Personalized product suggestions",
+  "priceDrops": "Price Drops",
+  "priceDropsDesc": "Get notified about saved items",
+  "newDiscoveries": "New Discoveries",
+  "newDiscoveriesDesc": "New brands and products",
+  "transparencyAndLegal": "Transparency & Legal",
+  "affiliateTransparency": "Affiliate Transparency",
+  "affiliateTransparencyDesc": "ROSIVA is an intelligent recommendation engine, not a direct retailer. When you click \"Shop Now,\" you are directed to a third-party merchant. We may earn a commission through those links at no extra cost to you. This enables us to keep our premium beauty AI free for everyone.",
+  "medicalDisclaimer": "Medical Advice Disclaimer",
+  "requiredLegalDisclosureShort": "Required Legal Disclosure",
+  "darkMode": "Dark Mode",
+  "accountSettings": "Account Settings",
+  "editProfile": "Edit Profile",
+  "security": "Security",
+  "preferences": "Preferences",
+  "support": "Support",
+  "helpCenter": "Help Center",
+  "contactUs": "Contact Us",
+  "legalAndDisclaimers": "Legal & Disclaimers",
+  "affiliateDisclosure": "Affiliate Disclosure",
+  "aiAndMedicalDisclaimer": "AI & Medical Disclaimer",
+  "termsOfServiceShort": "Terms of Service",
+  "appVersion": "Version {version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "myBeautyProfile": "My Beauty Profile",
+  "myBeautyProfileDesc": "Skin Type, Goals",
+  "favoritesAndCollections": "Favorites & Collections",
+  "personalization": "Personalization",
+  "memberSince": "Member since {year}",
+  "@memberSince": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmLogout": "Are you sure you want to log out?",
+  "categorySkincare": "Skincare",
+  "categoryMakeup": "Makeup",
+  "categoryPerfume": "Perfumes"
 }

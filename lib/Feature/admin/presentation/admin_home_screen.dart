@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../../core/styles/colors.dart';
 import '../../auth/provider/auth_provider.dart';
@@ -58,17 +59,18 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = context.read<AuthProvider>();
+    final lang = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('لوحة تحكم الأدمن'),
+        title: Text(lang.adminDashboardTitle),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
           IconButton(
-            tooltip: 'تسجيل الخروج',
+            tooltip: lang.logOut,
             icon: const Icon(Icons.logout_rounded),
             onPressed: () => auth.logout(),
           ),
@@ -85,7 +87,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       Expanded(
                         child: _StatCard(
                           icon: Icons.people_alt_rounded,
-                          label: 'إجمالي المستخدمين',
+                          label: lang.totalUsers,
                           value: '$_totalUsers',
                         ),
                       ),
@@ -93,7 +95,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       Expanded(
                         child: _StatCard(
                           icon: Icons.verified_rounded,
-                          label: 'إيميلات موثّقة',
+                          label: lang.verifiedEmails,
                           value: '$_verifiedUsers',
                         ),
                       ),
@@ -101,7 +103,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                   ),
                   SizedBox(height: 24.h),
                   Text(
-                    'أدوات الأدمن',
+                    lang.adminToolsTitle,
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
@@ -120,7 +122,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       border: Border.all(color: AppColors.bordercolor),
                     ),
                     child: Text(
-                      'أدوات إدارة المستخدمين والمحتوى هتتضاف هنا لاحقًا.',
+                      lang.adminToolsPlaceholder,
                       style: TextStyle(fontSize: 14.sp, color: AppColors.graycolor),
                     ),
                   ),

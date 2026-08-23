@@ -5,6 +5,7 @@ import 'package:rosivia/Feature/intro/language/language_provider.dart';
 import 'package:rosivia/Feature/intro/language/language_tile.dart';
 import 'package:rosivia/Feature/intro/onboarding/presentation/page/onboarding_view.dart';
 import 'package:rosivia/core/styles/colors.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 class LanguageView extends StatefulWidget {
   const LanguageView({super.key});
@@ -27,6 +28,8 @@ class _LanguageViewState extends State<LanguageView> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: AppColors.bordercolor,
       body: SafeArea(
@@ -52,10 +55,10 @@ class _LanguageViewState extends State<LanguageView> {
 
               const SizedBox(height: 30),
 
-              const Text(
-                "Welcome to ROSIVA",
+              Text(
+                lang.welcome,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
@@ -64,10 +67,10 @@ class _LanguageViewState extends State<LanguageView> {
 
               const SizedBox(height: 10),
 
-              const Text(
-                "Choose your preferred language",
+              Text(
+                lang.chooseLanguage,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.graycolor, fontSize: 16),
+                style: const TextStyle(color: AppColors.graycolor, fontSize: 16),
               ),
 
               const SizedBox(height: 45),
@@ -123,9 +126,9 @@ class _LanguageViewState extends State<LanguageView> {
                       borderRadius: BorderRadius.circular(18),
                     ),
                   ),
-                  child: const Text(
-                    "Continue",
-                    style: TextStyle(
+                  child: Text(
+                    lang.continueButton,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,

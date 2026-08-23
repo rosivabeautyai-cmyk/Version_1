@@ -257,6 +257,27 @@ class AuthProvider extends ChangeNotifier {
     return _repository.getUserData(targetUid);
   }
 
+  /// Live stream of the current user's Firestore document, used to
+  /// keep the Favorites screen and product hearts in sync in
+  /// real time.
+  Stream<UserModel?> watchCurrentUser() {
+    final uid = currentUser?.uid;
+    if (uid == null) return const Stream.empty();
+    return _repository.watchUserData(uid);
+  }
+
+  Future<void> addFavorite(String productId) {
+    final uid = currentUser?.uid;
+    if (uid == null) return Future.value();
+    return _repository.addFavorite(uid: uid, productId: productId);
+  }
+
+  Future<void> removeFavorite(String productId) {
+    final uid = currentUser?.uid;
+    if (uid == null) return Future.value();
+    return _repository.removeFavorite(uid: uid, productId: productId);
+  }
+
   /// Repairs the current user's Firestore doc if it's missing or
   /// incomplete (e.g. missing the `role` field). Safe to call every
   /// time the app resumes an existing session, not just right after

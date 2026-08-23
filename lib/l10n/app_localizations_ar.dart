@@ -250,4 +250,451 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fullNameLettersOnly => 'يجب أن يحتوي الاسم على حروف فقط';
+
+  @override
+  String get home => 'الرئيسية';
+
+  @override
+  String get explore => 'استكشاف';
+
+  @override
+  String get favorites => 'المفضلة';
+
+  @override
+  String get profile => 'الملف الشخصي';
+
+  @override
+  String get homeStartHere => 'ابدأي من هنا';
+
+  @override
+  String get homeDiscoverMoreTitle => 'اكتشفي المزيد';
+
+  @override
+  String get homeDiscoverMoreDesc => 'استكشفي مميزات ROSIVA واكتشفي كل ما يمكن أن تقدمه لكِ.';
+
+  @override
+  String get homeFavoritesDesc => 'احتفظي بالأشياء التي تهمكِ للوصول إليها بسهولة.';
+
+  @override
+  String get homeMyAccountTitle => 'حسابي';
+
+  @override
+  String get homeMyAccountDesc => 'يمكنكِ إدارة بيانات حسابكِ وتفضيلاتكِ من هنا.';
+
+  @override
+  String welcomeGreeting(String name) {
+    return 'أهلًا، $name';
+  }
+
+  @override
+  String get rosivaUserFallback => 'مستخدمة ROSIVA';
+
+  @override
+  String get yourProfile => 'ملفكِ الشخصي';
+
+  @override
+  String get profileManageSubtitle => 'إدارة حسابك وتفضيلاتك.';
+
+  @override
+  String get favoritesSubtitle => 'ستظهر عناصرك المفضلة هنا.';
+
+  @override
+  String get noFavoritesYetTitle => 'لا توجد مفضلات بعد';
+
+  @override
+  String get noFavoritesYetDesc => 'ابدئي بإضافة العناصر المفضلة لديكِ وستظهر هنا.';
+
+  @override
+  String get exploreSubtitle => 'اكتشفي كل ما تقدمه ROSIVA.';
+
+  @override
+  String get exploreComingSoonTitle => 'قسم الاستكشاف قريبًا';
+
+  @override
+  String get exploreComingSoonDesc => 'سيتم إضافة قسم الاستكشاف هنا قريبًا.';
+
+  @override
+  String get adminDashboardTitle => 'لوحة تحكم الأدمن';
+
+  @override
+  String get totalUsers => 'إجمالي المستخدمين';
+
+  @override
+  String get verifiedEmails => 'إيميلات موثّقة';
+
+  @override
+  String get adminToolsTitle => 'أدوات الأدمن';
+
+  @override
+  String get adminToolsPlaceholder => 'أدوات إدارة المستخدمين والمحتوى هتتضاف هنا لاحقًا.';
+
+  @override
+  String get legalLastUpdatedPlaceholder => 'آخر تحديث: أضيفي التاريخ هنا';
+
+  @override
+  String get tosSection1Title => '١. الموافقة على الشروط';
+
+  @override
+  String get tosSection1Body => 'باستخدامك لتطبيق ROSIVA فإنك توافقين على هذه الشروط. إذا كنتِ لا توافقين عليها، يرجى عدم استخدام التطبيق.';
+
+  @override
+  String get tosSection2Title => '٢. استخدام التطبيق';
+
+  @override
+  String get tosSection2Body => 'يجب استخدام التطبيق للأغراض الشخصية المشروعة فقط، وعدم محاولة إساءة استخدامه أو الوصول غير المصرح به إلى حسابات أخرى.';
+
+  @override
+  String get tosSection3Title => '٣. الحساب والمسؤولية';
+
+  @override
+  String get tosSection3Body => 'أنتِ مسؤولة عن الحفاظ على سرية بيانات حسابك، وعن أي نشاط يتم من خلاله.';
+
+  @override
+  String get tosSection4Title => '٤. التعديلات على الخدمة';
+
+  @override
+  String get tosSection4Body => 'نحتفظ بحق تعديل أو إيقاف أي جزء من التطبيق في أي وقت دون إشعار مسبق.';
+
+  @override
+  String get tosSection5Title => '٥. إنهاء الحساب';
+
+  @override
+  String get tosSection5Body => 'يحق لنا تعليق أو إنهاء أي حساب يخالف هذه الشروط أو يُستخدم بشكل غير قانوني.';
+
+  @override
+  String get tosSection6Title => '٦. التواصل معنا';
+
+  @override
+  String get tosSection6Body => 'لأي استفسار حول شروط الاستخدام، راسلينا على: أضيفي بريدك هنا.';
+
+  @override
+  String get privacySection1Title => '١. البيانات التي نجمعها';
+
+  @override
+  String get privacySection1Body => 'نجمع بيانات مثل الاسم، البريد الإلكتروني، وأي معلومات تقومين بإدخالها داخل التطبيق (مثل نوع البشرة أو المفضلة). عدّلي هذا النص ليعكس البيانات الفعلية التي يجمعها تطبيقك.';
+
+  @override
+  String get privacySection2Title => '٢. كيف نستخدم بياناتك';
+
+  @override
+  String get privacySection2Body => 'نستخدم بياناتك لتقديم خدمات التطبيق، تحسين تجربة الاستخدام، والتواصل معك عند الحاجة. لا نبيع بياناتك لأي طرف ثالث.';
+
+  @override
+  String get privacySection3Title => '٣. مشاركة البيانات';
+
+  @override
+  String get privacySection3Body => 'قد تتم مشاركة بعض البيانات مع مزودي خدمات موثوقين (مثل Firebase من جوجل) لتشغيل التطبيق فقط، وليس لأي غرض تسويقي.';
+
+  @override
+  String get privacySection4Title => '٤. أمان البيانات';
+
+  @override
+  String get privacySection4Body => 'نتخذ إجراءات معقولة لحماية بياناتك، لكن لا يمكن ضمان الأمان الكامل لأي نظام إلكتروني بنسبة ١٠٠٪.';
+
+  @override
+  String get privacySection5Title => '٥. حقوقك';
+
+  @override
+  String get privacySection5Body => 'يمكنك طلب تعديل أو حذف بياناتك في أي وقت عن طريق التواصل معنا من داخل التطبيق أو عبر البريد الإلكتروني.';
+
+  @override
+  String get privacySection6Title => '٦. التواصل معنا';
+
+  @override
+  String get privacySection6Body => 'لأي استفسار حول سياسة الخصوصية، راسلينا على: أضيفي بريدك هنا.';
+
+  @override
+  String get search => 'بحث';
+
+  @override
+  String get searchHint => 'ابحثي عن منتج أو ماركة...';
+
+  @override
+  String get seeAll => 'عرض الكل';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get apply => 'تطبيق';
+
+  @override
+  String get done => 'تم';
+
+  @override
+  String get comingSoon => 'قريبًا';
+
+  @override
+  String get aiAssistant => 'المساعد الذكي';
+
+  @override
+  String get categories => 'الفئات';
+
+  @override
+  String get helloBeautiful => 'أهلاً أيتها الجميلة';
+
+  @override
+  String get elevateYourRitual => 'ارتقِ بروتينك اليومي.';
+
+  @override
+  String get askRosivaAnything => 'اسألي ROSIVA أي شيء...';
+
+  @override
+  String get curatedEssentials => 'أساسيات مختارة';
+
+  @override
+  String get trendingNow => 'الأكثر رواجًا';
+
+  @override
+  String get skincare => 'العناية بالبشرة';
+
+  @override
+  String get makeup => 'مكياج';
+
+  @override
+  String get perfume => 'عطور';
+
+  @override
+  String get affiliateDisclosureShort => 'روزيفيا منصة تسويق بالعمولة. تتم عمليات الشراء عبر مواقع خارجية. قد نحصل على عمولة عن عمليات الشراء المؤهلة عبر روابطنا.';
+
+  @override
+  String get loadingProducts => 'جارِ تحميل المنتجات...';
+
+  @override
+  String get somethingWentWrong => 'حدث خطأ ما';
+
+  @override
+  String get somethingWentWrongDesc => 'تعذر تحميل هذا المحتوى. يرجى التحقق من الاتصال والمحاولة مرة أخرى.';
+
+  @override
+  String get noResultsFound => 'لا توجد نتائج';
+
+  @override
+  String get noResultsFoundDesc => 'جربي كلمة بحث مختلفة أو تصفحي الفئات بدلاً من ذلك.';
+
+  @override
+  String get noProductsYet => 'لا توجد منتجات بعد';
+
+  @override
+  String get noProductsYetDesc => 'ستظهر المنتجات هنا بمجرد إضافتها.';
+
+  @override
+  String get startSearching => 'ابدئي البحث';
+
+  @override
+  String get startSearchingDesc => 'ابحثي عن منتجات العناية بالبشرة والمكياج والعطور.';
+
+  @override
+  String get browseCategories => 'تصفح الفئات';
+
+  @override
+  String get allProducts => 'كل المنتجات';
+
+  @override
+  String get filter => 'تصفية';
+
+  @override
+  String get sortBy => 'ترتيب حسب';
+
+  @override
+  String get productDetails => 'تفاصيل المنتج';
+
+  @override
+  String get reviews => 'التقييمات';
+
+  @override
+  String get editorsChoice => 'اختيار المحررين';
+
+  @override
+  String get whyRosivaRecommends => 'لماذا توصي روزيفيا بهذا';
+
+  @override
+  String get ingredients => 'المكونات';
+
+  @override
+  String get benefits => 'الفوائد';
+
+  @override
+  String get howToUse => 'طريقة الاستخدام';
+
+  @override
+  String get openStore => 'فتح المتجر';
+
+  @override
+  String get priceAvailabilityDisclaimer => 'قد تختلف الأسعار والتوفر على المواقع الخارجية. بصفتها منصة تسويق بالعمولة، قد تحصل روزيفيا على عمولة صغيرة عن عمليات الشراء المؤهلة.';
+
+  @override
+  String get patchTestDisclaimer => 'يحتوي هذا المنتج على مكونات فعالة. نوصي بإجراء اختبار حساسية قبل الاستخدام الكامل. استشيري طبيب الجلدية إذا كانت لديكِ مشكلات جلدية محددة.';
+
+  @override
+  String get addToFavorites => 'إضافة للمفضلة';
+
+  @override
+  String get removeFromFavorites => 'إزالة من المفضلة';
+
+  @override
+  String get addedToFavorites => 'أُضيف إلى المفضلة';
+
+  @override
+  String get removedFromFavorites => 'أُزيل من المفضلة';
+
+  @override
+  String get rosivaAiTitle => 'مساعد الجمال الذكي روزيفيا';
+
+  @override
+  String get aiWelcomeMessage => 'مرحبًا! أنا مساعد الجمال الذكي من روزيفيا. كيف يمكنني مساعدتكِ لتحقيق أهداف بشرتكِ اليوم؟';
+
+  @override
+  String get aiInputHint => 'اسألي روزيفيا أي شيء...';
+
+  @override
+  String get aiNotConfigured => 'لم يتم توصيل المساعد الذكي بعد. يرجى المحاولة لاحقًا.';
+
+  @override
+  String get aiAccuracyTitle => 'دقة الذكاء الاصطناعي';
+
+  @override
+  String get aiAccuracyDesc => 'يتم إنشاء توصياتنا من خلال نمذجة بيانات معقدة استنادًا إلى التفضيلات التي تشاركينها. نسعى للدقة المطلقة في مطابقة الألوان واقتراح الروتين، لكن النتائج الفردية قد تختلف بسبب العوامل البيئية وخصوصية بشرة كل شخص.';
+
+  @override
+  String get medicalAdviceDisclaimerTitle => 'إخلاء مسؤولية طبي';
+
+  @override
+  String get medicalAdviceDisclaimerDesc => 'لا تقدم روزيفيا تشخيصًا طبيًا أو استشارة جلدية. الاقتراحات المقدمة هي لأغراض تجميلية فقط. إذا كانت لديكِ حالات جلدية نشطة أو حساسية أو تخضعين لعلاج طبي، ننصح بشدة باستشارة أخصائي رعاية صحية مؤهل قبل إدخال مكونات فعالة جديدة إلى روتينكِ.';
+
+  @override
+  String get requiredLegalDisclosure => 'إفصاح قانوني مطلوب';
+
+  @override
+  String get settings => 'الإعدادات';
+
+  @override
+  String get settingsSubtitle => 'خصصي تجربتكِ وطريقة عملنا.';
+
+  @override
+  String get localization => 'الإعدادات المحلية';
+
+  @override
+  String get country => 'الدولة';
+
+  @override
+  String get language => 'اللغة';
+
+  @override
+  String get currency => 'العملة';
+
+  @override
+  String get autoBasedOnLocation => 'تلقائي حسب الموقع';
+
+  @override
+  String get notifications => 'الإشعارات';
+
+  @override
+  String get aiRecommendations => 'توصيات الذكاء الاصطناعي';
+
+  @override
+  String get aiRecommendationsDesc => 'اقتراحات منتجات مخصصة';
+
+  @override
+  String get priceDrops => 'انخفاض الأسعار';
+
+  @override
+  String get priceDropsDesc => 'احصلي على إشعار بالعناصر المحفوظة';
+
+  @override
+  String get newDiscoveries => 'اكتشافات جديدة';
+
+  @override
+  String get newDiscoveriesDesc => 'علامات ومنتجات جديدة';
+
+  @override
+  String get transparencyAndLegal => 'الشفافية والقوانين';
+
+  @override
+  String get affiliateTransparency => 'شفافية العمولة';
+
+  @override
+  String get affiliateTransparencyDesc => 'روزيفيا محرك توصيات ذكي وليست بائعًا مباشرًا. عند الضغط على "تسوقي الآن"، يتم توجيهكِ إلى بائع خارجي. قد نحصل على عمولة عبر تلك الروابط دون أي تكلفة إضافية عليكِ. هذا يمكّننا من إبقاء مساعد الجمال الذكي المتميز مجانيًا للجميع.';
+
+  @override
+  String get medicalDisclaimer => 'إخلاء مسؤولية طبي';
+
+  @override
+  String get requiredLegalDisclosureShort => 'إفصاح قانوني مطلوب';
+
+  @override
+  String get darkMode => 'الوضع الداكن';
+
+  @override
+  String get accountSettings => 'إعدادات الحساب';
+
+  @override
+  String get editProfile => 'تعديل الملف الشخصي';
+
+  @override
+  String get security => 'الأمان';
+
+  @override
+  String get preferences => 'التفضيلات';
+
+  @override
+  String get support => 'الدعم';
+
+  @override
+  String get helpCenter => 'مركز المساعدة';
+
+  @override
+  String get contactUs => 'تواصلي معنا';
+
+  @override
+  String get legalAndDisclaimers => 'الجوانب القانونية وإخلاء المسؤولية';
+
+  @override
+  String get affiliateDisclosure => 'إفصاح العمولة';
+
+  @override
+  String get aiAndMedicalDisclaimer => 'إخلاء مسؤولية الذكاء الاصطناعي والطب';
+
+  @override
+  String get termsOfServiceShort => 'شروط الخدمة';
+
+  @override
+  String appVersion(String version) {
+    return 'الإصدار $version';
+  }
+
+  @override
+  String get myBeautyProfile => 'ملفي الجمالي';
+
+  @override
+  String get myBeautyProfileDesc => 'نوع البشرة، الأهداف';
+
+  @override
+  String get favoritesAndCollections => 'المفضلة والمجموعات';
+
+  @override
+  String get personalization => 'التخصيص';
+
+  @override
+  String memberSince(String year) {
+    return 'عضو منذ $year';
+  }
+
+  @override
+  String get confirmLogout => 'هل أنتِ متأكدة من تسجيل الخروج؟';
+
+  @override
+  String get categorySkincare => 'العناية بالبشرة';
+
+  @override
+  String get categoryMakeup => 'مكياج';
+
+  @override
+  String get categoryPerfume => 'العطور';
 }

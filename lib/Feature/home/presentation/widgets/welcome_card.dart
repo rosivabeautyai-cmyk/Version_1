@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../../auth/data/models/user_model.dart';
 
@@ -15,10 +16,11 @@ class WelcomeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final lang = AppLocalizations.of(context)!;
 
     final name = userData?.fullName.isNotEmpty == true
         ? userData!.fullName
-        : 'ROSIVA User';
+        : lang.rosivaUserFallback;
 
     final email = userData?.email ?? '';
 
@@ -44,7 +46,7 @@ class WelcomeCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'أهلًا، $name',
+                  lang.welcomeGreeting(name),
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,

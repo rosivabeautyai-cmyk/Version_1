@@ -568,6 +568,603 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Name can only contain letters'**
   String get fullNameLettersOnly;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @explore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get explore;
+
+  /// No description provided for @favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favorites;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @homeStartHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Start here'**
+  String get homeStartHere;
+
+  /// No description provided for @homeDiscoverMoreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover more'**
+  String get homeDiscoverMoreTitle;
+
+  /// No description provided for @homeDiscoverMoreDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore ROSIVA's features and discover everything it can offer you.'**
+  String get homeDiscoverMoreDesc;
+
+  /// No description provided for @homeFavoritesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the things you care about for easy access.'**
+  String get homeFavoritesDesc;
+
+  /// No description provided for @homeMyAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Account'**
+  String get homeMyAccountTitle;
+
+  /// No description provided for @homeMyAccountDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your account details and preferences from here.'**
+  String get homeMyAccountDesc;
+
+  /// No description provided for @welcomeGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi, {name}'**
+  String welcomeGreeting(String name);
+
+  /// No description provided for @rosivaUserFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'ROSIVA User'**
+  String get rosivaUserFallback;
+
+  /// No description provided for @yourProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Profile'**
+  String get yourProfile;
+
+  /// No description provided for @profileManageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your account and preferences.'**
+  String get profileManageSubtitle;
+
+  /// No description provided for @favoritesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your favorite items will appear here.'**
+  String get favoritesSubtitle;
+
+  /// No description provided for @noFavoritesYetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorites yet'**
+  String get noFavoritesYetTitle;
+
+  /// No description provided for @noFavoritesYetDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Start adding your favorite items and they will appear here.'**
+  String get noFavoritesYetDesc;
+
+  /// No description provided for @exploreSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover everything ROSIVA has to offer.'**
+  String get exploreSubtitle;
+
+  /// No description provided for @exploreComingSoonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore coming soon'**
+  String get exploreComingSoonTitle;
+
+  /// No description provided for @exploreComingSoonDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The explore section will be added here.'**
+  String get exploreComingSoonDesc;
+
+  /// No description provided for @adminDashboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Dashboard'**
+  String get adminDashboardTitle;
+
+  /// No description provided for @totalUsers.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Users'**
+  String get totalUsers;
+
+  /// No description provided for @verifiedEmails.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified Emails'**
+  String get verifiedEmails;
+
+  /// No description provided for @adminToolsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Tools'**
+  String get adminToolsTitle;
+
+  /// No description provided for @adminToolsPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'User and content management tools will be added here soon.'**
+  String get adminToolsPlaceholder;
+
+  /// No description provided for @legalLastUpdatedPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated: add the date here'**
+  String get legalLastUpdatedPlaceholder;
+
+  /// No description provided for @tosSection1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Acceptance of Terms'**
+  String get tosSection1Title;
+
+  /// No description provided for @tosSection1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'By using the ROSIVA app, you agree to these terms. If you do not agree with them, please do not use the app.'**
+  String get tosSection1Body;
+
+  /// No description provided for @tosSection2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Using the App'**
+  String get tosSection2Title;
+
+  /// No description provided for @tosSection2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'The app must be used only for lawful personal purposes. You must not attempt to misuse it or gain unauthorized access to other accounts.'**
+  String get tosSection2Body;
+
+  /// No description provided for @tosSection3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Account & Responsibility'**
+  String get tosSection3Title;
+
+  /// No description provided for @tosSection3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'You are responsible for keeping your account credentials confidential, and for any activity carried out through your account.'**
+  String get tosSection3Body;
+
+  /// No description provided for @tosSection4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Changes to the Service'**
+  String get tosSection4Title;
+
+  /// No description provided for @tosSection4Body.
+  ///
+  /// In en, this message translates to:
+  /// **'We reserve the right to modify or discontinue any part of the app at any time without prior notice.'**
+  String get tosSection4Body;
+
+  /// No description provided for @tosSection5Title.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Account Termination'**
+  String get tosSection5Title;
+
+  /// No description provided for @tosSection5Body.
+  ///
+  /// In en, this message translates to:
+  /// **'We may suspend or terminate any account that violates these terms or is used unlawfully.'**
+  String get tosSection5Body;
+
+  /// No description provided for @tosSection6Title.
+  ///
+  /// In en, this message translates to:
+  /// **'6. Contact Us'**
+  String get tosSection6Title;
+
+  /// No description provided for @tosSection6Body.
+  ///
+  /// In en, this message translates to:
+  /// **'For any questions about the Terms of Service, contact us at: add your email here.'**
+  String get tosSection6Body;
+
+  /// No description provided for @privacySection1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Data We Collect'**
+  String get privacySection1Title;
+
+  /// No description provided for @privacySection1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'We collect data such as your name, email address, and any information you enter within the app (such as skin type or favorites). Edit this text to reflect the data your app actually collects.'**
+  String get privacySection1Body;
+
+  /// No description provided for @privacySection2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'2. How We Use Your Data'**
+  String get privacySection2Title;
+
+  /// No description provided for @privacySection2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'We use your data to provide the app's services, improve the user experience, and contact you when needed. We do not sell your data to any third party.'**
+  String get privacySection2Body;
+
+  /// No description provided for @privacySection3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Data Sharing'**
+  String get privacySection3Title;
+
+  /// No description provided for @privacySection3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Some data may be shared with trusted service providers (such as Google Firebase) solely to operate the app, and not for any marketing purpose.'**
+  String get privacySection3Body;
+
+  /// No description provided for @privacySection4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Data Security'**
+  String get privacySection4Title;
+
+  /// No description provided for @privacySection4Body.
+  ///
+  /// In en, this message translates to:
+  /// **'We take reasonable measures to protect your data, but complete security cannot be guaranteed for any electronic system 100%.'**
+  String get privacySection4Body;
+
+  /// No description provided for @privacySection5Title.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Your Rights'**
+  String get privacySection5Title;
+
+  /// No description provided for @privacySection5Body.
+  ///
+  /// In en, this message translates to:
+  /// **'You may request to modify or delete your data at any time by contacting us from within the app or by email.'**
+  String get privacySection5Body;
+
+  /// No description provided for @privacySection6Title.
+  ///
+  /// In en, this message translates to:
+  /// **'6. Contact Us'**
+  String get privacySection6Title;
+
+  /// No description provided for @privacySection6Body.
+  ///
+  /// In en, this message translates to:
+  /// **'For any questions about the Privacy Policy, contact us at: add your email here.'**
+  String get privacySection6Body;
+
+  /// No description provided for @search.
+  String get search;
+
+  /// No description provided for @searchHint.
+  String get searchHint;
+
+  /// No description provided for @seeAll.
+  String get seeAll;
+
+  /// No description provided for @cancel.
+  String get cancel;
+
+  /// No description provided for @retry.
+  String get retry;
+
+  /// No description provided for @save.
+  String get save;
+
+  /// No description provided for @apply.
+  String get apply;
+
+  /// No description provided for @done.
+  String get done;
+
+  /// No description provided for @comingSoon.
+  String get comingSoon;
+
+  /// No description provided for @aiAssistant.
+  String get aiAssistant;
+
+  /// No description provided for @categories.
+  String get categories;
+
+  /// No description provided for @helloBeautiful.
+  String get helloBeautiful;
+
+  /// No description provided for @elevateYourRitual.
+  String get elevateYourRitual;
+
+  /// No description provided for @askRosivaAnything.
+  String get askRosivaAnything;
+
+  /// No description provided for @curatedEssentials.
+  String get curatedEssentials;
+
+  /// No description provided for @trendingNow.
+  String get trendingNow;
+
+  /// No description provided for @skincare.
+  String get skincare;
+
+  /// No description provided for @makeup.
+  String get makeup;
+
+  /// No description provided for @perfume.
+  String get perfume;
+
+  /// No description provided for @affiliateDisclosureShort.
+  String get affiliateDisclosureShort;
+
+  /// No description provided for @loadingProducts.
+  String get loadingProducts;
+
+  /// No description provided for @somethingWentWrong.
+  String get somethingWentWrong;
+
+  /// No description provided for @somethingWentWrongDesc.
+  String get somethingWentWrongDesc;
+
+  /// No description provided for @noResultsFound.
+  String get noResultsFound;
+
+  /// No description provided for @noResultsFoundDesc.
+  String get noResultsFoundDesc;
+
+  /// No description provided for @noProductsYet.
+  String get noProductsYet;
+
+  /// No description provided for @noProductsYetDesc.
+  String get noProductsYetDesc;
+
+  /// No description provided for @startSearching.
+  String get startSearching;
+
+  /// No description provided for @startSearchingDesc.
+  String get startSearchingDesc;
+
+  /// No description provided for @browseCategories.
+  String get browseCategories;
+
+  /// No description provided for @allProducts.
+  String get allProducts;
+
+  /// No description provided for @filter.
+  String get filter;
+
+  /// No description provided for @sortBy.
+  String get sortBy;
+
+  /// No description provided for @productDetails.
+  String get productDetails;
+
+  /// No description provided for @reviews.
+  String get reviews;
+
+  /// No description provided for @editorsChoice.
+  String get editorsChoice;
+
+  /// No description provided for @whyRosivaRecommends.
+  String get whyRosivaRecommends;
+
+  /// No description provided for @ingredients.
+  String get ingredients;
+
+  /// No description provided for @benefits.
+  String get benefits;
+
+  /// No description provided for @howToUse.
+  String get howToUse;
+
+  /// No description provided for @openStore.
+  String get openStore;
+
+  /// No description provided for @priceAvailabilityDisclaimer.
+  String get priceAvailabilityDisclaimer;
+
+  /// No description provided for @patchTestDisclaimer.
+  String get patchTestDisclaimer;
+
+  /// No description provided for @addToFavorites.
+  String get addToFavorites;
+
+  /// No description provided for @removeFromFavorites.
+  String get removeFromFavorites;
+
+  /// No description provided for @addedToFavorites.
+  String get addedToFavorites;
+
+  /// No description provided for @removedFromFavorites.
+  String get removedFromFavorites;
+
+  /// No description provided for @rosivaAiTitle.
+  String get rosivaAiTitle;
+
+  /// No description provided for @aiWelcomeMessage.
+  String get aiWelcomeMessage;
+
+  /// No description provided for @aiInputHint.
+  String get aiInputHint;
+
+  /// No description provided for @aiNotConfigured.
+  String get aiNotConfigured;
+
+  /// No description provided for @aiAccuracyTitle.
+  String get aiAccuracyTitle;
+
+  /// No description provided for @aiAccuracyDesc.
+  String get aiAccuracyDesc;
+
+  /// No description provided for @medicalAdviceDisclaimerTitle.
+  String get medicalAdviceDisclaimerTitle;
+
+  /// No description provided for @medicalAdviceDisclaimerDesc.
+  String get medicalAdviceDisclaimerDesc;
+
+  /// No description provided for @requiredLegalDisclosure.
+  String get requiredLegalDisclosure;
+
+  /// No description provided for @settings.
+  String get settings;
+
+  /// No description provided for @settingsSubtitle.
+  String get settingsSubtitle;
+
+  /// No description provided for @localization.
+  String get localization;
+
+  /// No description provided for @country.
+  String get country;
+
+  /// No description provided for @language.
+  String get language;
+
+  /// No description provided for @currency.
+  String get currency;
+
+  /// No description provided for @autoBasedOnLocation.
+  String get autoBasedOnLocation;
+
+  /// No description provided for @notifications.
+  String get notifications;
+
+  /// No description provided for @aiRecommendations.
+  String get aiRecommendations;
+
+  /// No description provided for @aiRecommendationsDesc.
+  String get aiRecommendationsDesc;
+
+  /// No description provided for @priceDrops.
+  String get priceDrops;
+
+  /// No description provided for @priceDropsDesc.
+  String get priceDropsDesc;
+
+  /// No description provided for @newDiscoveries.
+  String get newDiscoveries;
+
+  /// No description provided for @newDiscoveriesDesc.
+  String get newDiscoveriesDesc;
+
+  /// No description provided for @transparencyAndLegal.
+  String get transparencyAndLegal;
+
+  /// No description provided for @affiliateTransparency.
+  String get affiliateTransparency;
+
+  /// No description provided for @affiliateTransparencyDesc.
+  String get affiliateTransparencyDesc;
+
+  /// No description provided for @medicalDisclaimer.
+  String get medicalDisclaimer;
+
+  /// No description provided for @requiredLegalDisclosureShort.
+  String get requiredLegalDisclosureShort;
+
+  /// No description provided for @darkMode.
+  String get darkMode;
+
+  /// No description provided for @accountSettings.
+  String get accountSettings;
+
+  /// No description provided for @editProfile.
+  String get editProfile;
+
+  /// No description provided for @security.
+  String get security;
+
+  /// No description provided for @preferences.
+  String get preferences;
+
+  /// No description provided for @support.
+  String get support;
+
+  /// No description provided for @helpCenter.
+  String get helpCenter;
+
+  /// No description provided for @contactUs.
+  String get contactUs;
+
+  /// No description provided for @legalAndDisclaimers.
+  String get legalAndDisclaimers;
+
+  /// No description provided for @affiliateDisclosure.
+  String get affiliateDisclosure;
+
+  /// No description provided for @aiAndMedicalDisclaimer.
+  String get aiAndMedicalDisclaimer;
+
+  /// No description provided for @termsOfServiceShort.
+  String get termsOfServiceShort;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String appVersion(String version);
+
+  /// No description provided for @myBeautyProfile.
+  String get myBeautyProfile;
+
+  /// No description provided for @myBeautyProfileDesc.
+  String get myBeautyProfileDesc;
+
+  /// No description provided for @favoritesAndCollections.
+  String get favoritesAndCollections;
+
+  /// No description provided for @personalization.
+  String get personalization;
+
+  /// No description provided for @memberSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Member since {year}'**
+  String memberSince(String year);
+
+  /// No description provided for @confirmLogout.
+  String get confirmLogout;
+
+  /// No description provided for @categorySkincare.
+  String get categorySkincare;
+
+  /// No description provided for @categoryMakeup.
+  String get categoryMakeup;
+
+  /// No description provided for @categoryPerfume.
+  String get categoryPerfume;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

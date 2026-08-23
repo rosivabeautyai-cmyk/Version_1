@@ -18,7 +18,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Profile',
+          lang.profile,
           style: theme.textTheme.titleMedium,
         ),
       ),
@@ -51,12 +51,12 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 16.h),
                   Text(
-                    'Your Profile',
+                    lang.yourProfile,
                     style: theme.textTheme.titleMedium,
                   ),
                   SizedBox(height: 6.h),
                   Text(
-                    'Manage your account and preferences.',
+                    lang.profileManageSubtitle,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium,
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
@@ -7,11 +8,12 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final lang = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Favorites',
+          lang.favorites,
           style: theme.textTheme.titleMedium,
         ),
       ),
@@ -20,12 +22,12 @@ class FavoritesScreen extends StatelessWidget {
           padding: EdgeInsets.all(20.w),
           children: [
             Text(
-              'Favorites',
+              lang.favorites,
               style: theme.textTheme.headlineSmall,
             ),
             SizedBox(height: 8.h),
             Text(
-              'Your favorite items will appear here.',
+              lang.favoritesSubtitle,
               style: theme.textTheme.bodyMedium,
             ),
             SizedBox(height: 24.h),
@@ -42,6 +44,7 @@ class _FavoritesEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final lang = AppLocalizations.of(context)!;
 
     return Container(
       padding: EdgeInsets.all(24.w),
@@ -61,13 +64,13 @@ class _FavoritesEmptyState extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           Text(
-            'No favorites yet',
+            lang.noFavoritesYetTitle,
             textAlign: TextAlign.center,
             style: theme.textTheme.titleMedium,
           ),
           SizedBox(height: 8.h),
           Text(
-            'Start adding your favorite items and they will appear here.',
+            lang.noFavoritesYetDesc,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium,
           ),

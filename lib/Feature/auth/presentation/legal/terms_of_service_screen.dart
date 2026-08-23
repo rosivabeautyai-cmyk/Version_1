@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 import 'legal_document_screen.dart';
 
@@ -15,43 +16,35 @@ class TermsOfServiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LegalDocumentScreen(
-      title: 'شروط الاستخدام',
-      lastUpdated: 'آخر تحديث: أضيفي التاريخ هنا',
+    final lang = AppLocalizations.of(context)!;
+
+    return LegalDocumentScreen(
+      title: lang.termsOfService,
+      lastUpdated: lang.legalLastUpdatedPlaceholder,
       sections: [
         LegalSection(
-          title: '١. الموافقة على الشروط',
-          body:
-              'باستخدامك لتطبيق ROSIVA فإنك توافقين على هذه الشروط. إذا كنتِ '
-              'لا توافقين عليها، يرجى عدم استخدام التطبيق.',
+          title: lang.tosSection1Title,
+          body: lang.tosSection1Body,
         ),
         LegalSection(
-          title: '٢. استخدام التطبيق',
-          body:
-              'يجب استخدام التطبيق للأغراض الشخصية المشروعة فقط، وعدم محاولة '
-              'إساءة استخدامه أو الوصول غير المصرح به إلى حسابات أخرى.',
+          title: lang.tosSection2Title,
+          body: lang.tosSection2Body,
         ),
         LegalSection(
-          title: '٣. الحساب والمسؤولية',
-          body:
-              'أنتِ مسؤولة عن الحفاظ على سرية بيانات حسابك، وعن أي نشاط يتم '
-              'من خلاله.',
+          title: lang.tosSection3Title,
+          body: lang.tosSection3Body,
         ),
         LegalSection(
-          title: '٤. التعديلات على الخدمة',
-          body:
-              'نحتفظ بحق تعديل أو إيقاف أي جزء من التطبيق في أي وقت دون '
-              'إشعار مسبق.',
+          title: lang.tosSection4Title,
+          body: lang.tosSection4Body,
         ),
         LegalSection(
-          title: '٥. إنهاء الحساب',
-          body:
-              'يحق لنا تعليق أو إنهاء أي حساب يخالف هذه الشروط أو يُستخدم '
-              'بشكل غير قانوني.',
+          title: lang.tosSection5Title,
+          body: lang.tosSection5Body,
         ),
         LegalSection(
-          title: '٦. التواصل معنا',
-          body: 'لأي استفسار حول شروط الاستخدام، راسلينا على: أضيفي بريدك هنا.',
+          title: lang.tosSection6Title,
+          body: lang.tosSection6Body,
         ),
       ],
     );

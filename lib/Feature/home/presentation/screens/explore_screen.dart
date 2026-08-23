@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 class ExploreScreen extends StatelessWidget {
   const ExploreScreen({super.key});
@@ -7,11 +8,12 @@ class ExploreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final lang = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Explore',
+          lang.explore,
           style: theme.textTheme.titleMedium,
         ),
       ),
@@ -20,12 +22,12 @@ class ExploreScreen extends StatelessWidget {
           padding: EdgeInsets.all(20.w),
           children: [
             Text(
-              'Explore',
+              lang.explore,
               style: theme.textTheme.headlineSmall,
             ),
             SizedBox(height: 8.h),
             Text(
-              'Discover everything ROSIVA has to offer.',
+              lang.exploreSubtitle,
               style: theme.textTheme.bodyMedium,
             ),
             SizedBox(height: 24.h),
@@ -42,6 +44,7 @@ class _ExplorePlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final lang = AppLocalizations.of(context)!;
 
     return Container(
       padding: EdgeInsets.all(24.w),
@@ -61,13 +64,13 @@ class _ExplorePlaceholder extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           Text(
-            'Explore coming soon',
+            lang.exploreComingSoonTitle,
             textAlign: TextAlign.center,
             style: theme.textTheme.titleMedium,
           ),
           SizedBox(height: 8.h),
           Text(
-            'The explore section will be added here.',
+            lang.exploreComingSoonDesc,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium,
           ),

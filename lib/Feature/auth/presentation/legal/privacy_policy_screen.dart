@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 import 'legal_document_screen.dart';
 
@@ -15,44 +16,35 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LegalDocumentScreen(
-      title: 'سياسة الخصوصية',
-      lastUpdated: 'آخر تحديث: أضيفي التاريخ هنا',
+    final lang = AppLocalizations.of(context)!;
+
+    return LegalDocumentScreen(
+      title: lang.privacyPolicy,
+      lastUpdated: lang.legalLastUpdatedPlaceholder,
       sections: [
         LegalSection(
-          title: '١. البيانات التي نجمعها',
-          body:
-              'نجمع بيانات مثل الاسم، البريد الإلكتروني، وأي معلومات تقومين '
-              'بإدخالها داخل التطبيق (مثل نوع البشرة أو المفضلة). عدّلي هذا '
-              'النص ليعكس البيانات الفعلية التي يجمعها تطبيقك.',
+          title: lang.privacySection1Title,
+          body: lang.privacySection1Body,
         ),
         LegalSection(
-          title: '٢. كيف نستخدم بياناتك',
-          body:
-              'نستخدم بياناتك لتقديم خدمات التطبيق، تحسين تجربة الاستخدام، '
-              'والتواصل معك عند الحاجة. لا نبيع بياناتك لأي طرف ثالث.',
+          title: lang.privacySection2Title,
+          body: lang.privacySection2Body,
         ),
         LegalSection(
-          title: '٣. مشاركة البيانات',
-          body:
-              'قد تتم مشاركة بعض البيانات مع مزودي خدمات موثوقين (مثل '
-              'Firebase من جوجل) لتشغيل التطبيق فقط، وليس لأي غرض تسويقي.',
+          title: lang.privacySection3Title,
+          body: lang.privacySection3Body,
         ),
         LegalSection(
-          title: '٤. أمان البيانات',
-          body:
-              'نتخذ إجراءات معقولة لحماية بياناتك، لكن لا يمكن ضمان الأمان '
-              'الكامل لأي نظام إلكتروني بنسبة ١٠٠٪.',
+          title: lang.privacySection4Title,
+          body: lang.privacySection4Body,
         ),
         LegalSection(
-          title: '٥. حقوقك',
-          body:
-              'يمكنك طلب تعديل أو حذف بياناتك في أي وقت عن طريق التواصل معنا '
-              'من داخل التطبيق أو عبر البريد الإلكتروني.',
+          title: lang.privacySection5Title,
+          body: lang.privacySection5Body,
         ),
         LegalSection(
-          title: '٦. التواصل معنا',
-          body: 'لأي استفسار حول سياسة الخصوصية، راسلينا على: أضيفي بريدك هنا.',
+          title: lang.privacySection6Title,
+          body: lang.privacySection6Body,
         ),
       ],
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
 
 class HomeBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -15,6 +16,7 @@ class HomeBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final lang = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -46,26 +48,26 @@ class HomeBottomNavBar extends StatelessWidget {
 
             labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
 
-            destinations: const [
+            destinations: [
               NavigationDestination(
-                icon: Icon(Icons.home_outlined),
-                selectedIcon: Icon(Icons.home_rounded),
-                label: 'Home',
+                icon: const Icon(Icons.home_outlined),
+                selectedIcon: const Icon(Icons.home_rounded),
+                label: lang.home,
               ),
               NavigationDestination(
-                icon: Icon(Icons.explore_outlined),
-                selectedIcon: Icon(Icons.explore_rounded),
-                label: 'Explore',
+                icon: const Icon(Icons.explore_outlined),
+                selectedIcon: const Icon(Icons.explore_rounded),
+                label: lang.explore,
               ),
               NavigationDestination(
-                icon: Icon(Icons.favorite_border_rounded),
-                selectedIcon: Icon(Icons.favorite_rounded),
-                label: 'Favorites',
+                icon: const Icon(Icons.favorite_border_rounded),
+                selectedIcon: const Icon(Icons.favorite_rounded),
+                label: lang.favorites,
               ),
               NavigationDestination(
-                icon: Icon(Icons.person_outline_rounded),
-                selectedIcon: Icon(Icons.person_rounded),
-                label: 'Profile',
+                icon: const Icon(Icons.person_outline_rounded),
+                selectedIcon: const Icon(Icons.person_rounded),
+                label: lang.profile,
               ),
             ],
           ),
