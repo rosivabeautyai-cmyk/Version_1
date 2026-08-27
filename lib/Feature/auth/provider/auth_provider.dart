@@ -278,6 +278,44 @@ class AuthProvider extends ChangeNotifier {
     return _repository.removeFavorite(uid: uid, productId: productId);
   }
 
+  /// Updates a subset of profile fields on the current user's
+  /// Firestore document. Never touches Firebase Auth itself.
+  Future<void> updateProfile({
+    String? fullName,
+    String? skinType,
+    String? country,
+  }) {
+    final uid = currentUser?.uid;
+    if (uid == null) return Future.value();
+    return _repository.updateProfile(
+      uid: uid,
+      fullName: fullName,
+      skinType: skinType,
+      country: country,
+    );
+  }
+
+  /// Sends a password reset email to the current user's own address,
+  /// reusing the same repository call as the "forgot password" flow.
+  Future<bool> sendPasswordResetToCurrentUser() async {
+    final email = currentUser?.email;
+    if (email == null) return false;
+    _errorMessage = null;
+    _setLoading(true);
+    try {
+      await _repository.forgotPassword(email: email);
+      return true;
+    } on AuthFailure catch (e) {
+      _errorMessage = e.message;
+      return false;
+    } catch (_) {
+      _errorMessage = 'Something went wrong. Please try again.';
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
   /// Repairs the current user's Firestore doc if it's missing or
   /// incomplete (e.g. missing the `role` field). Safe to call every
   /// time the app resumes an existing session, not just right after

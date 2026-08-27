@@ -25,8 +25,8 @@ class ProductDetailsProvider extends ChangeNotifier {
     try {
       final product = await _repository.getProductDetails(productId);
       _state = ViewState(status: ViewStatus.success, data: product);
-    } on ApiException catch (e) {
-      _state = ViewState(status: ViewStatus.error, errorMessage: e.message);
+    } on ApiException catch (_) {
+      _state = const ViewState(status: ViewStatus.error);
     } catch (_) {
       _state = const ViewState(
         status: ViewStatus.error,

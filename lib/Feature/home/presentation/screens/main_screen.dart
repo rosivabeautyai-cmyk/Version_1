@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:rosivia/Feature/products/presentation/screens/categories_screen.dart';
+
 import '../widgets/home_bottom_nav_bar.dart';
 import 'explore_screen.dart';
 import 'favorites_screen.dart';
@@ -16,11 +18,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    HomeScreen(),
-    ExploreScreen(),
-    FavoritesScreen(),
-    ProfileScreen(),
+  late final List<Widget> _screens = [
+    const HomeScreen(),
+    const ExploreScreen(),
+    const CategoriesScreen(),
+    const FavoritesScreen(),
+    ProfileScreen(onShowFavorites: () => _onItemTapped(3)),
   ];
 
   void _onItemTapped(int index) {

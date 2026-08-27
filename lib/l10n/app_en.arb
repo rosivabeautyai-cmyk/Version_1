@@ -130,8 +130,6 @@
   "adminDashboardTitle": "Admin Dashboard",
   "totalUsers": "Total Users",
   "verifiedEmails": "Verified Emails",
-  "adminToolsTitle": "Admin Tools",
-  "adminToolsPlaceholder": "User and content management tools will be added here soon.",
   "legalLastUpdatedPlaceholder": "Last updated: add the date here",
   "tosSection1Title": "1. Acceptance of Terms",
   "tosSection1Body": "By using the ROSIVA app, you agree to these terms. If you do not agree with them, please do not use the app.",
@@ -267,5 +265,191 @@
   "confirmLogout": "Are you sure you want to log out?",
   "categorySkincare": "Skincare",
   "categoryMakeup": "Makeup",
-  "categoryPerfume": "Perfumes"
+  "categoryPerfume": "Perfumes",
+  "helpCenterSubtitle": "Answers to common questions about your ROSIVA account, products, and the AI assistant.",
+  "helpCenterAccountQuestion": "How do I manage my account?",
+  "helpCenterAccountAnswer": "Go to Profile → Edit Profile to update your name and beauty preferences, or Profile → Security to reset your password.",
+  "helpCenterProductsQuestion": "Where do product details come from?",
+  "helpCenterProductsAnswer": "Product information, pricing, and availability are provided by our partner stores and may change without notice.",
+  "helpCenterOrdersQuestion": "Does ROSIVA process my orders?",
+  "helpCenterOrdersAnswer": "No. ROSIVA is a discovery platform — tapping \"Open Store\" takes you to the retailer's site to complete your purchase there.",
+  "helpCenterFavoritesQuestion": "How do favorites work?",
+  "helpCenterFavoritesAnswer": "Tap the heart icon on any product to save it to your Favorites tab. Your favorites are synced to your account.",
+  "helpCenterAiQuestion": "How accurate is the AI assistant?",
+  "helpCenterAiAnswer": "The AI assistant offers general beauty guidance based on what you share with it. It isn't a substitute for professional advice — see AI Accuracy in Settings for details.",
+  "helpCenterLanguageQuestion": "Can I change the app language or currency?",
+  "helpCenterLanguageAnswer": "Yes. Go to Profile → Settings → Localization to switch between English and Arabic, and to set your country and currency preferences.",
+  "helpCenterPrivacyQuestion": "How is my data used?",
+  "helpCenterPrivacyAnswer": "See our Privacy Policy in Settings for full details on what we collect and how it's used.",
+  "helpCenterContactQuestion": "I still need help — how do I reach you?",
+  "helpCenterContactAnswer": "Visit Contact Us in Settings for the latest ways to reach the ROSIVA team.",
+  "contactUsSubtitle": "We'd love to hear from you.",
+  "contactUsNotConfiguredTitle": "Contact details coming soon",
+  "contactUsNotConfiguredDesc": "We're setting up direct contact channels for ROSIVA. In the meantime, check the Help Center for answers to common questions.",
+  "contactUsHelpCenterCta": "Go to Help Center",
+  "countryEgypt": "Egypt",
+  "countrySaudiArabia": "Saudi Arabia",
+  "countryUae": "United Arab Emirates",
+  "countryUsa": "United States",
+  "countryUnitedKingdom": "United Kingdom",
+  "countryQatar": "Qatar",
+  "countryKuwait": "Kuwait",
+  "countryJordan": "Jordan",
+  "myBeautyProfileScreenSubtitle": "Tell us about your skin so ROSIVA can recommend better products for you.",
+  "skinType": "Skin Type",
+  "skinTypeNormal": "Normal",
+  "skinTypeDry": "Dry",
+  "skinTypeOily": "Oily",
+  "skinTypeCombination": "Combination",
+  "skinTypeSensitive": "Sensitive",
+  "skinTypeNotSet": "Not set",
+  "profileUpdated": "Profile updated",
+  "editProfileScreenSubtitle": "Update your name and how you appear across ROSIVA.",
+  "securityScreenSubtitle": "Manage how you sign in to ROSIVA.",
+  "changePassword": "Change Password",
+  "changePasswordDesc": "We'll email you a secure link to reset your password.",
+  "sendPasswordResetConfirm": "Send a password reset link to {email}?",
+  "@sendPasswordResetConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "passwordResetLinkSent": "Password reset link sent. Check your inbox.",
+  "aiNoProductsFound": "I couldn't find a matching product in ROSIVA right now. Try adjusting your preferences or budget.",
+  "aiRecommendationsIntro": "Here are some products that may be relevant.",
+  "adminProductsTitle": "Products",
+  "adminLastSync": "Last Sync",
+  "adminSyncNever": "Never synced yet",
+  "adminSyncRunning": "Sync in progress…",
+  "adminSyncSuccess": "Last sync succeeded",
+  "adminSyncError": "Last sync failed",
+  "adminSyncSummary": "{imported} imported, {skipped} skipped, {processed} processed",
+  "@adminSyncSummary": {
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      },
+      "processed": {
+        "type": "int"
+      }
+    }
+  },
+  "adminFallbackName": "Admin",
+  "adminHelloWave": "Hello Admin 👋",
+  "adminDashboardSubtitle": "Here's what's happening with ROSIVA today.",
+  "adminMobileHeaderSubtitle": "Admin",
+  "navDashboard": "Dashboard",
+  "navUsers": "Users",
+  "navProducts": "Products",
+  "navPlatforms": "Platforms",
+  "navSettings": "Settings",
+  "adminTotalProducts": "Total Products",
+  "adminTotalProductsDesc": "Products currently available",
+  "adminCategoryProductsDesc": "Products in this category",
+  "adminTotalUsersDesc": "Registered accounts",
+  "adminVerifiedUsersDesc": "Verified email addresses",
+  "adminCatalogSync": "Catalog Sync",
+  "adminLastSuccessfulSync": "Last successful sync",
+  "adminProductsImported": "Products imported",
+  "adminProductsSkipped": "Products skipped",
+  "adminProductsProcessed": "Rows processed",
+  "adminSyncDuration": "Sync duration",
+  "adminSyncCatalogButton": "Sync Catalog",
+  "adminSyncOpensGithub": "Opens GitHub Actions to run the sync workflow.",
+  "adminSyncLinkFailed": "Couldn't open the sync page. Try again.",
+  "adminRecentActivity": "Recent Activity",
+  "adminActivityStarted": "Catalog sync started",
+  "adminActivityCompleted": "Catalog sync completed",
+  "adminActivityFailedEvent": "Catalog sync failed",
+  "adminNoActivityTitle": "No recent activity",
+  "adminNoActivityDesc": "Sync activity will appear here after your first catalog sync.",
+  "adminJustNow": "Just now",
+  "adminMinutesAgo": "{count, plural, one{1 minute ago} other{{count} minutes ago}}",
+  "@adminMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminHoursAgo": "{count, plural, one{1 hour ago} other{{count} hours ago}}",
+  "@adminHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminDaysAgo": "{count, plural, one{1 day ago} other{{count} days ago}}",
+  "@adminDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminQuickActions": "Quick Actions",
+  "adminViewProducts": "View Products",
+  "adminViewUsers": "View Users",
+  "adminNoProductsTitle": "No products yet",
+  "adminNoProductsDesc": "Your catalog will appear here after the first successful Awin sync.",
+  "adminSyncFailedDesc": "Something went wrong while updating the catalog. Please try again.",
+  "adminCatalogSyncedSuccess": "Catalog synced successfully.",
+  "adminSyncedProductsCount": "{count} products updated.",
+  "@adminSyncedProductsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminAffiliatePlatforms": "Affiliate Platforms",
+  "adminPlatformsDesc": "Connected integrations",
+  "adminPlatformActivity": "Platform activity",
+  "adminNoHistoricalActivity": "No historical activity data available yet.",
+  "adminRecentUsers": "Recent Users",
+  "adminNoUsersYet": "No users yet",
+  "adminJoinedOn": "Joined {date}",
+  "@adminJoinedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminStatusVerified": "Verified",
+  "adminStatusUnverified": "Unverified",
+  "adminUsersSubtitle": "Manage ROSIVA users",
+  "adminSearchUsersHint": "Search by name or email",
+  "adminFilterAll": "All",
+  "adminActiveUsers": "Active Users",
+  "adminActiveUsersDesc": "Signed in within the last 30 days",
+  "adminUserDetails": "View Details",
+  "adminDeleteUser": "Delete",
+  "adminDeleteNotAvailable": "Deleting users isn't available yet.",
+  "adminUserListRestricted": "Full user list requires an additional Firestore permission that hasn't been enabled yet.",
+  "adminNoUsersFound": "No users found",
+  "adminNoUsersFoundDesc": "Try a different search term.",
+  "adminProductsScreenSubtitle": "Manage the ROSIVA beauty catalog",
+  "adminSearchProductsHint": "Search products",
+  "adminInStock": "In Stock",
+  "adminOutOfStock": "Out of Stock",
+  "adminPlatformsScreenTitle": "Affiliate Platforms",
+  "adminPlatformsScreenSubtitle": "Manage your connected affiliate ecosystem",
+  "adminPlatformConnected": "Connected",
+  "adminPlatformNotConnected": "Not Connected",
+  "adminCatalogActive": "Active",
+  "adminCatalogInactive": "Inactive",
+  "adminComingSoonPlatform": "More platforms coming soon",
+  "adminSettingsScreenSubtitle": "Manage your admin preferences",
+  "adminSectionAccount": "Account",
+  "adminSectionAppearance": "Appearance",
+  "adminNotificationsComingSoonDesc": "Admin notifications aren't available yet.",
+  "adminNewUsers": "New Users",
+  "adminNewUsersDesc": "Joined in the last 7 days"
 }

@@ -51,11 +51,16 @@ class _AiViewState extends State<_AiView> {
     });
   }
 
-  void _send(AiChatProvider provider) {
+  void _send(AiChatProvider provider, AppLocalizations lang) {
     final text = _inputController.text;
     if (text.trim().isEmpty) return;
     _inputController.clear();
-    provider.sendMessage(text);
+    provider.sendMessage(
+      text,
+      errorFallback: lang.somethingWentWrongDesc,
+      noResultsFallback: lang.aiNoProductsFound,
+      recommendationsIntroFallback: lang.aiRecommendationsIntro,
+    );
     _scrollToBottom();
   }
 
@@ -178,7 +183,7 @@ class _AiViewState extends State<_AiView> {
               controller: _inputController,
               enabled: provider.isConfigured && !provider.isSending,
               textInputAction: TextInputAction.send,
-              onSubmitted: (_) => _send(provider),
+              onSubmitted: (_) => _send(provider, lang),
               decoration: InputDecoration(
                 hintText: lang.aiInputHint,
                 contentPadding: EdgeInsets.symmetric(
@@ -195,7 +200,7 @@ class _AiViewState extends State<_AiView> {
             child: InkWell(
               customBorder: const CircleBorder(),
               onTap: provider.isConfigured && !provider.isSending
-                  ? () => _send(provider)
+                  ? () => _send(provider, lang)
                   : null,
               child: Padding(
                 padding: EdgeInsets.all(12.w),

@@ -28,9 +28,9 @@ class SnackbarService {
       SnackBar(
         behavior: SnackBarBehavior.floating,
         backgroundColor: backgroundColor,
-        margin: EdgeInsets.only(
-          left: 16.w,
-          right: 16.w,
+        margin: EdgeInsetsDirectional.only(
+          start: 16.w,
+          end: 16.w,
           bottom: 16.h,
         ),
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),

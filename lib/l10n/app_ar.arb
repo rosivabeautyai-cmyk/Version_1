@@ -130,8 +130,6 @@
   "adminDashboardTitle": "لوحة تحكم الأدمن",
   "totalUsers": "إجمالي المستخدمين",
   "verifiedEmails": "إيميلات موثّقة",
-  "adminToolsTitle": "أدوات الأدمن",
-  "adminToolsPlaceholder": "أدوات إدارة المستخدمين والمحتوى هتتضاف هنا لاحقًا.",
   "legalLastUpdatedPlaceholder": "آخر تحديث: أضيفي التاريخ هنا",
   "tosSection1Title": "١. الموافقة على الشروط",
   "tosSection1Body": "باستخدامك لتطبيق ROSIVA فإنك توافقين على هذه الشروط. إذا كنتِ لا توافقين عليها، يرجى عدم استخدام التطبيق.",
@@ -267,5 +265,191 @@
   "confirmLogout": "هل أنتِ متأكدة من تسجيل الخروج؟",
   "categorySkincare": "العناية بالبشرة",
   "categoryMakeup": "مكياج",
-  "categoryPerfume": "العطور"
+  "categoryPerfume": "العطور",
+  "helpCenterSubtitle": "إجابات عن الأسئلة الشائعة حول حسابك في روزيفيا، والمنتجات، والمساعد الذكي.",
+  "helpCenterAccountQuestion": "كيف أدير حسابي؟",
+  "helpCenterAccountAnswer": "اذهبي إلى الملف الشخصي ← تعديل الملف الشخصي لتحديث اسمك وتفضيلاتك الجمالية، أو الملف الشخصي ← الأمان لإعادة تعيين كلمة المرور.",
+  "helpCenterProductsQuestion": "من أين تأتي تفاصيل المنتجات؟",
+  "helpCenterProductsAnswer": "معلومات المنتجات والأسعار والتوفر تُقدَّم من متاجرنا الشريكة وقد تتغير دون إشعار.",
+  "helpCenterOrdersQuestion": "هل تقوم روزيفيا بمعالجة طلباتي؟",
+  "helpCenterOrdersAnswer": "لا. روزيفيا منصة اكتشاف — الضغط على \"فتح المتجر\" ينقلك إلى موقع البائع لإتمام الشراء هناك.",
+  "helpCenterFavoritesQuestion": "كيف تعمل المفضلة؟",
+  "helpCenterFavoritesAnswer": "اضغطي على أيقونة القلب في أي منتج لحفظه في تبويب المفضلة. تتم مزامنة مفضلتكِ مع حسابكِ.",
+  "helpCenterAiQuestion": "ما مدى دقة المساعد الذكي؟",
+  "helpCenterAiAnswer": "يقدم المساعد الذكي إرشادات جمالية عامة بناءً على ما تشاركينه معه. لا يُعد بديلاً عن الاستشارة المتخصصة — راجعي دقة الذكاء الاصطناعي في الإعدادات لمزيد من التفاصيل.",
+  "helpCenterLanguageQuestion": "هل يمكنني تغيير لغة التطبيق أو العملة؟",
+  "helpCenterLanguageAnswer": "نعم. اذهبي إلى الملف الشخصي ← الإعدادات ← الإعدادات المحلية للتبديل بين العربية والإنجليزية، ولتحديد الدولة والعملة المفضلتين لديكِ.",
+  "helpCenterPrivacyQuestion": "كيف تُستخدم بياناتي؟",
+  "helpCenterPrivacyAnswer": "راجعي سياسة الخصوصية في الإعدادات للاطلاع على التفاصيل الكاملة حول ما نجمعه وكيفية استخدامه.",
+  "helpCenterContactQuestion": "ما زلت بحاجة إلى مساعدة — كيف أتواصل معكم؟",
+  "helpCenterContactAnswer": "زوري صفحة تواصلي معنا في الإعدادات لأحدث طرق التواصل مع فريق روزيفيا.",
+  "contactUsSubtitle": "يسعدنا التواصل معكِ.",
+  "contactUsNotConfiguredTitle": "بيانات التواصل قريبًا",
+  "contactUsNotConfiguredDesc": "نعمل حاليًا على توفير قنوات تواصل مباشرة لروزيفيا. في هذه الأثناء، يمكنكِ مراجعة مركز المساعدة للإجابة على الأسئلة الشائعة.",
+  "contactUsHelpCenterCta": "الذهاب إلى مركز المساعدة",
+  "countryEgypt": "مصر",
+  "countrySaudiArabia": "السعودية",
+  "countryUae": "الإمارات العربية المتحدة",
+  "countryUsa": "الولايات المتحدة",
+  "countryUnitedKingdom": "المملكة المتحدة",
+  "countryQatar": "قطر",
+  "countryKuwait": "الكويت",
+  "countryJordan": "الأردن",
+  "myBeautyProfileScreenSubtitle": "أخبرينا عن بشرتكِ لتتمكن روزيفيا من اقتراح منتجات أفضل لكِ.",
+  "skinType": "نوع البشرة",
+  "skinTypeNormal": "عادية",
+  "skinTypeDry": "جافة",
+  "skinTypeOily": "دهنية",
+  "skinTypeCombination": "مختلطة",
+  "skinTypeSensitive": "حساسة",
+  "skinTypeNotSet": "غير محدد",
+  "profileUpdated": "تم تحديث الملف الشخصي",
+  "editProfileScreenSubtitle": "حدّثي اسمكِ وكيفية ظهوركِ عبر روزيفيا.",
+  "securityScreenSubtitle": "إدارة طريقة تسجيل دخولكِ إلى روزيفيا.",
+  "changePassword": "تغيير كلمة المرور",
+  "changePasswordDesc": "سنرسل لكِ رابطًا آمنًا عبر البريد الإلكتروني لإعادة تعيين كلمة المرور.",
+  "sendPasswordResetConfirm": "إرسال رابط إعادة تعيين كلمة المرور إلى {email}؟",
+  "@sendPasswordResetConfirm": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "passwordResetLinkSent": "تم إرسال رابط إعادة تعيين كلمة المرور. تحققي من بريدكِ.",
+  "aiNoProductsFound": "لم أتمكن من العثور على منتج مطابق في روزيفيا الآن. جربي تعديل تفضيلاتكِ أو ميزانيتكِ.",
+  "aiRecommendationsIntro": "إليكِ بعض المنتجات التي قد تكون مناسبة.",
+  "adminProductsTitle": "المنتجات",
+  "adminLastSync": "آخر مزامنة",
+  "adminSyncNever": "لم تتم أي مزامنة بعد",
+  "adminSyncRunning": "المزامنة جارية…",
+  "adminSyncSuccess": "نجحت آخر مزامنة",
+  "adminSyncError": "فشلت آخر مزامنة",
+  "adminSyncSummary": "تم استيراد {imported}، وتخطي {skipped}، من أصل {processed}",
+  "@adminSyncSummary": {
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      },
+      "skipped": {
+        "type": "int"
+      },
+      "processed": {
+        "type": "int"
+      }
+    }
+  },
+  "adminFallbackName": "المشرف",
+  "adminHelloWave": "مرحبًا أيها المشرف 👋",
+  "adminDashboardSubtitle": "إليك آخر مستجدات روزيفيا اليوم.",
+  "adminMobileHeaderSubtitle": "المشرف",
+  "navDashboard": "الرئيسية",
+  "navUsers": "المستخدمون",
+  "navProducts": "المنتجات",
+  "navPlatforms": "المنصات",
+  "navSettings": "الإعدادات",
+  "adminTotalProducts": "إجمالي المنتجات",
+  "adminTotalProductsDesc": "المنتجات المتوفرة حاليًا",
+  "adminCategoryProductsDesc": "المنتجات ضمن هذه الفئة",
+  "adminTotalUsersDesc": "الحسابات المسجَّلة",
+  "adminVerifiedUsersDesc": "عناوين بريد إلكتروني موثّقة",
+  "adminCatalogSync": "مزامنة الكتالوج",
+  "adminLastSuccessfulSync": "آخر مزامنة ناجحة",
+  "adminProductsImported": "منتجات مستوردة",
+  "adminProductsSkipped": "منتجات متخطاة",
+  "adminProductsProcessed": "صفوف تمت معالجتها",
+  "adminSyncDuration": "مدة المزامنة",
+  "adminSyncCatalogButton": "مزامنة الكتالوج",
+  "adminSyncOpensGithub": "يفتح GitHub Actions لتشغيل مهمة المزامنة.",
+  "adminSyncLinkFailed": "تعذر فتح صفحة المزامنة. حاولي مرة أخرى.",
+  "adminRecentActivity": "النشاط الأخير",
+  "adminActivityStarted": "بدأت مزامنة الكتالوج",
+  "adminActivityCompleted": "اكتملت مزامنة الكتالوج",
+  "adminActivityFailedEvent": "فشلت مزامنة الكتالوج",
+  "adminNoActivityTitle": "لا يوجد نشاط حديث",
+  "adminNoActivityDesc": "سيظهر نشاط المزامنة هنا بعد أول عملية مزامنة للكتالوج.",
+  "adminJustNow": "الآن",
+  "adminMinutesAgo": "{count, plural, one{منذ دقيقة} two{منذ دقيقتين} few{منذ {count} دقائق} many{منذ {count} دقيقة} other{منذ {count} دقيقة}}",
+  "@adminMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminHoursAgo": "{count, plural, one{منذ ساعة} two{منذ ساعتين} few{منذ {count} ساعات} many{منذ {count} ساعة} other{منذ {count} ساعة}}",
+  "@adminHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminDaysAgo": "{count, plural, one{منذ يوم} two{منذ يومين} few{منذ {count} أيام} many{منذ {count} يومًا} other{منذ {count} يوم}}",
+  "@adminDaysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminQuickActions": "إجراءات سريعة",
+  "adminViewProducts": "عرض المنتجات",
+  "adminViewUsers": "عرض المستخدمين",
+  "adminNoProductsTitle": "لا توجد منتجات بعد",
+  "adminNoProductsDesc": "سيظهر كتالوجك هنا بعد أول مزامنة ناجحة مع Awin.",
+  "adminSyncFailedDesc": "حدث خطأ أثناء تحديث الكتالوج. يرجى المحاولة مرة أخرى.",
+  "adminCatalogSyncedSuccess": "تمت مزامنة الكتالوج بنجاح.",
+  "adminSyncedProductsCount": "تم تحديث {count} منتج.",
+  "@adminSyncedProductsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "adminAffiliatePlatforms": "منصات التسويق بالعمولة",
+  "adminPlatformsDesc": "عمليات الربط النشطة",
+  "adminPlatformActivity": "نشاط المنصة",
+  "adminNoHistoricalActivity": "لا تتوفر بيانات نشاط سابقة حتى الآن.",
+  "adminRecentUsers": "أحدث المستخدمين",
+  "adminNoUsersYet": "لا يوجد مستخدمون بعد",
+  "adminJoinedOn": "انضم في {date}",
+  "@adminJoinedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "adminStatusVerified": "موثّق",
+  "adminStatusUnverified": "غير موثّق",
+  "adminUsersSubtitle": "إدارة مستخدمي روزيفيا",
+  "adminSearchUsersHint": "ابحثي بالاسم أو البريد الإلكتروني",
+  "adminFilterAll": "الكل",
+  "adminActiveUsers": "المستخدمون النشطون",
+  "adminActiveUsersDesc": "سجّلوا الدخول خلال آخر 30 يومًا",
+  "adminUserDetails": "عرض التفاصيل",
+  "adminDeleteUser": "حذف",
+  "adminDeleteNotAvailable": "حذف المستخدمين غير متاح حاليًا.",
+  "adminUserListRestricted": "عرض قائمة المستخدمين الكاملة يتطلب صلاحية إضافية في Firestore لم يتم تفعيلها بعد.",
+  "adminNoUsersFound": "لم يتم العثور على مستخدمين",
+  "adminNoUsersFoundDesc": "جربي كلمة بحث مختلفة.",
+  "adminProductsScreenSubtitle": "إدارة كتالوج روزيفيا للجمال",
+  "adminSearchProductsHint": "ابحثي عن منتج",
+  "adminInStock": "متوفر",
+  "adminOutOfStock": "غير متوفر",
+  "adminPlatformsScreenTitle": "منصات التسويق بالعمولة",
+  "adminPlatformsScreenSubtitle": "إدارة منظومة الشراكات الخاصة بكِ",
+  "adminPlatformConnected": "متصل",
+  "adminPlatformNotConnected": "غير متصل",
+  "adminCatalogActive": "نشط",
+  "adminCatalogInactive": "غير نشط",
+  "adminComingSoonPlatform": "المزيد من المنصات قريبًا",
+  "adminSettingsScreenSubtitle": "إدارة تفضيلات المشرف",
+  "adminSectionAccount": "الحساب",
+  "adminSectionAppearance": "المظهر",
+  "adminNotificationsComingSoonDesc": "إشعارات المشرف غير متاحة حاليًا.",
+  "adminNewUsers": "مستخدمون جدد",
+  "adminNewUsersDesc": "انضموا خلال آخر 7 أيام"
 }

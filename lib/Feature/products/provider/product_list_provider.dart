@@ -52,10 +52,9 @@ class ProductListProvider extends ChangeNotifier {
         data: List.unmodifiable(_items),
         hasMore: result.hasMore,
       );
-    } on ApiException catch (e) {
+    } on ApiException catch (_) {
       _state = ViewState(
         status: ViewStatus.error,
-        errorMessage: e.message,
         data: _items.isEmpty ? null : List.unmodifiable(_items),
       );
     } catch (_) {

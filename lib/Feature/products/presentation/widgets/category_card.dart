@@ -19,7 +19,7 @@ class CategoryCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 90.w,
-        margin: EdgeInsets.only(right: 12.w),
+        margin: EdgeInsetsDirectional.only(end: 12.w),
         child: Column(
           children: [
             Container(
@@ -80,7 +80,7 @@ class CategoryChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 9.h),
-        margin: EdgeInsets.only(right: 8.w),
+        margin: EdgeInsetsDirectional.only(end: 8.w),
         decoration: BoxDecoration(
           color: selected ? colorScheme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(30.r),

@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 
 import 'package:rosivia/Feature/auth/presentation/legal/privacy_policy_screen.dart';
 import 'package:rosivia/Feature/auth/presentation/legal/terms_of_service_screen.dart';
+import 'package:rosivia/Feature/auth/provider/auth_provider.dart';
+import 'package:rosivia/Feature/home/presentation/screens/edit_profile_screen.dart';
+import 'package:rosivia/Feature/home/presentation/screens/security_screen.dart';
 import 'package:rosivia/Feature/intro/language/language_provider.dart';
 import 'package:rosivia/Feature/intro/language/language_tile.dart';
 import 'package:rosivia/core/functions/navigations.dart';
@@ -11,7 +14,10 @@ import 'package:rosivia/core/providers/theme_provider.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../provider/notification_prefs_provider.dart';
+import '../../provider/regional_prefs_provider.dart';
 import '../widgets/settings_widgets.dart';
+import 'contact_us_screen.dart';
+import 'help_center_screen.dart';
 import 'legal_info_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -19,8 +25,11 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => NotificationPrefsProvider()..load(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NotificationPrefsProvider()..load()),
+        ChangeNotifierProvider(create: (_) => RegionalPrefsProvider()..load()),
+      ],
       child: const _SettingsView(),
     );
   }
@@ -36,6 +45,7 @@ class _SettingsView extends StatelessWidget {
     final languageProvider = context.watch<LanguageProvider>();
     final themeProvider = context.watch<ThemeProvider>();
     final notifPrefs = context.watch<NotificationPrefsProvider>();
+    final regionalPrefs = context.watch<RegionalPrefsProvider>();
 
     final isArabic = languageProvider.locale.languageCode == 'ar';
 
@@ -59,9 +69,12 @@ class _SettingsView extends StatelessWidget {
                   icon: Icons.public_rounded,
                   title: lang.country,
                   trailing: Text(
-                    lang.autoBasedOnLocation,
+                    regionalPrefs.countryCode == null
+                        ? lang.autoBasedOnLocation
+                        : regionalCountryName(lang, regionalPrefs.countryCode!),
                     style: theme.textTheme.bodySmall,
                   ),
+                  onTap: () => _showCountryPicker(context, regionalPrefs, lang),
                 ),
                 SettingsTile(
                   icon: Icons.translate_rounded,
@@ -76,9 +89,10 @@ class _SettingsView extends StatelessWidget {
                   icon: Icons.attach_money_rounded,
                   title: lang.currency,
                   trailing: Text(
-                    lang.autoBasedOnLocation,
+                    regionalPrefs.currencyCode ?? lang.autoBasedOnLocation,
                     style: theme.textTheme.bodySmall,
                   ),
+                  onTap: () => _showCurrencyPicker(context, regionalPrefs, lang),
                 ),
               ],
             ),
@@ -144,6 +158,18 @@ class _SettingsView extends StatelessWidget {
                   ),
                 ),
                 SettingsTile(
+                  icon: Icons.verified_user_outlined,
+                  title: lang.aiAccuracyTitle,
+                  onTap: () => pushTo(
+                    context,
+                    LegalInfoScreen(
+                      title: lang.aiAccuracyTitle,
+                      body: lang.aiAccuracyDesc,
+                      icon: Icons.verified_user_outlined,
+                    ),
+                  ),
+                ),
+                SettingsTile(
                   icon: Icons.description_outlined,
                   title: lang.termsOfServiceShort,
                   onTap: () => pushTo(context, const TermsOfServiceScreen()),
@@ -152,6 +178,38 @@ class _SettingsView extends StatelessWidget {
                   icon: Icons.privacy_tip_outlined,
                   title: lang.privacyPolicy,
                   onTap: () => pushTo(context, const PrivacyPolicyScreen()),
+                ),
+              ],
+            ),
+
+            SettingsSectionLabel(lang.accountSettings),
+            SettingsCard(
+              children: [
+                SettingsTile(
+                  icon: Icons.person_outline_rounded,
+                  title: lang.editProfile,
+                  onTap: () => pushTo(context, const EditProfileScreen()),
+                ),
+                SettingsTile(
+                  icon: Icons.lock_outline_rounded,
+                  title: lang.security,
+                  onTap: () => pushTo(context, const SecurityScreen()),
+                ),
+              ],
+            ),
+
+            SettingsSectionLabel(lang.support),
+            SettingsCard(
+              children: [
+                SettingsTile(
+                  icon: Icons.help_outline_rounded,
+                  title: lang.helpCenter,
+                  onTap: () => pushTo(context, const HelpCenterScreen()),
+                ),
+                SettingsTile(
+                  icon: Icons.mail_outline_rounded,
+                  title: lang.contactUs,
+                  onTap: () => pushTo(context, const ContactUsScreen()),
                 ),
               ],
             ),
@@ -166,6 +224,12 @@ class _SettingsView extends StatelessWidget {
                     value: themeProvider.isDarkMode,
                     onChanged: themeProvider.toggleDarkMode,
                   ),
+                ),
+                SettingsTile(
+                  icon: Icons.logout_rounded,
+                  title: lang.logOut,
+                  iconColor: theme.colorScheme.error,
+                  onTap: () => _confirmLogout(context, lang),
                 ),
               ],
             ),
@@ -229,4 +293,142 @@ class _SettingsView extends StatelessWidget {
       },
     );
   }
+
+  void _showCountryPicker(
+    BuildContext context,
+    RegionalPrefsProvider regionalPrefs,
+    AppLocalizations lang,
+  ) {
+    _showOptionPicker(
+      context: context,
+      title: lang.country,
+      options: [
+        _PickerOption(
+          label: lang.autoBasedOnLocation,
+          selected: regionalPrefs.countryCode == null,
+          onTap: () => regionalPrefs.setCountry(null),
+        ),
+        for (final code in RegionalPrefsProvider.countryCodes)
+          _PickerOption(
+            label: regionalCountryName(lang, code),
+            selected: regionalPrefs.countryCode == code,
+            onTap: () => regionalPrefs.setCountry(code),
+          ),
+      ],
+    );
+  }
+
+  void _showCurrencyPicker(
+    BuildContext context,
+    RegionalPrefsProvider regionalPrefs,
+    AppLocalizations lang,
+  ) {
+    _showOptionPicker(
+      context: context,
+      title: lang.currency,
+      options: [
+        _PickerOption(
+          label: lang.autoBasedOnLocation,
+          selected: regionalPrefs.currencyCode == null,
+          onTap: () => regionalPrefs.setCurrency(null),
+        ),
+        for (final code in RegionalPrefsProvider.currencyCodes)
+          _PickerOption(
+            label: code,
+            selected: regionalPrefs.currencyCode == code,
+            onTap: () => regionalPrefs.setCurrency(code),
+          ),
+      ],
+    );
+  }
+
+  void _showOptionPicker({
+    required BuildContext context,
+    required String title,
+    required List<_PickerOption> options,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+      ),
+      builder: (sheetContext) {
+        final theme = Theme.of(sheetContext);
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(8.w, 20.h, 8.w, 8.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  child: Text(title, style: theme.textTheme.titleMedium),
+                ),
+                SizedBox(height: 8.h),
+                Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      for (final option in options)
+                        ListTile(
+                          title: Text(option.label),
+                          trailing: option.selected
+                              ? Icon(
+                                  Icons.check_circle_rounded,
+                                  color: theme.colorScheme.primary,
+                                )
+                              : null,
+                          onTap: () {
+                            option.onTap();
+                            Navigator.pop(sheetContext);
+                          },
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _confirmLogout(BuildContext context, AppLocalizations lang) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(lang.logOut),
+          content: Text(lang.confirmLogout),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(lang.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                context.read<AuthProvider>().logout();
+              },
+              child: Text(lang.logOut),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _PickerOption {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _PickerOption({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
 }

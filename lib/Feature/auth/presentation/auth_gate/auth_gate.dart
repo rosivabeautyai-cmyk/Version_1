@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:rosivia/Feature/admin/presentation/admin_home_screen.dart';
+import 'package:rosivia/Feature/admin/presentation/screens/admin_shell.dart';
 import 'package:rosivia/Feature/home/presentation/screens/main_screen.dart';
 
 import '../../provider/auth_provider.dart';
@@ -27,7 +27,7 @@ import '../verify_email/verify_email_screen.dart';
 ///
 ///   Logged in + Verified + Admin
 ///       ↓
-///   AdminHomeScreen
+///   AdminShell
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
@@ -136,7 +136,7 @@ class _EmailVerificationCheckState extends State<_EmailVerificationCheck> {
 
     // Verified Admin.
     if (_isAdmin) {
-      return const AdminHomeScreen();
+      return const AdminShell();
     }
 
     // Verified normal user.

@@ -185,6 +185,23 @@ class AuthRepository {
     );
   }
 
+  /// Updates a subset of profile fields on the user's Firestore
+  /// document (never touches Firebase Auth itself). Pass only the
+  /// fields that changed.
+  Future<void> updateProfile({
+    required String uid,
+    String? fullName,
+    String? skinType,
+    String? country,
+  }) {
+    final data = <String, dynamic>{
+      'fullName': ?fullName,
+      'skinType': ?skinType,
+      'country': ?country,
+    };
+    return _usersRef.doc(uid).set(data, SetOptions(merge: true));
+  }
+
   /// Public entry point so callers like [AuthGate] can repair an
   /// incomplete Firestore doc for the currently signed-in user even
   /// on a resumed session — not just right after a fresh sign-in

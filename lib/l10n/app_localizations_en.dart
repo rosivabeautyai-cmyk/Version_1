@@ -323,12 +323,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verifiedEmails => 'Verified Emails';
 
   @override
-  String get adminToolsTitle => 'Admin Tools';
-
-  @override
-  String get adminToolsPlaceholder => 'User and content management tools will be added here soon.';
-
-  @override
   String get legalLastUpdatedPlaceholder => 'Last updated: add the date here';
 
   @override
@@ -620,7 +614,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get affiliateTransparency => 'Affiliate Transparency';
 
   @override
-  String get affiliateTransparencyDesc => 'ROSIVA is an intelligent recommendation engine, not a direct retailer. When you click "Shop Now," you are directed to a third-party merchant. We may earn a commission through those links at no extra cost to you. This enables us to keep our premium beauty AI free for everyone.';
+  String get affiliateTransparencyDesc => 'ROSIVA is an intelligent recommendation engine, not a direct retailer. When you click \"Shop Now,\" you are directed to a third-party merchant. We may earn a commission through those links at no extra cost to you. This enables us to keep our premium beauty AI free for everyone.';
 
   @override
   String get medicalDisclaimer => 'Medical Advice Disclaimer';
@@ -697,4 +691,429 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoryPerfume => 'Perfumes';
+
+  @override
+  String get helpCenterSubtitle => 'Answers to common questions about your ROSIVA account, products, and the AI assistant.';
+
+  @override
+  String get helpCenterAccountQuestion => 'How do I manage my account?';
+
+  @override
+  String get helpCenterAccountAnswer => 'Go to Profile → Edit Profile to update your name and beauty preferences, or Profile → Security to reset your password.';
+
+  @override
+  String get helpCenterProductsQuestion => 'Where do product details come from?';
+
+  @override
+  String get helpCenterProductsAnswer => 'Product information, pricing, and availability are provided by our partner stores and may change without notice.';
+
+  @override
+  String get helpCenterOrdersQuestion => 'Does ROSIVA process my orders?';
+
+  @override
+  String get helpCenterOrdersAnswer => 'No. ROSIVA is a discovery platform — tapping \"Open Store\" takes you to the retailer\'s site to complete your purchase there.';
+
+  @override
+  String get helpCenterFavoritesQuestion => 'How do favorites work?';
+
+  @override
+  String get helpCenterFavoritesAnswer => 'Tap the heart icon on any product to save it to your Favorites tab. Your favorites are synced to your account.';
+
+  @override
+  String get helpCenterAiQuestion => 'How accurate is the AI assistant?';
+
+  @override
+  String get helpCenterAiAnswer => 'The AI assistant offers general beauty guidance based on what you share with it. It isn\'t a substitute for professional advice — see AI Accuracy in Settings for details.';
+
+  @override
+  String get helpCenterLanguageQuestion => 'Can I change the app language or currency?';
+
+  @override
+  String get helpCenterLanguageAnswer => 'Yes. Go to Profile → Settings → Localization to switch between English and Arabic, and to set your country and currency preferences.';
+
+  @override
+  String get helpCenterPrivacyQuestion => 'How is my data used?';
+
+  @override
+  String get helpCenterPrivacyAnswer => 'See our Privacy Policy in Settings for full details on what we collect and how it\'s used.';
+
+  @override
+  String get helpCenterContactQuestion => 'I still need help — how do I reach you?';
+
+  @override
+  String get helpCenterContactAnswer => 'Visit Contact Us in Settings for the latest ways to reach the ROSIVA team.';
+
+  @override
+  String get contactUsSubtitle => 'We\'d love to hear from you.';
+
+  @override
+  String get contactUsNotConfiguredTitle => 'Contact details coming soon';
+
+  @override
+  String get contactUsNotConfiguredDesc => 'We\'re setting up direct contact channels for ROSIVA. In the meantime, check the Help Center for answers to common questions.';
+
+  @override
+  String get contactUsHelpCenterCta => 'Go to Help Center';
+
+  @override
+  String get countryEgypt => 'Egypt';
+
+  @override
+  String get countrySaudiArabia => 'Saudi Arabia';
+
+  @override
+  String get countryUae => 'United Arab Emirates';
+
+  @override
+  String get countryUsa => 'United States';
+
+  @override
+  String get countryUnitedKingdom => 'United Kingdom';
+
+  @override
+  String get countryQatar => 'Qatar';
+
+  @override
+  String get countryKuwait => 'Kuwait';
+
+  @override
+  String get countryJordan => 'Jordan';
+
+  @override
+  String get myBeautyProfileScreenSubtitle => 'Tell us about your skin so ROSIVA can recommend better products for you.';
+
+  @override
+  String get skinType => 'Skin Type';
+
+  @override
+  String get skinTypeNormal => 'Normal';
+
+  @override
+  String get skinTypeDry => 'Dry';
+
+  @override
+  String get skinTypeOily => 'Oily';
+
+  @override
+  String get skinTypeCombination => 'Combination';
+
+  @override
+  String get skinTypeSensitive => 'Sensitive';
+
+  @override
+  String get skinTypeNotSet => 'Not set';
+
+  @override
+  String get profileUpdated => 'Profile updated';
+
+  @override
+  String get editProfileScreenSubtitle => 'Update your name and how you appear across ROSIVA.';
+
+  @override
+  String get securityScreenSubtitle => 'Manage how you sign in to ROSIVA.';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get changePasswordDesc => 'We\'ll email you a secure link to reset your password.';
+
+  @override
+  String sendPasswordResetConfirm(String email) {
+    return 'Send a password reset link to $email?';
+  }
+
+  @override
+  String get passwordResetLinkSent => 'Password reset link sent. Check your inbox.';
+
+  @override
+  String get aiNoProductsFound => 'I couldn\'t find a matching product in ROSIVA right now. Try adjusting your preferences or budget.';
+
+  @override
+  String get aiRecommendationsIntro => 'Here are some products that may be relevant.';
+
+  @override
+  String get adminProductsTitle => 'Products';
+
+  @override
+  String get adminLastSync => 'Last Sync';
+
+  @override
+  String get adminSyncNever => 'Never synced yet';
+
+  @override
+  String get adminSyncRunning => 'Sync in progress…';
+
+  @override
+  String get adminSyncSuccess => 'Last sync succeeded';
+
+  @override
+  String get adminSyncError => 'Last sync failed';
+
+  @override
+  String adminSyncSummary(int imported, int skipped, int processed) {
+    return '$imported imported, $skipped skipped, $processed processed';
+  }
+
+  @override
+  String get adminFallbackName => 'Admin';
+
+  @override
+  String get adminHelloWave => 'Hello Admin 👋';
+
+  @override
+  String get adminDashboardSubtitle => 'Here\'s what\'s happening with ROSIVA today.';
+
+  @override
+  String get adminMobileHeaderSubtitle => 'Admin';
+
+  @override
+  String get navDashboard => 'Dashboard';
+
+  @override
+  String get navUsers => 'Users';
+
+  @override
+  String get navProducts => 'Products';
+
+  @override
+  String get navPlatforms => 'Platforms';
+
+  @override
+  String get navSettings => 'Settings';
+
+  @override
+  String get adminTotalProducts => 'Total Products';
+
+  @override
+  String get adminTotalProductsDesc => 'Products currently available';
+
+  @override
+  String get adminCategoryProductsDesc => 'Products in this category';
+
+  @override
+  String get adminTotalUsersDesc => 'Registered accounts';
+
+  @override
+  String get adminVerifiedUsersDesc => 'Verified email addresses';
+
+  @override
+  String get adminCatalogSync => 'Catalog Sync';
+
+  @override
+  String get adminLastSuccessfulSync => 'Last successful sync';
+
+  @override
+  String get adminProductsImported => 'Products imported';
+
+  @override
+  String get adminProductsSkipped => 'Products skipped';
+
+  @override
+  String get adminProductsProcessed => 'Rows processed';
+
+  @override
+  String get adminSyncDuration => 'Sync duration';
+
+  @override
+  String get adminSyncCatalogButton => 'Sync Catalog';
+
+  @override
+  String get adminSyncOpensGithub => 'Opens GitHub Actions to run the sync workflow.';
+
+  @override
+  String get adminSyncLinkFailed => 'Couldn\'t open the sync page. Try again.';
+
+  @override
+  String get adminRecentActivity => 'Recent Activity';
+
+  @override
+  String get adminActivityStarted => 'Catalog sync started';
+
+  @override
+  String get adminActivityCompleted => 'Catalog sync completed';
+
+  @override
+  String get adminActivityFailedEvent => 'Catalog sync failed';
+
+  @override
+  String get adminNoActivityTitle => 'No recent activity';
+
+  @override
+  String get adminNoActivityDesc => 'Sync activity will appear here after your first catalog sync.';
+
+  @override
+  String get adminJustNow => 'Just now';
+
+  @override
+  String adminMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes ago',
+      one: '1 minute ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String adminHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours ago',
+      one: '1 hour ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String adminDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days ago',
+      one: '1 day ago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminQuickActions => 'Quick Actions';
+
+  @override
+  String get adminViewProducts => 'View Products';
+
+  @override
+  String get adminViewUsers => 'View Users';
+
+  @override
+  String get adminNoProductsTitle => 'No products yet';
+
+  @override
+  String get adminNoProductsDesc => 'Your catalog will appear here after the first successful Awin sync.';
+
+  @override
+  String get adminSyncFailedDesc => 'Something went wrong while updating the catalog. Please try again.';
+
+  @override
+  String get adminCatalogSyncedSuccess => 'Catalog synced successfully.';
+
+  @override
+  String adminSyncedProductsCount(int count) {
+    return '$count products updated.';
+  }
+
+  @override
+  String get adminAffiliatePlatforms => 'Affiliate Platforms';
+
+  @override
+  String get adminPlatformsDesc => 'Connected integrations';
+
+  @override
+  String get adminPlatformActivity => 'Platform activity';
+
+  @override
+  String get adminNoHistoricalActivity => 'No historical activity data available yet.';
+
+  @override
+  String get adminRecentUsers => 'Recent Users';
+
+  @override
+  String get adminNoUsersYet => 'No users yet';
+
+  @override
+  String adminJoinedOn(String date) {
+    return 'Joined $date';
+  }
+
+  @override
+  String get adminStatusVerified => 'Verified';
+
+  @override
+  String get adminStatusUnverified => 'Unverified';
+
+  @override
+  String get adminUsersSubtitle => 'Manage ROSIVA users';
+
+  @override
+  String get adminSearchUsersHint => 'Search by name or email';
+
+  @override
+  String get adminFilterAll => 'All';
+
+  @override
+  String get adminActiveUsers => 'Active Users';
+
+  @override
+  String get adminActiveUsersDesc => 'Signed in within the last 30 days';
+
+  @override
+  String get adminUserDetails => 'View Details';
+
+  @override
+  String get adminDeleteUser => 'Delete';
+
+  @override
+  String get adminDeleteNotAvailable => 'Deleting users isn\'t available yet.';
+
+  @override
+  String get adminUserListRestricted => 'Full user list requires an additional Firestore permission that hasn\'t been enabled yet.';
+
+  @override
+  String get adminNoUsersFound => 'No users found';
+
+  @override
+  String get adminNoUsersFoundDesc => 'Try a different search term.';
+
+  @override
+  String get adminProductsScreenSubtitle => 'Manage the ROSIVA beauty catalog';
+
+  @override
+  String get adminSearchProductsHint => 'Search products';
+
+  @override
+  String get adminInStock => 'In Stock';
+
+  @override
+  String get adminOutOfStock => 'Out of Stock';
+
+  @override
+  String get adminPlatformsScreenTitle => 'Affiliate Platforms';
+
+  @override
+  String get adminPlatformsScreenSubtitle => 'Manage your connected affiliate ecosystem';
+
+  @override
+  String get adminPlatformConnected => 'Connected';
+
+  @override
+  String get adminPlatformNotConnected => 'Not Connected';
+
+  @override
+  String get adminCatalogActive => 'Active';
+
+  @override
+  String get adminCatalogInactive => 'Inactive';
+
+  @override
+  String get adminComingSoonPlatform => 'More platforms coming soon';
+
+  @override
+  String get adminSettingsScreenSubtitle => 'Manage your admin preferences';
+
+  @override
+  String get adminSectionAccount => 'Account';
+
+  @override
+  String get adminSectionAppearance => 'Appearance';
+
+  @override
+  String get adminNotificationsComingSoonDesc => 'Admin notifications aren\'t available yet.';
+
+  @override
+  String get adminNewUsers => 'New Users';
+
+  @override
+  String get adminNewUsersDesc => 'Joined in the last 7 days';
 }

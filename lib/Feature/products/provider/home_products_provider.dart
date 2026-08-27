@@ -62,8 +62,8 @@ class HomeProductsProvider extends ChangeNotifier {
         status: data.isEmpty ? ViewStatus.empty : ViewStatus.success,
         data: data,
       );
-    } on ApiException catch (e) {
-      _state = ViewState(status: ViewStatus.error, errorMessage: e.message);
+    } on ApiException catch (_) {
+      _state = const ViewState(status: ViewStatus.error);
     } catch (_) {
       _state = const ViewState(
         status: ViewStatus.error,

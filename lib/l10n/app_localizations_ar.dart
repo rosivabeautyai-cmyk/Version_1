@@ -323,12 +323,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get verifiedEmails => 'إيميلات موثّقة';
 
   @override
-  String get adminToolsTitle => 'أدوات الأدمن';
-
-  @override
-  String get adminToolsPlaceholder => 'أدوات إدارة المستخدمين والمحتوى هتتضاف هنا لاحقًا.';
-
-  @override
   String get legalLastUpdatedPlaceholder => 'آخر تحديث: أضيفي التاريخ هنا';
 
   @override
@@ -620,7 +614,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get affiliateTransparency => 'شفافية العمولة';
 
   @override
-  String get affiliateTransparencyDesc => 'روزيفيا محرك توصيات ذكي وليست بائعًا مباشرًا. عند الضغط على "تسوقي الآن"، يتم توجيهكِ إلى بائع خارجي. قد نحصل على عمولة عبر تلك الروابط دون أي تكلفة إضافية عليكِ. هذا يمكّننا من إبقاء مساعد الجمال الذكي المتميز مجانيًا للجميع.';
+  String get affiliateTransparencyDesc => 'روزيفيا محرك توصيات ذكي وليست بائعًا مباشرًا. عند الضغط على \"تسوقي الآن\"، يتم توجيهكِ إلى بائع خارجي. قد نحصل على عمولة عبر تلك الروابط دون أي تكلفة إضافية عليكِ. هذا يمكّننا من إبقاء مساعد الجمال الذكي المتميز مجانيًا للجميع.';
 
   @override
   String get medicalDisclaimer => 'إخلاء مسؤولية طبي';
@@ -697,4 +691,438 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get categoryPerfume => 'العطور';
+
+  @override
+  String get helpCenterSubtitle => 'إجابات عن الأسئلة الشائعة حول حسابك في روزيفيا، والمنتجات، والمساعد الذكي.';
+
+  @override
+  String get helpCenterAccountQuestion => 'كيف أدير حسابي؟';
+
+  @override
+  String get helpCenterAccountAnswer => 'اذهبي إلى الملف الشخصي ← تعديل الملف الشخصي لتحديث اسمك وتفضيلاتك الجمالية، أو الملف الشخصي ← الأمان لإعادة تعيين كلمة المرور.';
+
+  @override
+  String get helpCenterProductsQuestion => 'من أين تأتي تفاصيل المنتجات؟';
+
+  @override
+  String get helpCenterProductsAnswer => 'معلومات المنتجات والأسعار والتوفر تُقدَّم من متاجرنا الشريكة وقد تتغير دون إشعار.';
+
+  @override
+  String get helpCenterOrdersQuestion => 'هل تقوم روزيفيا بمعالجة طلباتي؟';
+
+  @override
+  String get helpCenterOrdersAnswer => 'لا. روزيفيا منصة اكتشاف — الضغط على \"فتح المتجر\" ينقلك إلى موقع البائع لإتمام الشراء هناك.';
+
+  @override
+  String get helpCenterFavoritesQuestion => 'كيف تعمل المفضلة؟';
+
+  @override
+  String get helpCenterFavoritesAnswer => 'اضغطي على أيقونة القلب في أي منتج لحفظه في تبويب المفضلة. تتم مزامنة مفضلتكِ مع حسابكِ.';
+
+  @override
+  String get helpCenterAiQuestion => 'ما مدى دقة المساعد الذكي؟';
+
+  @override
+  String get helpCenterAiAnswer => 'يقدم المساعد الذكي إرشادات جمالية عامة بناءً على ما تشاركينه معه. لا يُعد بديلاً عن الاستشارة المتخصصة — راجعي دقة الذكاء الاصطناعي في الإعدادات لمزيد من التفاصيل.';
+
+  @override
+  String get helpCenterLanguageQuestion => 'هل يمكنني تغيير لغة التطبيق أو العملة؟';
+
+  @override
+  String get helpCenterLanguageAnswer => 'نعم. اذهبي إلى الملف الشخصي ← الإعدادات ← الإعدادات المحلية للتبديل بين العربية والإنجليزية، ولتحديد الدولة والعملة المفضلتين لديكِ.';
+
+  @override
+  String get helpCenterPrivacyQuestion => 'كيف تُستخدم بياناتي؟';
+
+  @override
+  String get helpCenterPrivacyAnswer => 'راجعي سياسة الخصوصية في الإعدادات للاطلاع على التفاصيل الكاملة حول ما نجمعه وكيفية استخدامه.';
+
+  @override
+  String get helpCenterContactQuestion => 'ما زلت بحاجة إلى مساعدة — كيف أتواصل معكم؟';
+
+  @override
+  String get helpCenterContactAnswer => 'زوري صفحة تواصلي معنا في الإعدادات لأحدث طرق التواصل مع فريق روزيفيا.';
+
+  @override
+  String get contactUsSubtitle => 'يسعدنا التواصل معكِ.';
+
+  @override
+  String get contactUsNotConfiguredTitle => 'بيانات التواصل قريبًا';
+
+  @override
+  String get contactUsNotConfiguredDesc => 'نعمل حاليًا على توفير قنوات تواصل مباشرة لروزيفيا. في هذه الأثناء، يمكنكِ مراجعة مركز المساعدة للإجابة على الأسئلة الشائعة.';
+
+  @override
+  String get contactUsHelpCenterCta => 'الذهاب إلى مركز المساعدة';
+
+  @override
+  String get countryEgypt => 'مصر';
+
+  @override
+  String get countrySaudiArabia => 'السعودية';
+
+  @override
+  String get countryUae => 'الإمارات العربية المتحدة';
+
+  @override
+  String get countryUsa => 'الولايات المتحدة';
+
+  @override
+  String get countryUnitedKingdom => 'المملكة المتحدة';
+
+  @override
+  String get countryQatar => 'قطر';
+
+  @override
+  String get countryKuwait => 'الكويت';
+
+  @override
+  String get countryJordan => 'الأردن';
+
+  @override
+  String get myBeautyProfileScreenSubtitle => 'أخبرينا عن بشرتكِ لتتمكن روزيفيا من اقتراح منتجات أفضل لكِ.';
+
+  @override
+  String get skinType => 'نوع البشرة';
+
+  @override
+  String get skinTypeNormal => 'عادية';
+
+  @override
+  String get skinTypeDry => 'جافة';
+
+  @override
+  String get skinTypeOily => 'دهنية';
+
+  @override
+  String get skinTypeCombination => 'مختلطة';
+
+  @override
+  String get skinTypeSensitive => 'حساسة';
+
+  @override
+  String get skinTypeNotSet => 'غير محدد';
+
+  @override
+  String get profileUpdated => 'تم تحديث الملف الشخصي';
+
+  @override
+  String get editProfileScreenSubtitle => 'حدّثي اسمكِ وكيفية ظهوركِ عبر روزيفيا.';
+
+  @override
+  String get securityScreenSubtitle => 'إدارة طريقة تسجيل دخولكِ إلى روزيفيا.';
+
+  @override
+  String get changePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get changePasswordDesc => 'سنرسل لكِ رابطًا آمنًا عبر البريد الإلكتروني لإعادة تعيين كلمة المرور.';
+
+  @override
+  String sendPasswordResetConfirm(String email) {
+    return 'إرسال رابط إعادة تعيين كلمة المرور إلى $email؟';
+  }
+
+  @override
+  String get passwordResetLinkSent => 'تم إرسال رابط إعادة تعيين كلمة المرور. تحققي من بريدكِ.';
+
+  @override
+  String get aiNoProductsFound => 'لم أتمكن من العثور على منتج مطابق في روزيفيا الآن. جربي تعديل تفضيلاتكِ أو ميزانيتكِ.';
+
+  @override
+  String get aiRecommendationsIntro => 'إليكِ بعض المنتجات التي قد تكون مناسبة.';
+
+  @override
+  String get adminProductsTitle => 'المنتجات';
+
+  @override
+  String get adminLastSync => 'آخر مزامنة';
+
+  @override
+  String get adminSyncNever => 'لم تتم أي مزامنة بعد';
+
+  @override
+  String get adminSyncRunning => 'المزامنة جارية…';
+
+  @override
+  String get adminSyncSuccess => 'نجحت آخر مزامنة';
+
+  @override
+  String get adminSyncError => 'فشلت آخر مزامنة';
+
+  @override
+  String adminSyncSummary(int imported, int skipped, int processed) {
+    return 'تم استيراد $imported، وتخطي $skipped، من أصل $processed';
+  }
+
+  @override
+  String get adminFallbackName => 'المشرف';
+
+  @override
+  String get adminHelloWave => 'مرحبًا أيها المشرف 👋';
+
+  @override
+  String get adminDashboardSubtitle => 'إليك آخر مستجدات روزيفيا اليوم.';
+
+  @override
+  String get adminMobileHeaderSubtitle => 'المشرف';
+
+  @override
+  String get navDashboard => 'الرئيسية';
+
+  @override
+  String get navUsers => 'المستخدمون';
+
+  @override
+  String get navProducts => 'المنتجات';
+
+  @override
+  String get navPlatforms => 'المنصات';
+
+  @override
+  String get navSettings => 'الإعدادات';
+
+  @override
+  String get adminTotalProducts => 'إجمالي المنتجات';
+
+  @override
+  String get adminTotalProductsDesc => 'المنتجات المتوفرة حاليًا';
+
+  @override
+  String get adminCategoryProductsDesc => 'المنتجات ضمن هذه الفئة';
+
+  @override
+  String get adminTotalUsersDesc => 'الحسابات المسجَّلة';
+
+  @override
+  String get adminVerifiedUsersDesc => 'عناوين بريد إلكتروني موثّقة';
+
+  @override
+  String get adminCatalogSync => 'مزامنة الكتالوج';
+
+  @override
+  String get adminLastSuccessfulSync => 'آخر مزامنة ناجحة';
+
+  @override
+  String get adminProductsImported => 'منتجات مستوردة';
+
+  @override
+  String get adminProductsSkipped => 'منتجات متخطاة';
+
+  @override
+  String get adminProductsProcessed => 'صفوف تمت معالجتها';
+
+  @override
+  String get adminSyncDuration => 'مدة المزامنة';
+
+  @override
+  String get adminSyncCatalogButton => 'مزامنة الكتالوج';
+
+  @override
+  String get adminSyncOpensGithub => 'يفتح GitHub Actions لتشغيل مهمة المزامنة.';
+
+  @override
+  String get adminSyncLinkFailed => 'تعذر فتح صفحة المزامنة. حاولي مرة أخرى.';
+
+  @override
+  String get adminRecentActivity => 'النشاط الأخير';
+
+  @override
+  String get adminActivityStarted => 'بدأت مزامنة الكتالوج';
+
+  @override
+  String get adminActivityCompleted => 'اكتملت مزامنة الكتالوج';
+
+  @override
+  String get adminActivityFailedEvent => 'فشلت مزامنة الكتالوج';
+
+  @override
+  String get adminNoActivityTitle => 'لا يوجد نشاط حديث';
+
+  @override
+  String get adminNoActivityDesc => 'سيظهر نشاط المزامنة هنا بعد أول عملية مزامنة للكتالوج.';
+
+  @override
+  String get adminJustNow => 'الآن';
+
+  @override
+  String adminMinutesAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count دقيقة',
+      many: 'منذ $count دقيقة',
+      few: 'منذ $count دقائق',
+      two: 'منذ دقيقتين',
+      one: 'منذ دقيقة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String adminHoursAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count ساعة',
+      many: 'منذ $count ساعة',
+      few: 'منذ $count ساعات',
+      two: 'منذ ساعتين',
+      one: 'منذ ساعة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String adminDaysAgo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'منذ $count يوم',
+      many: 'منذ $count يومًا',
+      few: 'منذ $count أيام',
+      two: 'منذ يومين',
+      one: 'منذ يوم',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get adminQuickActions => 'إجراءات سريعة';
+
+  @override
+  String get adminViewProducts => 'عرض المنتجات';
+
+  @override
+  String get adminViewUsers => 'عرض المستخدمين';
+
+  @override
+  String get adminNoProductsTitle => 'لا توجد منتجات بعد';
+
+  @override
+  String get adminNoProductsDesc => 'سيظهر كتالوجك هنا بعد أول مزامنة ناجحة مع Awin.';
+
+  @override
+  String get adminSyncFailedDesc => 'حدث خطأ أثناء تحديث الكتالوج. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get adminCatalogSyncedSuccess => 'تمت مزامنة الكتالوج بنجاح.';
+
+  @override
+  String adminSyncedProductsCount(int count) {
+    return 'تم تحديث $count منتج.';
+  }
+
+  @override
+  String get adminAffiliatePlatforms => 'منصات التسويق بالعمولة';
+
+  @override
+  String get adminPlatformsDesc => 'عمليات الربط النشطة';
+
+  @override
+  String get adminPlatformActivity => 'نشاط المنصة';
+
+  @override
+  String get adminNoHistoricalActivity => 'لا تتوفر بيانات نشاط سابقة حتى الآن.';
+
+  @override
+  String get adminRecentUsers => 'أحدث المستخدمين';
+
+  @override
+  String get adminNoUsersYet => 'لا يوجد مستخدمون بعد';
+
+  @override
+  String adminJoinedOn(String date) {
+    return 'انضم في $date';
+  }
+
+  @override
+  String get adminStatusVerified => 'موثّق';
+
+  @override
+  String get adminStatusUnverified => 'غير موثّق';
+
+  @override
+  String get adminUsersSubtitle => 'إدارة مستخدمي روزيفيا';
+
+  @override
+  String get adminSearchUsersHint => 'ابحثي بالاسم أو البريد الإلكتروني';
+
+  @override
+  String get adminFilterAll => 'الكل';
+
+  @override
+  String get adminActiveUsers => 'المستخدمون النشطون';
+
+  @override
+  String get adminActiveUsersDesc => 'سجّلوا الدخول خلال آخر 30 يومًا';
+
+  @override
+  String get adminUserDetails => 'عرض التفاصيل';
+
+  @override
+  String get adminDeleteUser => 'حذف';
+
+  @override
+  String get adminDeleteNotAvailable => 'حذف المستخدمين غير متاح حاليًا.';
+
+  @override
+  String get adminUserListRestricted => 'عرض قائمة المستخدمين الكاملة يتطلب صلاحية إضافية في Firestore لم يتم تفعيلها بعد.';
+
+  @override
+  String get adminNoUsersFound => 'لم يتم العثور على مستخدمين';
+
+  @override
+  String get adminNoUsersFoundDesc => 'جربي كلمة بحث مختلفة.';
+
+  @override
+  String get adminProductsScreenSubtitle => 'إدارة كتالوج روزيفيا للجمال';
+
+  @override
+  String get adminSearchProductsHint => 'ابحثي عن منتج';
+
+  @override
+  String get adminInStock => 'متوفر';
+
+  @override
+  String get adminOutOfStock => 'غير متوفر';
+
+  @override
+  String get adminPlatformsScreenTitle => 'منصات التسويق بالعمولة';
+
+  @override
+  String get adminPlatformsScreenSubtitle => 'إدارة منظومة الشراكات الخاصة بكِ';
+
+  @override
+  String get adminPlatformConnected => 'متصل';
+
+  @override
+  String get adminPlatformNotConnected => 'غير متصل';
+
+  @override
+  String get adminCatalogActive => 'نشط';
+
+  @override
+  String get adminCatalogInactive => 'غير نشط';
+
+  @override
+  String get adminComingSoonPlatform => 'المزيد من المنصات قريبًا';
+
+  @override
+  String get adminSettingsScreenSubtitle => 'إدارة تفضيلات المشرف';
+
+  @override
+  String get adminSectionAccount => 'الحساب';
+
+  @override
+  String get adminSectionAppearance => 'المظهر';
+
+  @override
+  String get adminNotificationsComingSoonDesc => 'إشعارات المشرف غير متاحة حاليًا.';
+
+  @override
+  String get adminNewUsers => 'مستخدمون جدد';
+
+  @override
+  String get adminNewUsersDesc => 'انضموا خلال آخر 7 أيام';
 }

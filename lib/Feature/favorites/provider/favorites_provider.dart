@@ -63,8 +63,8 @@ class FavoritesProvider extends ChangeNotifier {
         status: products.isEmpty ? ViewStatus.empty : ViewStatus.success,
         data: products,
       );
-    } on ApiException catch (e) {
-      _state = ViewState(status: ViewStatus.error, errorMessage: e.message);
+    } on ApiException catch (_) {
+      _state = const ViewState(status: ViewStatus.error);
     } catch (_) {
       _state = const ViewState(
         status: ViewStatus.error,

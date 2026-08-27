@@ -60,6 +60,11 @@ class HomeBottomNavBar extends StatelessWidget {
                 label: lang.explore,
               ),
               NavigationDestination(
+                icon: const Icon(Icons.category_outlined),
+                selectedIcon: const Icon(Icons.category_rounded),
+                label: lang.categories,
+              ),
+              NavigationDestination(
                 icon: const Icon(Icons.favorite_border_rounded),
                 selectedIcon: const Icon(Icons.favorite_rounded),
                 label: lang.favorites,
