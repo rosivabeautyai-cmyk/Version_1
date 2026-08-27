@@ -1,3 +1,5 @@
+import 'category_model.dart' show normalizeCategory;
+
 /// A single beauty product as returned by the ROSIVA catalog API.
 ///
 /// Every field is nullable/defaulted on purpose: the backend is the
@@ -59,7 +61,11 @@ class ProductModel {
       images: _toStringList(json['images']),
       rating: _toDouble(json['rating']),
       reviewCount: _toInt(json['reviewCount'] ?? json['reviewsCount']),
-      category: json['category'] as String?,
+      // Normalized through the single canonical `normalizeCategory`
+      // (never overwritten with `merchantCategory` — that's Awin's
+      // own, unnormalized taxonomy and is a completely separate
+      // signal, not read here at all).
+      category: normalizeCategory(json['category'] as String?),
       tags: _toStringList(json['tags']),
       ingredients: _toStringList(json['ingredients']),
       benefits: json['benefits'] as String?,

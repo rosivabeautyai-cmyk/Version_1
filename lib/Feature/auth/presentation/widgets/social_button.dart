@@ -85,8 +85,7 @@ class _ProviderIcon extends StatelessWidget {
     return Icon(
       Icons.apple_rounded,
       size: 50.sp,
-      color: isDark ? Colors.black : AppColors.blackcolor,
-      
+      color: isDark ? Colors.white : AppColors.blackcolor,
     );
   }
 }

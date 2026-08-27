@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:rosivia/core/network/api_exception.dart';
 
+import '../../products/data/models/category_model.dart';
 import '../../products/data/models/product_model.dart';
 import '../../products/data/models/product_query.dart';
 import '../../products/data/repositories/product_repository.dart';
@@ -100,7 +102,13 @@ class AiChatProvider extends ChangeNotifier {
           );
         }
       }
-    } on ApiException catch (_) {
+    } on ApiException catch (e) {
+      // Never surface raw exception details to the user (could leak
+      // backend/config info) — but logging in debug builds is the
+      // only way to tell "Gemini call failed" apart from "Firestore
+      // product lookup failed" apart from "App Check rejected the
+      // request" when something breaks.
+      debugPrint('ROSIVA AI: catalog request failed — $e');
       _messages.add(
         ChatMessageModel(
           id: _nextId(),
@@ -110,7 +118,9 @@ class AiChatProvider extends ChangeNotifier {
           isError: true,
         ),
       );
-    } catch (_) {
+    } catch (e, stackTrace) {
+      debugPrint('ROSIVA AI: unhandled error — $e');
+      debugPrintStack(stackTrace: stackTrace);
       _messages.add(
         ChatMessageModel(
           id: _nextId(),
@@ -126,16 +136,35 @@ class AiChatProvider extends ChangeNotifier {
     }
   }
 
-  /// Queries the existing product catalog with the smallest possible
-  /// request (one search term, capped limit), then ranks/filters the
-  /// results locally so Gemini is never asked to sort or, worse,
-  /// invent products.
+  /// Queries the existing product catalog, then ranks the results
+  /// locally so Gemini is never asked to sort or, worse, invent
+  /// products.
+  ///
+  /// When the AI identified a ROSIVA category, that's applied as a
+  /// real Firestore `category` filter — a reliable, always-English
+  /// field regardless of what language the user wrote in. `searchTerm`
+  /// is only sent to Firestore as a fallback when no category was
+  /// identified, since (unlike `category`) it's a hard substring
+  /// filter that can zero out every real match if the extracted term
+  /// doesn't literally appear in the (English) catalog text. Keyword/
+  /// productType relevance is still applied afterwards, but only as
+  /// local *ranking* (see `score` below), never as an exclusion.
   Future<List<ProductModel>> _findProducts(ProductSearchIntent intent) async {
-    final searchTerm = intent.productType ??
+    // Routed through the single canonical `normalizeCategory` (same
+    // one the product model/query layer uses) rather than comparing
+    // Gemini's raw string directly — never scatter category-string
+    // logic across screens/providers.
+    final normalizedCategory = normalizeCategory(intent.category);
+    final hasCategory = normalizedCategory != null;
+    final fallbackSearchTerm = intent.productType ??
         (intent.keywords.isNotEmpty ? intent.keywords.first : intent.category);
 
     final page = await _productRepository.getProducts(
-      ProductQuery(searchTerm: searchTerm, limit: 20),
+      ProductQuery(
+        category: hasCategory ? normalizedCategory : null,
+        searchTerm: hasCategory ? null : fallbackSearchTerm,
+        limit: 30,
+      ),
     );
 
     var candidates = page.items;
@@ -158,8 +187,10 @@ class AiChatProvider extends ChangeNotifier {
 
     int score(ProductModel p) {
       var s = 0;
-      if (intent.category != null &&
-          p.category?.toLowerCase() == intent.category!.toLowerCase()) {
+      // `p.category` is already normalized (ProductModel.fromJson
+      // runs every category through `normalizeCategory`), so this is
+      // a direct canonical-slug comparison, not a raw string one.
+      if (normalizedCategory != null && p.category == normalizedCategory) {
         s += 3;
       }
       final haystack = [p.category, p.name, p.brand, ...p.tags]

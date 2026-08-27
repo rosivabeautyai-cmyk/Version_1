@@ -21,13 +21,14 @@ class LoadingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool disabled = isLoading || onPressed == null;
+    final theme = Theme.of(context);
 
     return SizedBox(
       height: 54.h,
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
-          color: disabled ? AppColors.bordercolor : null,
+          color: disabled ? theme.colorScheme.surfaceContainerHighest : null,
           boxShadow: disabled
               ? null
               : [

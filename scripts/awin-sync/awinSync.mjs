@@ -183,11 +183,15 @@ async function runAwinSync(feedUrl) {
         continue;
       }
 
-      const category = classifyCategory(
-        record.category_name,
-        record.merchant_category,
-        record.merchant_product_category_path
-      );
+      const category = classifyCategory({
+        categoryName: record.category_name,
+        merchantCategory: record.merchant_category,
+        merchantCategoryPath: record.merchant_product_category_path,
+        productName: record.product_name,
+        brandName: record.brand_name,
+        description: record.description,
+        keywords: record.keywords,
+      });
       if (!category) {
         skipped++;
         continue;

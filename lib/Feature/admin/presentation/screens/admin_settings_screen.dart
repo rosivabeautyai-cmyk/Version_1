@@ -57,10 +57,11 @@ class AdminSettingsScreen extends StatelessWidget {
                 SettingsTile(
                   icon: Icons.dark_mode_outlined,
                   title: lang.darkMode,
-                  trailing: Switch(
-                    value: themeProvider.isDarkMode,
-                    onChanged: themeProvider.toggleDarkMode,
+                  trailing: Text(
+                    themeModeLabel(lang, themeProvider.themeMode),
+                    style: theme.textTheme.bodySmall,
                   ),
+                  onTap: () => showThemeModePicker(context, themeProvider),
                 ),
                 SettingsTile(
                   icon: Icons.translate_rounded,

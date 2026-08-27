@@ -25,6 +25,8 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return TextFormField(
       controller: widget.passwordController,
       obscureText: isHide,
@@ -35,8 +37,8 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
       },
       decoration: InputDecoration(
         hintText: widget.hint,
-        hintStyle: TextStyles.caption1.copyWith(color: AppColors.graycolor),
-        fillColor: AppColors.background,
+        hintStyle: TextStyles.caption1.copyWith(color: theme.colorScheme.onSurfaceVariant),
+        fillColor: theme.cardColor,
         filled: true,
 
         suffixIcon: IconButton(
@@ -50,12 +52,12 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.bordercolor),
+          borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
         ),
 
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.bordercolor),
+          borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
         ),
 
         errorBorder: OutlineInputBorder(

@@ -26,31 +26,40 @@ class LegalExpandableCard extends StatelessWidget {
     final theme = Theme.of(context);
     final color = accentColor ?? theme.colorScheme.primary;
 
+    // A Material (not a plain Container+BoxDecoration) so the
+    // ExpansionTile's internal ListTile can find a colored Material
+    // ancestor to paint its ink splashes on directly — otherwise the
+    // splash paints on whatever Material is further up the tree and
+    // this Container's own opaque background covers it, which is
+    // exactly what triggers Flutter's "ListTile background color or
+    // ink splashes may be invisible" warning.
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
-      decoration: BoxDecoration(
+      child: Material(
         color: color.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: color.withValues(alpha: 0.18)),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Theme(
-        data: theme.copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          initiallyExpanded: initiallyExpanded,
-          tilePadding: EdgeInsets.symmetric(horizontal: 14.w),
-          childrenPadding: EdgeInsets.fromLTRB(14.w, 0, 14.w, 14.h),
-          leading: Icon(icon, color: color, size: 20.sp),
-          title: Text(
-            title,
-            style: theme.textTheme.titleSmall?.copyWith(color: color),
-          ),
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(body, style: theme.textTheme.bodyMedium),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+          side: BorderSide(color: color.withValues(alpha: 0.18)),
+        ),
+        child: Theme(
+          data: theme.copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            initiallyExpanded: initiallyExpanded,
+            tilePadding: EdgeInsets.symmetric(horizontal: 14.w),
+            childrenPadding: EdgeInsets.fromLTRB(14.w, 0, 14.w, 14.h),
+            leading: Icon(icon, color: color, size: 20.sp),
+            title: Text(
+              title,
+              style: theme.textTheme.titleSmall?.copyWith(color: color),
             ),
-          ],
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(body, style: theme.textTheme.bodyMedium),
+              ),
+            ],
+          ),
         ),
       ),
     );

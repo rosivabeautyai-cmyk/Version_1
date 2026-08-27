@@ -30,6 +30,8 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return TextFormField(
       keyboardType: keyboardType,
       readOnly: readOnly,
@@ -48,14 +50,14 @@ class CustomTextFormField extends StatelessWidget {
         hintText: hintText,
         prefixIcon: prefixIcon,
 
-        hintStyle: TextStyles.caption1.copyWith(color: AppColors.graycolor),
+        hintStyle: TextStyles.caption1.copyWith(color: theme.colorScheme.onSurfaceVariant),
 
-        fillColor: AppColors.background,
+        fillColor: theme.cardColor,
         filled: true,
 
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.bordercolor),
+          borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
         ),
 
         focusedBorder: OutlineInputBorder(

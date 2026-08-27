@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 
@@ -13,7 +12,7 @@ class AuthDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const lineColor = AppColors.bordercolor;
+    final lineColor = Theme.of(context).colorScheme.outlineVariant;
     final lang = AppLocalizations.of(context)!;
     final resolvedLabel = label ?? lang.orContinueWith;
 

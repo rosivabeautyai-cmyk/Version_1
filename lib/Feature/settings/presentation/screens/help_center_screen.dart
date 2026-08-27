@@ -35,15 +35,21 @@ class HelpCenterScreen extends StatelessWidget {
               style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
             ),
             SizedBox(height: 20.h),
-            Container(
-              decoration: BoxDecoration(
-                color: theme.cardColor,
+            // Material (not Container+BoxDecoration) so each FAQ's
+            // ExpansionTile can find a colored Material ancestor for
+            // its ink splashes — otherwise this opaque background
+            // paints over them, triggering Flutter's "ListTile
+            // background color or ink splashes may be invisible"
+            // warning.
+            Material(
+              color: theme.cardColor,
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.r),
-                border: Border.all(
+                side: BorderSide(
                   color: theme.colorScheme.outline.withValues(alpha: 0.12),
                 ),
               ),
-              clipBehavior: Clip.antiAlias,
               child: Column(
                 children: [
                   for (int i = 0; i < faqs.length; i++) ...[

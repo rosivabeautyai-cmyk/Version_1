@@ -35,7 +35,8 @@ class ChatBubble extends StatelessWidget {
     final products = message.products;
 
     return Align(
-      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+      alignment:
+          isUser ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
       child: Column(
         crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
@@ -45,11 +46,15 @@ class ChatBubble extends StatelessWidget {
             constraints: BoxConstraints(maxWidth: 0.78.sw),
             decoration: BoxDecoration(
               color: bubbleColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(18.r),
-                topRight: Radius.circular(18.r),
-                bottomLeft: Radius.circular(isUser ? 18.r : 4.r),
-                bottomRight: Radius.circular(isUser ? 4.r : 18.r),
+              // Directional (start/end) rather than physical
+              // (left/right) so the bubble's "tail" corner mirrors
+              // correctly in Arabic RTL instead of staying pinned to
+              // a physical side.
+              borderRadius: BorderRadiusDirectional.only(
+                topStart: Radius.circular(18.r),
+                topEnd: Radius.circular(18.r),
+                bottomStart: Radius.circular(isUser ? 18.r : 4.r),
+                bottomEnd: Radius.circular(isUser ? 4.r : 18.r),
               ),
               border: isUser || message.isError
                   ? null

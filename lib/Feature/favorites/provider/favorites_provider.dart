@@ -75,6 +75,10 @@ class FavoritesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Re-resolves the current favorite ids into products — used by the
+  /// Favorites screen's pull-to-refresh and error-state retry.
+  Future<void> refresh() => _resolveProducts();
+
   Future<void> toggle(String productId) async {
     final wasFavorite = _favoriteIds.contains(productId);
 
@@ -84,6 +88,24 @@ class FavoritesProvider extends ChangeNotifier {
     } else {
       _favoriteIds = {..._favoriteIds, productId};
     }
+
+    // Un-favoriting must drop the product from the resolved list (what
+    // the Favorites screen actually renders) immediately — otherwise
+    // it lingers on screen until the Firestore stream round-trips.
+    // Favoriting doesn't need the same treatment here: the newly
+    // favorited product isn't in `_state.data` yet regardless (only
+    // the stream/_resolveProducts fetches its full ProductModel), and
+    // nothing currently on the Favorites screen depends on it
+    // appearing before that completes.
+    if (wasFavorite && _state.data != null) {
+      final updated =
+          _state.data!.where((p) => p.id != productId).toList();
+      _state = ViewState(
+        status: updated.isEmpty ? ViewStatus.empty : ViewStatus.success,
+        data: updated,
+      );
+    }
+
     notifyListeners();
 
     if (wasFavorite) {

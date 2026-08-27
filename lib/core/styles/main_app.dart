@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:rosivia/Feature/auth/auth_routes.dart';
 import 'package:rosivia/Feature/intro/language/language_provider.dart';
 import 'package:rosivia/core/constants/app_fonts.dart';
+import 'package:rosivia/core/providers/theme_provider.dart';
 import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -27,7 +28,9 @@ class MainApp extends StatelessWidget {
           // ==============================
           // APP THEME
           // ==============================
-          theme: appTheme(),
+          theme: buildAppTheme(Brightness.light),
+          darkTheme: buildAppTheme(Brightness.dark),
+          themeMode: context.watch<ThemeProvider>().themeMode,
 
           // ==============================
           // LANGUAGE
@@ -59,241 +62,258 @@ class MainApp extends StatelessWidget {
       },
     );
   }
+}
 
-  ThemeData appTheme() {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-    );
+/// Builds ROSIVA's [ThemeData] for either [Brightness.light] or
+/// [Brightness.dark], sharing every structural choice (Material 3,
+/// font, shapes, spacing) between the two and only swapping the
+/// actual color tokens — so light/dark can never structurally drift
+/// apart from each other.
+ThemeData buildAppTheme(Brightness brightness) {
+  final isDark = brightness == Brightness.dark;
 
-    return ThemeData(
-      // ==============================
-      // MATERIAL 3
-      // ==============================
-      useMaterial3: true,
+  final colorScheme = ColorScheme.fromSeed(
+    seedColor: AppColors.primary,
+    brightness: brightness,
+  );
 
-      // ==============================
-      // FONT
-      // ==============================
-      fontFamily: AppFonts.beVietnamPro,
+  final scaffoldBg = isDark ? AppColors.scaffoldDark : AppColors.continerbg;
+  final surface = isDark ? AppColors.surfaceDark : AppColors.continerbg;
+  final cardColor = isDark ? AppColors.cardDark : AppColors.cardLight;
+  final borderColor = isDark ? AppColors.borderDark : AppColors.bordercolor;
+  final textColor = isDark ? AppColors.textDark : AppColors.blackcolor;
+  final mutedTextColor = isDark ? AppColors.grayDark : AppColors.graycolor;
 
-      // ==============================
-      // BACKGROUND
-      // ==============================
-      scaffoldBackgroundColor: AppColors.continerbg,
+  return ThemeData(
+    // ==============================
+    // MATERIAL 3
+    // ==============================
+    useMaterial3: true,
+    brightness: brightness,
 
-      // ==============================
-      // COLOR SCHEME
-      // ==============================
-      colorScheme: colorScheme,
+    // ==============================
+    // FONT
+    // ==============================
+    fontFamily: AppFonts.beVietnamPro,
 
-      // ==============================
-      // APP BAR
-      // ==============================
-      appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.continerbg,
-        foregroundColor: AppColors.blackcolor,
-        elevation: 0,
-        centerTitle: true,
-        iconTheme: IconThemeData(
-          color: AppColors.primary,
-        ),
+    // ==============================
+    // BACKGROUND
+    // ==============================
+    scaffoldBackgroundColor: scaffoldBg,
+    cardColor: cardColor,
+
+    // ==============================
+    // COLOR SCHEME
+    // ==============================
+    colorScheme: colorScheme,
+
+    // ==============================
+    // APP BAR
+    // ==============================
+    appBarTheme: AppBarTheme(
+      backgroundColor: surface,
+      foregroundColor: textColor,
+      elevation: 0,
+      centerTitle: true,
+      iconTheme: IconThemeData(
+        color: AppColors.primary,
+      ),
+    ),
+
+    // ==============================
+    // TEXT THEME
+    // ==============================
+    textTheme: TextTheme(
+      displayMedium: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+        color: textColor,
+      ),
+      headlineSmall: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: textColor,
+      ),
+      titleMedium: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: textColor,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: textColor,
+      ),
+      labelLarge: TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        color: textColor,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        color: mutedTextColor,
+      ),
+      bodySmall: TextStyle(
+        fontSize: 12,
+        color: mutedTextColor,
+      ),
+    ),
+
+    // ==============================
+    // BOTTOM NAVIGATION BAR
+    // ==============================
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: surface,
+      elevation: 0,
+      height: 72.h,
+
+      indicatorColor: AppColors.primary.withValues(
+        alpha: 0.12,
       ),
 
-      // ==============================
-      // TEXT THEME
-      // ==============================
-      textTheme: const TextTheme(
-        displayMedium: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: AppColors.blackcolor,
-        ),
-        headlineSmall: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          color: AppColors.blackcolor,
-        ),
-        titleMedium: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: AppColors.blackcolor,
-        ),
-        titleSmall: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-          color: AppColors.blackcolor,
-        ),
-        labelLarge: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          color: AppColors.blackcolor,
-        ),
-        bodyMedium: TextStyle(
-          fontSize: 14,
-          color: AppColors.graycolor,
-        ),
-        bodySmall: TextStyle(
-          fontSize: 12,
-          color: AppColors.graycolor,
-        ),
-      ),
+      labelTextStyle: WidgetStateProperty.resolveWith(
+        (states) {
+          final isSelected = states.contains(
+            WidgetState.selected,
+          );
 
-      // ==============================
-      // BOTTOM NAVIGATION BAR
-      // ==============================
-      navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: AppColors.continerbg,
-        elevation: 0,
-        height: 72.h,
-
-        indicatorColor: AppColors.primary.withValues(
-          alpha: 0.12,
-        ),
-
-        labelTextStyle: WidgetStateProperty.resolveWith(
-          (states) {
-            final isSelected = states.contains(
-              WidgetState.selected,
-            );
-
-            return TextStyle(
-              fontFamily: AppFonts.beVietnamPro,
-              fontSize: 11.sp,
-              fontWeight: isSelected
-                  ? FontWeight.w700
-                  : FontWeight.w500,
-              color: isSelected
-                  ? AppColors.primary
-                  : AppColors.graycolor,
-            );
-          },
-        ),
-
-        iconTheme: WidgetStateProperty.resolveWith(
-          (states) {
-            final isSelected = states.contains(
-              WidgetState.selected,
-            );
-
-            return IconThemeData(
-              size: isSelected ? 25.sp : 24.sp,
-              color: isSelected
-                  ? AppColors.primary
-                  : AppColors.graycolor,
-            );
-          },
-        ),
-      ),
-
-      // ==============================
-      // CHECKBOX
-      // ==============================
-      checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.resolveWith(
-          (states) {
-            return states.contains(WidgetState.selected)
+          return TextStyle(
+            fontFamily: AppFonts.beVietnamPro,
+            fontSize: 11.sp,
+            fontWeight: isSelected
+                ? FontWeight.w700
+                : FontWeight.w500,
+            color: isSelected
                 ? AppColors.primary
-                : Colors.transparent;
-          },
+                : mutedTextColor,
+          );
+        },
+      ),
+
+      iconTheme: WidgetStateProperty.resolveWith(
+        (states) {
+          final isSelected = states.contains(
+            WidgetState.selected,
+          );
+
+          return IconThemeData(
+            size: isSelected ? 25.sp : 24.sp,
+            color: isSelected
+                ? AppColors.primary
+                : mutedTextColor,
+          );
+        },
+      ),
+    ),
+
+    // ==============================
+    // CHECKBOX
+    // ==============================
+    checkboxTheme: CheckboxThemeData(
+      fillColor: WidgetStateProperty.resolveWith(
+        (states) {
+          return states.contains(WidgetState.selected)
+              ? AppColors.primary
+              : Colors.transparent;
+        },
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+      ),
+    ),
+
+    // ==============================
+    // TEXT BUTTON
+    // ==============================
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: AppColors.primary,
+      ),
+    ),
+
+    // ==============================
+    // OUTLINED BUTTON
+    // ==============================
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: AppColors.primary,
+        side: BorderSide(
+          color: borderColor,
+          width: 1.2,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+    ),
+
+    // ==============================
+    // ELEVATED BUTTON
+    // ==============================
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+    ),
+
+    // ==============================
+    // INPUT FIELDS
+    // ==============================
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+
+      fillColor: cardColor,
+
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 14,
+      ),
+
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(
+          color: borderColor,
         ),
       ),
 
-      // ==============================
-      // TEXT BUTTON
-      // ==============================
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: AppColors.primary,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(
+          color: borderColor,
         ),
       ),
 
-      // ==============================
-      // OUTLINED BUTTON
-      // ==============================
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          side: const BorderSide(
-            color: AppColors.bordercolor,
-            width: 1.2,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(
+          color: AppColors.primary,
+          width: 1.4,
         ),
       ),
 
-      // ==============================
-      // ELEVATED BUTTON
-      // ==============================
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(
+          color: AppColors.errorcolor,
         ),
       ),
 
-      // ==============================
-      // INPUT FIELDS
-      // ==============================
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-
-        fillColor: Colors.white,
-
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
-
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: AppColors.bordercolor,
-          ),
-        ),
-
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: AppColors.bordercolor,
-          ),
-        ),
-
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-            width: 1.4,
-          ),
-        ),
-
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: AppColors.errorcolor,
-          ),
-        ),
-
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: AppColors.errorcolor,
-            width: 1.4,
-          ),
-        ),
-
-        hintStyle: const TextStyle(
-          color: AppColors.graycolor,
-          fontSize: 14,
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: const BorderSide(
+          color: AppColors.errorcolor,
+          width: 1.4,
         ),
       ),
-    );
-  }
+
+      hintStyle: TextStyle(
+        color: mutedTextColor,
+        fontSize: 14,
+      ),
+    ),
+  );
 }

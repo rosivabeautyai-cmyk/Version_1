@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     vertical: 24.h,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.background,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(30.r),
                     boxShadow: [
                       BoxShadow(

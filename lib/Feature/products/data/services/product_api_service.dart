@@ -51,7 +51,14 @@ class ProductApiService {
 
   Future<List<ProductModel>> fetchProducts(ProductQuery query) async {
     try {
-      final cursorKey = '${query.category}|${query.sort}';
+      // Always normalize before the equality filter — Firestore does
+      // an exact string match server-side, so sending anything other
+      // than the canonical lowercase slug actually stored on the
+      // documents (e.g. "Makeup" instead of "makeup") would silently
+      // match nothing rather than error.
+      final normalizedCategory = normalizeCategory(query.category);
+
+      final cursorKey = '$normalizedCategory|${query.sort}';
       if (query.page <= 1) {
         _cursors.remove(cursorKey);
       }
@@ -63,9 +70,9 @@ class ProductApiService {
 
       Query<Map<String, dynamic>> firestoreQuery = _productsRef;
 
-      if (query.category != null && query.category!.isNotEmpty) {
+      if (normalizedCategory != null) {
         firestoreQuery =
-            firestoreQuery.where('category', isEqualTo: query.category);
+            firestoreQuery.where('category', isEqualTo: normalizedCategory);
       }
 
       firestoreQuery = _applySort(firestoreQuery, query.sort);

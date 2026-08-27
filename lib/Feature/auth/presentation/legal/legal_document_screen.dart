@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/styles/colors.dart';
 
+
+
 /// A single section within a legal document: a bold heading followed
 /// by a paragraph of body text.
 class LegalSection {
@@ -33,13 +35,10 @@ class LegalDocumentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.blackcolor,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: Text(title)),
       body: SafeArea(
         child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
@@ -48,7 +47,7 @@ class LegalDocumentScreen extends StatelessWidget {
               lastUpdated,
               style: TextStyle(
                 fontSize: 12.sp,
-                color: AppColors.graycolor,
+                color: theme.colorScheme.onSurfaceVariant,
                 fontStyle: FontStyle.italic,
               ),
             ),
@@ -68,7 +67,7 @@ class LegalDocumentScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14.sp,
                   height: 1.6,
-                  color: AppColors.blackcolor,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               SizedBox(height: 20.h),

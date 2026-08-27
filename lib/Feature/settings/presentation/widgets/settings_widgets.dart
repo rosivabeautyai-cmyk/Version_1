@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:rosivia/core/providers/theme_provider.dart';
+import 'package:rosivia/l10n/app_localizations.dart';
+
 /// Section label used above a group of settings rows (e.g.
 /// "Localization", "Notifications", "Transparency & Legal").
 class SettingsSectionLabel extends StatelessWidget {
@@ -140,4 +143,67 @@ class SettingsTile extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Localized label for a [ThemeMode] — shared so the trailing value
+/// text on the "Dark Mode" settings row (both user-facing and admin)
+/// always agrees with the picker sheet below.
+String themeModeLabel(AppLocalizations lang, ThemeMode mode) {
+  return switch (mode) {
+    ThemeMode.light => lang.themeLight,
+    ThemeMode.dark => lang.themeDark,
+    ThemeMode.system => lang.themeSystem,
+  };
+}
+
+/// Bottom-sheet picker for Light/Dark/System, shared between the
+/// user-facing and admin Settings screens so appearance selection
+/// stays in exactly one place.
+void showThemeModePicker(BuildContext context, ThemeProvider themeProvider) {
+  final lang = AppLocalizations.of(context)!;
+
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+    builder: (sheetContext) {
+      final theme = Theme.of(sheetContext);
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(lang.darkMode, style: theme.textTheme.titleMedium),
+              ),
+              const SizedBox(height: 8),
+              for (final mode in ThemeMode.values)
+                ListTile(
+                  leading: Icon(
+                    switch (mode) {
+                      ThemeMode.light => Icons.light_mode_outlined,
+                      ThemeMode.dark => Icons.dark_mode_outlined,
+                      ThemeMode.system => Icons.brightness_auto_outlined,
+                    },
+                    color: theme.colorScheme.primary,
+                  ),
+                  title: Text(themeModeLabel(lang, mode)),
+                  trailing: themeProvider.themeMode == mode
+                      ? Icon(Icons.check_circle_rounded, color: theme.colorScheme.primary)
+                      : null,
+                  onTap: () {
+                    themeProvider.setThemeMode(mode);
+                    Navigator.pop(sheetContext);
+                  },
+                ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

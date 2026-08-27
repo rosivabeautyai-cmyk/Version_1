@@ -65,6 +65,11 @@ class AiService {
       "null), productType (a short keyword like 'moisturizer'), keywords "
       '(extra descriptive words), maxPrice (a number if a budget was '
       "mentioned, else null); leave 'answer' empty. "
+      'The product catalog itself is in English, regardless of what '
+      'language the user writes in — so category, productType, and '
+      'keywords must ALWAYS be in English (translate them if the user '
+      "wrote in Arabic), even though 'answer' (for the false case) must "
+      "still match the user's own language. "
       "If false: leave category/productType/keywords/maxPrice empty, and "
       "instead write a short, friendly, concise answer in 'answer', in "
       'the same language the user wrote in. You are a premium beauty '

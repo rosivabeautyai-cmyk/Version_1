@@ -27,26 +27,46 @@ class AppNetworkImage extends StatelessWidget {
     final theme = Theme.of(context);
     final radius = borderRadius ?? BorderRadius.circular(16.r);
 
-    Widget child;
-
     if (url == null || url!.isEmpty) {
-      child = _placeholder(theme);
-    } else {
-      child = Image.network(
-        url!,
-        width: width,
-        height: height,
-        fit: fit,
-        loadingBuilder: (context, widget, progress) {
-          if (progress == null) return widget;
-          return _loading(theme);
-        },
-        errorBuilder: (context, error, stackTrace) => _placeholder(theme),
-      );
+      return ClipRRect(borderRadius: radius, child: _placeholder(theme));
     }
 
-    return ClipRRect(borderRadius: radius, child: child);
+    // Decode at (roughly) the size the image is actually displayed at
+    // rather than its full native resolution — product photos coming
+    // from the Awin feed are often much larger than the ~150-180px
+    // thumbnail they render at here, and decoding dozens of them at
+    // full size while scrolling a grid is a classic cause of dropped
+    // frames. When this widget isn't given explicit width/height (the
+    // common case — product cards size it via AspectRatio/Expanded
+    // instead), LayoutBuilder reads the actual constraints so the
+    // cache size still matches real render size.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final dpr = MediaQuery.devicePixelRatioOf(context);
+        final targetWidth = width ?? _finiteOrNull(constraints.maxWidth);
+        final targetHeight = height ?? _finiteOrNull(constraints.maxHeight);
+
+        return ClipRRect(
+          borderRadius: radius,
+          child: Image.network(
+            url!,
+            width: width,
+            height: height,
+            fit: fit,
+            cacheWidth: targetWidth == null ? null : (targetWidth * dpr).round(),
+            cacheHeight: targetHeight == null ? null : (targetHeight * dpr).round(),
+            loadingBuilder: (context, widget, progress) {
+              if (progress == null) return widget;
+              return _loading(theme);
+            },
+            errorBuilder: (context, error, stackTrace) => _placeholder(theme),
+          ),
+        );
+      },
+    );
   }
+
+  static double? _finiteOrNull(double value) => value.isFinite ? value : null;
 
   Widget _placeholder(ThemeData theme) {
     return Container(

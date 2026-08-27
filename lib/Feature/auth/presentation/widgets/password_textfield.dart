@@ -50,7 +50,7 @@ class PasswordTextField extends StatelessWidget {
           onChanged: onChanged,
           style: TextStyle(
             fontSize: 15.sp,
-            color: AppColors.blackcolor,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
           decoration: InputDecoration(
             hintText: hint,
