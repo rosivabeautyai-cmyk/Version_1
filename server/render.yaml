@@ -1,0 +1,29 @@
+# Render.com blueprint for the ROSIVA AI backend.
+#
+# Deploy: push this repo to GitHub, then in the Render dashboard
+# "New +" -> "Blueprint" -> pick the repo. Render reads this file.
+# Set the secret values (marked sync:false) in the dashboard — they are
+# NEVER committed here.
+services:
+  - type: web
+    name: rosiva-ai-backend
+    runtime: docker
+    plan: free
+    rootDir: server
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: GROQ_FALLBACK_MODEL
+        value: llama-3.1-8b-instant
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: ""
+      - key: GROQ_TIMEOUT_MS
+        value: "12000"
+      # Render injects PORT automatically; do not set it here.

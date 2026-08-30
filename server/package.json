@@ -1,0 +1,22 @@
+{
+  "name": "rosiva-ai-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ROSIVA AI backend — Flutter -> this service -> Groq (intent + reply) -> Firestore product search -> hard women's-beauty filtering -> Flutter. Keeps the Groq API key server-side only.",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.6.0"
+  }
+}
