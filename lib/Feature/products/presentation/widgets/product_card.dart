@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rosivia/core/widgets/app_network_image.dart';
 
 import '../../data/models/product_model.dart';
+import 'product_price_text.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -108,13 +109,12 @@ class ProductCard extends StatelessWidget {
             SizedBox(height: 4.h),
             Row(
               children: [
-                if (product.price != null)
-                  Text(
-                    '${product.currency} ${product.price!.toStringAsFixed(2)}',
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      color: colorScheme.primary,
-                    ),
-                  ),
+                ProductPriceText(
+                  product: product,
+                  showApprox: false,
+                  style: theme.textTheme.titleSmall
+                      ?.copyWith(color: colorScheme.primary),
+                ),
                 const Spacer(),
                 if (product.rating != null) ...[
                   Icon(Icons.star_rounded, size: 14.sp, color: Colors.amber),

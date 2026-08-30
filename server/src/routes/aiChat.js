@@ -5,6 +5,8 @@ import { searchProducts } from '../products/search.js';
 import { rankProducts } from '../products/rank.js';
 import { deterministicReply, generateProductsIntro, copyFor } from '../reply/generateReply.js';
 import { rememberResponse } from '../middleware/throttle.js';
+import { getAiConfig } from '../appConfig.js';
+import { recordAiRequest, getTodayUsage } from '../usage.js';
 
 /**
  * Validate + clamp the request body. Returns `{ ok, value, error }`.
@@ -57,22 +59,92 @@ function clampHistory(raw) {
 }
 
 /**
- * Pure orchestration — no Express. Returns `{ status, body }`.
+ * Public entry: runs the chat pipeline, then best-effort records the
+ * outcome in the daily AI usage counters (item 11). The wrapper never
+ * lets a metrics failure affect the response. All product/intent/
+ * hard-filter logic is untouched inside `_runChatInner`.
  *
  * @param {object} opts
- * @param {object} opts.request  already parsed/clamped (parseChatRequest .value)
+ * @param {object} opts.request  already parsed/clamped (parseChatRequest .value; may carry `userId`)
  * @param {Function} [opts._extractIntent] test seam
  * @param {Function} [opts._searchProducts] test seam
  * @param {Function} [opts._generateProductsIntro] test seam
+ * @param {Function} [opts._getAiConfig] test seam
+ * @param {Function} [opts._getTodayUsage] test seam
+ * @param {Function} [opts._recordAiRequest] test seam
  */
-export async function runChat({
+export async function runChat(opts) {
+  const {
+    request,
+    _recordAiRequest = recordAiRequest,
+    ...inner
+  } = opts;
+  const result = await _runChatInner({ request, ...inner });
+  // "successful" = a normal 200 answer; anything else counts as failed.
+  Promise.resolve(
+    _recordAiRequest({ ok: result.status === 200, userId: request?.userId }),
+  ).catch(() => {});
+  return result;
+}
+
+async function _runChatInner({
   request,
   _extractIntent = extractIntent,
   _searchProducts = searchProducts,
   _generateProductsIntro = generateProductsIntro,
+  _getAiConfig = getAiConfig,
+  _getTodayUsage = getTodayUsage,
 }) {
-  const { message, history, locale } = request;
+  const { message, history, locale, userId } = request;
   const lang = detectDominantLanguage(message, locale);
+
+  // 0. Admin kill-switch / maintenance mode (app_config/ai). Checked
+  //    BEFORE any Groq or Firestore-search work so a disabled or
+  //    under-maintenance assistant costs nothing. Fail-open: a config
+  //    read error leaves the assistant enabled.
+  const aiCfg = await _getAiConfig();
+  if (!aiCfg.enabled || aiCfg.maintenanceMode) {
+    const c = copyFor(lang);
+    const custom = (
+      lang === 'ar' ? aiCfg.maintenanceMessageAr : aiCfg.maintenanceMessageEn
+    );
+    return {
+      status: 503,
+      body: {
+        error: 'ai_maintenance',
+        reply: (typeof custom === 'string' && custom.trim()) || c.aiUnavailable,
+        intent: { category: null, productType: null, gender: 'women' },
+        products: [],
+      },
+    };
+  }
+
+  // 0b. Admin-configured daily request limits (item 12). null =
+  //     unlimited. Global limit is a real cap; the per-user limit uses
+  //     the advisory request user id and is skipped when absent.
+  //     Fail-open: a counter read error does not block the request.
+  if (aiCfg.dailyGlobalLimit != null || aiCfg.dailyUserLimit != null) {
+    const usage = await _getTodayUsage({ userId });
+    const overGlobal =
+      aiCfg.dailyGlobalLimit != null &&
+      usage.globalRequests >= aiCfg.dailyGlobalLimit;
+    const overUser =
+      aiCfg.dailyUserLimit != null &&
+      userId &&
+      usage.userRequests >= aiCfg.dailyUserLimit;
+    if (overGlobal || overUser) {
+      const c = copyFor(lang);
+      return {
+        status: 429,
+        body: {
+          error: 'rate_limited',
+          reply: c.aiBusy,
+          intent: { category: null, productType: null, gender: 'women' },
+          products: [],
+        },
+      };
+    }
+  }
 
   // 1. Intent (deterministic + optional Groq assist).
   let intentResult;
@@ -174,7 +246,13 @@ export async function aiChatHandler(req, res) {
     return res.status(400).json({ error: parsed.error, reply: null, products: [] });
   }
 
-  const { status, body } = await runChat({ request: parsed.value });
+  // Advisory per-request user id (same source the throttle uses) — used
+  // only for the optional per-user daily limit and usage counters.
+  const userId = String(req.headers['x-user-id'] || '').slice(0, 128) || undefined;
+
+  const { status, body } = await runChat({
+    request: { ...parsed.value, userId },
+  });
 
   if (status === 200 && req._clientKey) {
     rememberResponse(req._clientKey, parsed.value.message, body);

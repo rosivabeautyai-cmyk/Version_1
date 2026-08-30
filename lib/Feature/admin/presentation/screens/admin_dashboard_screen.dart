@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../../auth/data/models/user_model.dart';
+import '../../data/models/admin_dashboard_metrics.dart';
+import '../../data/repositories/admin_repository.dart';
+import '../../provider/admin_config_provider.dart';
 import '../widgets/admin_quick_actions.dart';
 import '../widgets/admin_recent_activity_card.dart';
 import '../widgets/admin_stat_card.dart';
@@ -39,6 +43,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   int _verifiedUsers = 0;
   int _productsCount = 0;
   int _platformsCount = 0;
+  AdminDashboardMetrics _metrics = const AdminDashboardMetrics();
+  List<CountryProductTally> _byCountry = const [];
   List<UserModel> _recentUsers = const [];
 
   final _syncSectionKey = GlobalKey();
@@ -91,6 +97,19 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         usersRef.orderBy('createdAt', descending: true).limit(5).get(),
       ]);
 
+      // Catalog-health metrics — resilient (each count guarded), so a
+      // slow/building index shows "—" rather than blocking the page.
+      final repo = AdminRepository();
+      final metrics = await repo.loadDashboardMetrics();
+      final enabledCodes = context
+          .read<AdminConfigProvider>()
+          .countries
+          .map((c) => c.code)
+          .toList();
+      final byCountry = enabledCodes.isEmpty
+          ? <CountryProductTally>[]
+          : await repo.loadProductsByCountry(enabledCodes);
+
       if (!mounted) return;
 
       final recentSnapshot = results[5] as QuerySnapshot<Map<String, dynamic>>;
@@ -106,6 +125,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         // not a fabricated statistic (there's no Firestore collection
         // tracking configured platforms).
         _platformsCount = 1;
+        _metrics = metrics;
+        _byCountry = byCountry;
         _recentUsers = recentSnapshot.docs
             .map((doc) => UserModel.fromSnapshot(doc))
             .toList();
@@ -164,6 +185,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               ),
               const SizedBox(height: 28),
               _buildKpiGrid(theme, lang),
+              const SizedBox(height: 24),
+              _buildCatalogHealth(theme, lang),
+              const SizedBox(height: 24),
+              _buildProductsByCountry(theme, lang),
               const SizedBox(height: 24),
               Container(key: _syncSectionKey),
               const AdminSyncStatusCard(),
@@ -292,6 +317,127 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildProductsByCountry(ThemeData theme, AppLocalizations lang) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          lang.adminProductsByCountry,
+          style: theme.textTheme.titleMedium
+              ?.copyWith(fontWeight: FontWeight.w700),
+        ),
+        const SizedBox(height: 12),
+        if (_byCountry.isEmpty)
+          Text(
+            lang.adminByCountryNone,
+            style: theme.textTheme.bodySmall
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          )
+        else
+          Column(
+            children: [
+              for (final t in _byCountry)
+                Card(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: ListTile(
+                    dense: true,
+                    title: Text(t.countryCode),
+                    subtitle: Text(
+                      '${t.withOffer} ${lang.adminByCountryWithOffer} · '
+                      '${t.inStock} ${lang.adminByCountryInStock} · '
+                      '${t.outOfStock} ${lang.adminByCountryOutOfStock} · '
+                      '${t.missingAffiliateUrl} ${lang.adminByCountryMissingUrl}',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+      ],
+    );
+  }
+
+  Widget _buildCatalogHealth(ThemeData theme, AppLocalizations lang) {
+    final colorScheme = theme.colorScheme;
+    String v(int? n) => n?.toString() ?? '—';
+
+    final cards = <Widget>[
+      AdminStatCard(
+        icon: Icons.spa_rounded,
+        label: lang.adminMetricSkincare,
+        value: v(_metrics.skincareCount),
+      ),
+      AdminStatCard(
+        icon: Icons.brush_rounded,
+        label: lang.adminMetricMakeup,
+        value: v(_metrics.makeupCount),
+        accentColor: colorScheme.secondary,
+      ),
+      AdminStatCard(
+        icon: Icons.water_drop_rounded,
+        label: lang.adminMetricPerfume,
+        value: v(_metrics.perfumeCount),
+        accentColor: colorScheme.tertiary,
+      ),
+      AdminStatCard(
+        icon: Icons.star_rounded,
+        label: lang.adminMetricFeatured,
+        value: v(_metrics.featuredCount),
+        accentColor: colorScheme.primary,
+      ),
+      AdminStatCard(
+        icon: Icons.block_rounded,
+        label: lang.adminMetricIneligible,
+        value: v(_metrics.ineligibleCount),
+        accentColor: colorScheme.error,
+      ),
+      AdminStatCard(
+        icon: Icons.link_off_rounded,
+        label: lang.adminMetricMissingLink,
+        value: v(_metrics.missingAffiliateCount),
+        accentColor: colorScheme.error,
+      ),
+      AdminStatCard(
+        icon: Icons.money_off_rounded,
+        label: lang.adminMetricMissingPrice,
+        value: v(_metrics.missingPriceCount),
+        accentColor: colorScheme.error,
+      ),
+      AdminStatCard(
+        icon: Icons.visibility_off_rounded,
+        label: lang.adminMetricInactive,
+        value: v(_metrics.inactiveCount),
+      ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          lang.adminCatalogHealth,
+          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+        ),
+        const SizedBox(height: 12),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+            final columns = width >= 760 ? 4 : 2;
+            const gap = 16.0;
+            final cardWidth = (width - gap * (columns - 1)) / columns;
+            return Wrap(
+              spacing: gap,
+              runSpacing: gap,
+              children: [
+                for (final card in cards)
+                  SizedBox(width: cardWidth, child: card),
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 }

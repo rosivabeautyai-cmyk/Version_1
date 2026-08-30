@@ -16,6 +16,11 @@ class UserModel {
   final DateTime? lastLogin;
   final bool isEmailVerified;
 
+  /// Admin-set advisory flag. `true` marks the account disabled in the
+  /// Admin panel. NOTE: on its own this does NOT block Firebase Auth
+  /// sign-in — that still requires a Cloud Function / the console.
+  final bool disabled;
+
   /// Access role for this account. Either `'user'` or `'admin'`.
   ///
   /// Every account is created as `'user'` — there is no public sign-up
@@ -40,6 +45,7 @@ class UserModel {
     this.createdAt,
     this.lastLogin,
     this.isEmailVerified = false,
+    this.disabled = false,
     this.role = roleUser,
   });
 
@@ -88,6 +94,7 @@ class UserModel {
       createdAt: _toDateTime(map['createdAt']),
       lastLogin: _toDateTime(map['lastLogin']),
       isEmailVerified: map['isEmailVerified'] as bool? ?? false,
+      disabled: map['disabled'] as bool? ?? false,
       role: map['role'] as String? ?? roleUser,
     );
   }
@@ -152,6 +159,7 @@ class UserModel {
     DateTime? createdAt,
     DateTime? lastLogin,
     bool? isEmailVerified,
+    bool? disabled,
     String? role,
   }) {
     return UserModel(
@@ -166,6 +174,7 @@ class UserModel {
       createdAt: createdAt ?? this.createdAt,
       lastLogin: lastLogin ?? this.lastLogin,
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
+      disabled: disabled ?? this.disabled,
       role: role ?? this.role,
     );
   }

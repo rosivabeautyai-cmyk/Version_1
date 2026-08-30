@@ -10,7 +10,11 @@ RUN npm ci --omit=dev --no-audit --no-fund
 
 COPY src ./src
 
-# Render/most PaaS inject PORT; default for local `docker run`.
+# Drop root.
+USER node
+
+# Most PaaS inject PORT; 8080 is the local `docker run` default. The
+# server binds 0.0.0.0 so any platform load balancer can reach it.
 ENV PORT=8080
 EXPOSE 8080
 

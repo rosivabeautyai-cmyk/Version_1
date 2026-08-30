@@ -1,11 +1,11 @@
 {
-    "name": "rosivia",
-    "short_name": "rosivia",
+    "name": "ROSIVA",
+    "short_name": "ROSIVA",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "ROSIVA — AI beauty shopping assistant for skincare, makeup and perfume.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

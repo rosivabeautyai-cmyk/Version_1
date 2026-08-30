@@ -7,6 +7,7 @@ import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../data/models/product_model.dart';
 import '../../provider/product_list_provider.dart';
+import 'package:rosivia/Feature/settings/provider/regional_prefs_provider.dart';
 import '../widgets/product_grid.dart';
 import 'product_details_screen.dart';
 
@@ -23,7 +24,10 @@ class CategoryProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => ProductListProvider(category: categorySlug)..load(refresh: true),
+      create: (context) => ProductListProvider(
+        category: categorySlug,
+        country: context.read<RegionalPrefsProvider>().countryCode,
+      )..load(refresh: true),
       child: _CategoryProductsView(title: title),
     );
   }

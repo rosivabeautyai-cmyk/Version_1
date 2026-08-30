@@ -6,12 +6,21 @@ class ProductQuery {
   final int page;
   final int limit;
 
+  /// The shopper's selected country (ISO code). When set, products
+  /// that carry a `countryOffers` map which intentionally does NOT
+  /// include this country are hidden. Products with no `countryOffers`
+  /// stay visible everywhere (never hide the existing global catalog).
+  /// This is a presentation-layer visibility filter only — it never
+  /// touches `isRosivaProduct` / `gender` / `rosivaCategory`.
+  final String? country;
+
   const ProductQuery({
     this.category,
     this.searchTerm,
     this.sort,
     this.page = 1,
     this.limit = 20,
+    this.country,
   });
 
   ProductQuery copyWith({
@@ -20,6 +29,7 @@ class ProductQuery {
     String? sort,
     int? page,
     int? limit,
+    String? country,
   }) {
     return ProductQuery(
       category: category ?? this.category,
@@ -27,6 +37,7 @@ class ProductQuery {
       sort: sort ?? this.sort,
       page: page ?? this.page,
       limit: limit ?? this.limit,
+      country: country ?? this.country,
     );
   }
 

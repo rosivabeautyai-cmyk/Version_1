@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
-import 'package:rosivia/core/network/api_exception.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 
+import '../../data/models/admin_product_query.dart';
+import '../../data/repositories/admin_repository.dart';
+import '../../provider/admin_config_provider.dart';
 import '../../../products/data/models/product_model.dart';
-import '../../../products/data/models/product_query.dart';
-import '../../../products/data/repositories/product_repository.dart';
 import '../widgets/admin_product_tile.dart';
+import 'admin_product_create_screen.dart';
+import 'admin_product_edit_screen.dart';
 
-/// The "Products" tab — reuses the existing [ProductRepository] /
-/// [ProductQuery] / [ProductModel] exactly as-is (no API changes),
-/// with its own lightweight local pagination state (the same pattern
-/// already used elsewhere in this app, e.g. the Categories screen).
+/// The "Products" tab. Uses [AdminRepository.fetchProductsAdmin] — the
+/// admin read path, which (unlike the shopper catalog) is NOT limited
+/// to women-only / `isRosivaProduct` items, so an admin can see and
+/// fix ineligible products too. Tapping a row opens the editor.
 class AdminProductsScreen extends StatefulWidget {
   const AdminProductsScreen({super.key});
 
@@ -21,12 +24,11 @@ class AdminProductsScreen extends StatefulWidget {
 }
 
 class _AdminProductsScreenState extends State<AdminProductsScreen> {
-  final _repository = ProductRepository();
+  final _repo = AdminRepository();
   final _searchController = TextEditingController();
 
-  String? _category;
-  String _searchTerm = '';
-  int _page = 1;
+  AdminProductQuery _query = const AdminProductQuery();
+  String? _cursorId;
   bool _hasMore = false;
   bool _loading = true;
   bool _loadingMore = false;
@@ -39,8 +41,8 @@ class _AdminProductsScreenState extends State<AdminProductsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _load(refresh: true));
     _searchController.addListener(() {
       final value = _searchController.text.trim();
-      if (value == _searchTerm) return;
-      _searchTerm = value;
+      if (value == _query.search) return;
+      setState(() => _query = _query.copyWith(search: value));
       _load(refresh: true);
     });
   }
@@ -53,7 +55,7 @@ class _AdminProductsScreenState extends State<AdminProductsScreen> {
 
   Future<void> _load({bool refresh = false}) async {
     if (refresh) {
-      _page = 1;
+      _cursorId = null;
       setState(() {
         _loading = true;
         _hasError = false;
@@ -63,27 +65,12 @@ class _AdminProductsScreenState extends State<AdminProductsScreen> {
     }
 
     try {
-      final page = await _repository.getProducts(
-        ProductQuery(
-          category: _category,
-          searchTerm: _searchTerm.isEmpty ? null : _searchTerm,
-          page: _page,
-          limit: 20,
-        ),
-      );
-
+      final page = await _repo.fetchProductsAdmin(_query, afterId: _cursorId);
       if (!mounted) return;
       setState(() {
         _items = refresh ? page.items : [..._items, ...page.items];
         _hasMore = page.hasMore;
-        _page++;
-        _loading = false;
-        _loadingMore = false;
-      });
-    } on ApiException catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _hasError = _items.isEmpty;
+        _cursorId = page.cursorId;
         _loading = false;
         _loadingMore = false;
       });
@@ -97,10 +84,38 @@ class _AdminProductsScreenState extends State<AdminProductsScreen> {
     }
   }
 
-  void _selectCategory(String? category) {
-    if (category == _category) return;
-    setState(() => _category = category);
+  void _updateQuery(AdminProductQuery next) {
+    setState(() => _query = next);
     _load(refresh: true);
+  }
+
+  Future<void> _openEditor(ProductModel product) async {
+    final cfg = context.read<AdminConfigProvider>();
+    final changed = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => AdminProductEditScreen(
+          productId: product.id,
+          repository: _repo,
+          currencies: cfg.currencies,
+          countries: cfg.countries,
+        ),
+      ),
+    );
+    if (changed == true) _load(refresh: true);
+  }
+
+  Future<void> _openCreate() async {
+    final cfg = context.read<AdminConfigProvider>();
+    final created = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => AdminProductCreateScreen(
+          repository: _repo,
+          currencies: cfg.currencies,
+          countries: cfg.countries,
+        ),
+      ),
+    );
+    if (created == true) _load(refresh: true);
   }
 
   @override
@@ -112,7 +127,8 @@ class _AdminProductsScreenState extends State<AdminProductsScreen> {
       onNotification: (notification) {
         if (_hasMore &&
             !_loadingMore &&
-            notification.metrics.pixels >= notification.metrics.maxScrollExtent - 200) {
+            notification.metrics.pixels >=
+                notification.metrics.maxScrollExtent - 200) {
           _load();
         }
         return false;
@@ -128,9 +144,21 @@ class _AdminProductsScreenState extends State<AdminProductsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    lang.navProducts,
-                    style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          lang.navProducts,
+                          style: theme.textTheme.headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      FilledButton.tonalIcon(
+                        onPressed: _openCreate,
+                        icon: const Icon(Icons.add_rounded),
+                        label: Text(lang.adminCreateProduct),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -161,31 +189,123 @@ class _AdminProductsScreenState extends State<AdminProductsScreen> {
                       children: [
                         _CategoryTab(
                           label: lang.allProducts,
-                          selected: _category == null,
-                          onTap: () => _selectCategory(null),
+                          selected: _query.category == null,
+                          onTap: () => _updateQuery(
+                            _query.copyWith(clearCategory: true),
+                          ),
                         ),
                         const SizedBox(width: 8),
                         _CategoryTab(
                           label: lang.categorySkincare,
-                          selected: _category == 'skincare',
-                          onTap: () => _selectCategory('skincare'),
+                          selected: _query.category == 'skincare',
+                          onTap: () => _updateQuery(
+                            _query.copyWith(category: 'skincare'),
+                          ),
                         ),
                         const SizedBox(width: 8),
                         _CategoryTab(
                           label: lang.categoryMakeup,
-                          selected: _category == 'makeup',
-                          onTap: () => _selectCategory('makeup'),
+                          selected: _query.category == 'makeup',
+                          onTap: () =>
+                              _updateQuery(_query.copyWith(category: 'makeup')),
                         ),
                         const SizedBox(width: 8),
                         _CategoryTab(
                           label: lang.categoryPerfume,
-                          selected: _category == 'perfume',
-                          onTap: () => _selectCategory('perfume'),
+                          selected: _query.category == 'perfume',
+                          onTap: () => _updateQuery(
+                            _query.copyWith(category: 'perfume'),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: [
+                      _Toggle(
+                        label: lang.adminFilterFeatured,
+                        value: _query.onlyFeatured,
+                        onChanged: (v) => _updateQuery(
+                          _query.copyWith(onlyFeatured: v),
+                        ),
+                      ),
+                      _Toggle(
+                        label: lang.adminFilterInactive,
+                        value: _query.onlyInactive,
+                        onChanged: (v) => _updateQuery(
+                          _query.copyWith(onlyInactive: v),
+                        ),
+                      ),
+                      _Toggle(
+                        label: lang.adminFilterIneligible,
+                        value: _query.onlyIneligible,
+                        onChanged: (v) => _updateQuery(
+                          _query.copyWith(onlyIneligible: v),
+                        ),
+                      ),
+                      _Toggle(
+                        label: lang.adminFilterMissingLink,
+                        value: _query.missingAffiliate,
+                        onChanged: (v) => _updateQuery(
+                          _query.copyWith(missingAffiliate: v),
+                        ),
+                      ),
+                      _Toggle(
+                        label: lang.adminFilterMissingPrice,
+                        value: _query.missingPrice,
+                        onChanged: (v) => _updateQuery(
+                          _query.copyWith(missingPrice: v),
+                        ),
+                      ),
+                      _Toggle(
+                        label: lang.adminFilterHasOffer,
+                        value: _query.hasCountryOffer,
+                        onChanged: (v) => _updateQuery(
+                          _query.copyWith(hasCountryOffer: v),
+                        ),
+                      ),
+                      _Toggle(
+                        label: lang.adminFilterMissingOffer,
+                        value: _query.missingCountryOffer,
+                        onChanged: (v) => _updateQuery(
+                          _query.copyWith(missingCountryOffer: v),
+                        ),
+                      ),
+                      _Toggle(
+                        label: lang.adminFilterInStock,
+                        value: _query.inStockOnly,
+                        onChanged: (v) => _updateQuery(
+                          _query.copyWith(inStockOnly: v),
+                        ),
+                      ),
+                      _Toggle(
+                        label: lang.adminFilterOutOfStock,
+                        value: _query.outOfStockOnly,
+                        onChanged: (v) => _updateQuery(
+                          _query.copyWith(outOfStockOnly: v),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  _CountryCurrencyFilters(
+                    query: _query,
+                    countries: context
+                        .watch<AdminConfigProvider>()
+                        .countries
+                        .map((c) => c.code)
+                        .toList(),
+                    currencies: context
+                        .watch<AdminConfigProvider>()
+                        .currencies
+                        .map((c) => c.code)
+                        .toList(),
+                    onChanged: _updateQuery,
+                  ),
+                  const SizedBox(height: 16),
                   _buildBody(theme, lang),
                 ],
               ),
@@ -228,7 +348,10 @@ class _AdminProductsScreenState extends State<AdminProductsScreen> {
     return Column(
       children: [
         for (var i = 0; i < _items.length; i++) ...[
-          AdminProductTile(product: _items[i]),
+          AdminProductTile(
+            product: _items[i],
+            onTap: () => _openEditor(_items[i]),
+          ),
           if (i != _items.length - 1) const SizedBox(height: 10),
         ],
         if (_loadingMore) ...[
@@ -248,7 +371,11 @@ class _CategoryTab extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const _CategoryTab({required this.label, required this.selected, required this.onTap});
+  const _CategoryTab({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -268,6 +395,82 @@ class _CategoryTab extends StatelessWidget {
   }
 }
 
+class _CountryCurrencyFilters extends StatelessWidget {
+  final AdminProductQuery query;
+  final List<String> countries;
+  final List<String> currencies;
+  final ValueChanged<AdminProductQuery> onChanged;
+
+  const _CountryCurrencyFilters({
+    required this.query,
+    required this.countries,
+    required this.currencies,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
+    if (countries.isEmpty && currencies.isEmpty) return const SizedBox.shrink();
+    return Wrap(
+      spacing: 10,
+      children: [
+        if (countries.isNotEmpty)
+          DropdownButton<String?>(
+            value: query.country,
+            hint: Text(lang.adminAnyCountry),
+            items: [
+              DropdownMenuItem(value: null, child: Text(lang.adminAnyCountry)),
+              for (final c in countries)
+                DropdownMenuItem(value: c, child: Text(c)),
+            ],
+            onChanged: (v) => onChanged(v == null
+                ? query.copyWith(clearCountry: true)
+                : query.copyWith(country: v)),
+          ),
+        if (currencies.isNotEmpty)
+          DropdownButton<String?>(
+            value: query.currency,
+            hint: Text(lang.adminAnyCurrency),
+            items: [
+              DropdownMenuItem(value: null, child: Text(lang.adminAnyCurrency)),
+              for (final c in currencies)
+                DropdownMenuItem(value: c, child: Text(c)),
+            ],
+            onChanged: (v) => onChanged(v == null
+                ? query.copyWith(clearCurrency: true)
+                : query.copyWith(currency: v)),
+          ),
+      ],
+    );
+  }
+}
+
+class _Toggle extends StatelessWidget {
+  final String label;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  const _Toggle({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return FilterChip(
+      label: Text(label),
+      selected: value,
+      onSelected: onChanged,
+      selectedColor: colorScheme.secondary.withValues(alpha: 0.16),
+      showCheckmark: true,
+      side: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: 0.6)),
+    );
+  }
+}
+
 class _ProductTileSkeleton extends StatelessWidget {
   const _ProductTileSkeleton();
 
@@ -278,19 +481,33 @@ class _ProductTileSkeleton extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+        ),
       ),
       child: Row(
         children: [
-          const AppSkeletonBox(width: 56, height: 56, borderRadius: BorderRadius.all(Radius.circular(10))),
+          const AppSkeletonBox(
+            width: 56,
+            height: 56,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const AppSkeletonBox(width: 140, height: 14, borderRadius: BorderRadius.all(Radius.circular(4))),
-                const SizedBox(height: 8),
-                const AppSkeletonBox(width: 90, height: 12, borderRadius: BorderRadius.all(Radius.circular(4))),
+              children: const [
+                AppSkeletonBox(
+                  width: 140,
+                  height: 14,
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                ),
+                SizedBox(height: 8),
+                AppSkeletonBox(
+                  width: 90,
+                  height: 12,
+                  borderRadius: BorderRadius.all(Radius.circular(4)),
+                ),
               ],
             ),
           ),

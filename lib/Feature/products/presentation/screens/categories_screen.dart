@@ -173,7 +173,12 @@ class _CategoryTile extends StatelessWidget {
               if (category.productCount != null) ...[
                 SizedBox(height: 4.h),
                 Text(
-                  '${category.productCount} ${lang.categories}',
+                  // This is a product count, not a category count — reuse
+                  // the existing bare "Products"/"المنتجات" nav label
+                  // rather than the "Categories" string (a real bug: the
+                  // tile was showing e.g. "378 Categories" instead of
+                  // "378 Products").
+                  '${category.productCount} ${lang.navProducts}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodySmall,

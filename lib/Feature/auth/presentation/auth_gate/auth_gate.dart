@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:rosivia/Feature/admin/presentation/screens/admin_shell.dart';
 import 'package:rosivia/Feature/home/presentation/screens/main_screen.dart';
+import 'package:rosivia/Feature/settings/provider/regional_prefs_provider.dart';
 
 import '../../provider/auth_provider.dart';
 import '../login/login_screen.dart';
@@ -97,6 +98,14 @@ class _EmailVerificationCheckState extends State<_EmailVerificationCheck> {
       if (verified) {
         // Make sure the user's Firestore document exists.
         await auth.ensureUserDoc();
+
+        // Now that Firestore reads are authorized, refresh the
+        // Firestore-backed country/currency config (its first attempt
+        // at app start ran before sign-in and fell back to defaults).
+        if (mounted) {
+          // fire-and-forget — best-effort, never blocks routing
+          context.read<RegionalPrefsProvider>().load();
+        }
 
         // Get the user's latest data from Firestore.
         final userData = await auth.fetchUserData(widget.user.uid);

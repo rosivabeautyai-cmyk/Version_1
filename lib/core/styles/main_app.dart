@@ -15,9 +15,29 @@ import 'package:rosivia/l10n/app_localizations.dart';
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
+  /// On the **web** at tablet/desktop widths, ROSIVA renders inside a
+  /// centered, phone-width frame. This is the smallest change that makes
+  /// the existing mobile design — and `flutter_screenutil`'s
+  /// width-based scaling — render at its intended size instead of being
+  /// multiplied by a 1400px+ desktop viewport (which is what made icons
+  /// and spacing huge and forms stretch edge-to-edge). Native Android /
+  /// iOS / desktop builds are completely untouched (`kIsWeb` guard).
+  static const double _webFrameWidth = 480;
+
+  static bool _shouldFrame(BuildContext context) {
+    if (!kIsWeb) return false;
+    final size = MediaQuery.maybeOf(context)?.size;
+    return size != null && size.width > 600;
+  }
+
+  static MediaQueryData _framed(MediaQueryData data) =>
+      data.copyWith(size: Size(_webFrameWidth, data.size.height));
+
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
+    final frame = _shouldFrame(context);
+
+    final Widget app = ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
@@ -51,16 +71,36 @@ class MainApp extends StatelessWidget {
           // GLOBAL BUILDER
           // ==============================
           builder: (context, child) {
-            return SafeArea(
+            final Widget content = SafeArea(
               top: false,
               bottom:
                   !kIsWeb && defaultTargetPlatform == TargetPlatform.android,
               child: child ?? const SizedBox(),
             );
+            if (!frame) return content;
+            // The screens live below `WidgetsApp`'s own MediaQuery
+            // (derived from the physical view), so the clamp applied
+            // above `ScreenUtilInit` doesn't reach them — re-assert the
+            // framed size here, then physically constrain + centre the
+            // render so nothing stretches across the full window.
+            return ColoredBox(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Center(
+                child: MediaQuery(
+                  data: _framed(MediaQuery.of(context)),
+                  child: SizedBox(width: _webFrameWidth, child: content),
+                ),
+              ),
+            );
           },
         );
       },
     );
+
+    if (!frame) return app;
+    // Feed the clamped width to `flutter_screenutil`, which initialises
+    // from the MediaQuery that sits *above* MaterialApp.
+    return MediaQuery(data: _framed(MediaQuery.of(context)), child: app);
   }
 }
 

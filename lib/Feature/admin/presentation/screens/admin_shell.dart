@@ -5,6 +5,7 @@ import 'package:rosivia/core/functions/navigations.dart';
 
 import '../../../auth/data/models/user_model.dart';
 import '../../../auth/provider/auth_provider.dart';
+import '../../provider/admin_config_provider.dart';
 import '../widgets/admin_bottom_nav.dart';
 import '../widgets/admin_header.dart';
 import '../widgets/admin_sidebar.dart';
@@ -80,7 +81,9 @@ class _AdminShellState extends State<AdminShell> {
       onLogout: auth.logout,
     );
 
-    return Scaffold(
+    return ChangeNotifierProvider(
+      create: (_) => AdminConfigProvider(),
+      child: Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AdminHeader(
         adminUser: _adminUser,
@@ -118,6 +121,7 @@ class _AdminShellState extends State<AdminShell> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

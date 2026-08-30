@@ -16,6 +16,7 @@ import '../../../products/presentation/screens/product_details_screen.dart';
 import '../../../products/presentation/widgets/category_card.dart';
 import '../../../products/presentation/widgets/product_card.dart';
 import '../../../products/provider/home_products_provider.dart';
+import 'package:rosivia/Feature/settings/provider/regional_prefs_provider.dart';
 import '../../../settings/presentation/screens/settings_screen.dart';
 import '../widgets/home_app_bar.dart';
 import '../widgets/home_loading.dart';
@@ -38,7 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _productsProvider = HomeProductsProvider()..load();
+    _productsProvider = HomeProductsProvider(
+      country: context.read<RegionalPrefsProvider>().countryCode,
+    )..load();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadUser();

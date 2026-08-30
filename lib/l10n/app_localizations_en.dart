@@ -548,6 +548,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiInputHint => 'Ask ROSIVA anything...';
 
   @override
+  String get aiSuggestionMascara => '💄 I want mascara';
+
+  @override
+  String get aiSuggestionLipstick => '💋 I want lipstick';
+
+  @override
+  String get aiSuggestionHighlighter => '✨ I want highlighter';
+
+  @override
+  String get aiSuggestionSkincare => '🧴 I want skincare';
+
+  @override
+  String get aiSuggestionPerfume => '🌸 I want women\'s perfume';
+
+  @override
+  String get aiSuggestionMakeupBrushes => '🖌️ I want makeup brushes';
+
+  @override
   String get aiNotConfigured => 'The AI assistant isn\'t connected yet. Please check back soon.';
 
   @override
@@ -836,7 +854,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordResetLinkSent => 'Password reset link sent. Check your inbox.';
 
   @override
-  String get aiNoProductsFound => 'I couldn\'t find a matching product in ROSIVA right now. Try adjusting your preferences or budget.';
+  String get aiNoProductsFound => 'I couldn\'t find an exact match right now, but I can help you find another skincare, makeup, or perfume product.';
+
+  @override
+  String get aiErrorGeneric => 'Something went wrong with the AI assistant. Please try again ❤️';
+
+  @override
+  String get aiQuotaExceeded => 'ROSIVA AI is getting a lot of requests right now. Please wait a moment and try again ❤️';
 
   @override
   String get aiRecommendationsIntro => 'Here are some products that may be relevant.';
@@ -1125,4 +1149,373 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminNewUsersDesc => 'Joined in the last 7 days';
+
+  @override
+  String get adminSave => 'Save';
+
+  @override
+  String get adminCancel => 'Cancel';
+
+  @override
+  String get adminSaved => 'Saved';
+
+  @override
+  String get adminSaveFailed => 'Could not save. Please try again.';
+
+  @override
+  String get adminDiscardChanges => 'Discard changes?';
+
+  @override
+  String get adminEditProduct => 'Edit Product';
+
+  @override
+  String get adminProductOverridesNote => 'Name, price, currency, image and store link are refreshed daily by the Awin sync. Your edits are saved as overrides and always take precedence.';
+
+  @override
+  String get adminFieldName => 'Name';
+
+  @override
+  String get adminFieldBrand => 'Brand';
+
+  @override
+  String get adminFieldDescription => 'Description';
+
+  @override
+  String get adminFieldImageUrl => 'Image URL';
+
+  @override
+  String get adminFieldProductType => 'Product type';
+
+  @override
+  String get adminFieldProductTypeHint => 'e.g. mascara, face serum, makeup brush';
+
+  @override
+  String get adminFieldCategory => 'Category';
+
+  @override
+  String get adminFieldGender => 'Gender';
+
+  @override
+  String get adminGenderClassifierNote => 'Set by the classifier — not editable here.';
+
+  @override
+  String get adminFieldPrice => 'Price';
+
+  @override
+  String get adminFieldCurrency => 'Currency';
+
+  @override
+  String get adminFieldStoreUrl => 'Store / affiliate URL';
+
+  @override
+  String get adminFieldFeatured => 'Featured';
+
+  @override
+  String get adminFieldFeaturedDesc => 'Highlight this product across ROSIVA';
+
+  @override
+  String get adminFieldActive => 'Active';
+
+  @override
+  String get adminFieldActiveDesc => 'Inactive products are hidden from shoppers (soft delete)';
+
+  @override
+  String get adminFieldAdminNote => 'Admin note (internal)';
+
+  @override
+  String get adminInvalidUrl => 'Enter a valid https:// URL';
+
+  @override
+  String get adminInvalidNumber => 'Enter a valid number';
+
+  @override
+  String get adminRequiredField => 'This field is required';
+
+  @override
+  String get adminConfirmSaveProductTitle => 'Save product changes?';
+
+  @override
+  String get adminConfirmSaveProductBody => 'These changes take effect immediately for all shoppers.';
+
+  @override
+  String get adminFilterFeatured => 'Featured';
+
+  @override
+  String get adminFilterInactive => 'Inactive';
+
+  @override
+  String get adminFilterIneligible => 'Ineligible';
+
+  @override
+  String get adminFilterMissingLink => 'Missing link';
+
+  @override
+  String get adminFilterMissingPrice => 'Missing price';
+
+  @override
+  String get adminBadgeInactive => 'Inactive';
+
+  @override
+  String get adminBadgeFeatured => 'Featured';
+
+  @override
+  String get adminBadgeIneligible => 'Not in catalog';
+
+  @override
+  String get adminCatalogHealth => 'Catalog health';
+
+  @override
+  String get adminMetricSkincare => 'Skincare';
+
+  @override
+  String get adminMetricMakeup => 'Makeup';
+
+  @override
+  String get adminMetricPerfume => 'Perfume';
+
+  @override
+  String get adminMetricFeatured => 'Featured';
+
+  @override
+  String get adminMetricIneligible => 'Ineligible';
+
+  @override
+  String get adminMetricMissingLink => 'Missing affiliate link';
+
+  @override
+  String get adminMetricMissingPrice => 'Missing price';
+
+  @override
+  String get adminMetricInactive => 'Inactive';
+
+  @override
+  String get adminSectionAiAssistant => 'AI Assistant';
+
+  @override
+  String get adminSectionRegions => 'Regions & Currency';
+
+  @override
+  String get adminManageCountries => 'Countries';
+
+  @override
+  String get adminManageCurrencies => 'Currencies';
+
+  @override
+  String get adminAiControls => 'AI controls';
+
+  @override
+  String get adminAiControlsSubtitle => 'Turn the assistant on/off and set maintenance mode';
+
+  @override
+  String get adminAiEnabled => 'AI assistant enabled';
+
+  @override
+  String get adminAiEnabledDesc => 'When off, the assistant is unavailable for every user';
+
+  @override
+  String get adminAiMaintenance => 'Maintenance mode';
+
+  @override
+  String get adminAiMaintenanceDesc => 'Temporarily pause the assistant and show a message';
+
+  @override
+  String get adminAiMaintenanceMsgEn => 'Maintenance message (English)';
+
+  @override
+  String get adminAiMaintenanceMsgAr => 'Maintenance message (Arabic)';
+
+  @override
+  String get adminAiBackendAuthorityNote => 'These switches are enforced by the ROSIVA AI backend, not just the app.';
+
+  @override
+  String get adminCountriesTitle => 'Countries';
+
+  @override
+  String get adminCountriesSubtitle => 'Where ROSIVA is available, and each country’s currency';
+
+  @override
+  String get adminAddCountry => 'Add country';
+
+  @override
+  String get adminCountryCode => 'Country code (ISO, e.g. EG)';
+
+  @override
+  String get adminCountryNameEn => 'Name (English)';
+
+  @override
+  String get adminCountryNameAr => 'Name (Arabic)';
+
+  @override
+  String get adminCountrySortOrder => 'Sort order';
+
+  @override
+  String get adminCountryEnabledDesc => 'Show this country in the shopper picker';
+
+  @override
+  String get adminCurrenciesTitle => 'Currencies';
+
+  @override
+  String get adminCurrenciesSubtitle => 'Symbols and USD exchange rates for price display';
+
+  @override
+  String get adminCurrencySymbol => 'Symbol';
+
+  @override
+  String get adminCurrencyRate => 'Rate to USD';
+
+  @override
+  String get adminCurrencyRateHint => 'USD per 1 unit. Empty = no approximate conversion shown.';
+
+  @override
+  String get adminCurrencyNoRate => 'No rate';
+
+  @override
+  String get adminConfigLoadError => 'Could not load configuration.';
+
+  @override
+  String get adminNothingToShow => 'Nothing to show';
+
+  @override
+  String get aiMaintenanceBanner => 'The AI assistant is under maintenance.';
+
+  @override
+  String get adminRemove => 'Remove';
+
+  @override
+  String get adminOptional => 'optional';
+
+  @override
+  String get adminCountryOffers => 'Country offers';
+
+  @override
+  String get adminCountryOffersDesc => 'Per-country price and affiliate link. Countries without an offer keep the default price and link.';
+
+  @override
+  String get adminAddOffer => 'Add offer';
+
+  @override
+  String get adminClearOffer => 'Clear offer for this country';
+
+  @override
+  String get adminOfferInStock => 'In stock';
+
+  @override
+  String get adminNoEnabledCountries => 'No enabled countries. Add one under Regions & Currency first.';
+
+  @override
+  String get adminOfferInvalidCurrency => 'Currency must be one of the configured currencies';
+
+  @override
+  String get adminOfferNegativePrice => 'Price cannot be negative';
+
+  @override
+  String get adminCreateProduct => 'Create product';
+
+  @override
+  String get adminNewProduct => 'New product';
+
+  @override
+  String get adminCreateProductDesc => 'Manually added products are tagged source = \"admin\" and are excluded from the AI catalog by default.';
+
+  @override
+  String get adminProductCreated => 'Product created';
+
+  @override
+  String get adminFieldGenderWomen => 'Women';
+
+  @override
+  String get adminFieldGenderMen => 'Men';
+
+  @override
+  String get adminFieldGenderUnisex => 'Unisex';
+
+  @override
+  String get adminDisableUser => 'Disable user';
+
+  @override
+  String get adminEnableUser => 'Enable user';
+
+  @override
+  String get adminUserDisabledBadge => 'Disabled';
+
+  @override
+  String get adminConfirmDisableUserBody => 'The account will be marked disabled. Note: this does not block sign-in by itself — a Cloud Function or the Firebase console is still required for that.';
+
+  @override
+  String get adminConfirmEnableUserBody => 'Re-enable this account?';
+
+  @override
+  String get adminActivityLog => 'Activity log';
+
+  @override
+  String get adminActivityLogDesc => 'Recent admin actions, newest first';
+
+  @override
+  String get adminActivityEmpty => 'No activity recorded yet';
+
+  @override
+  String get adminActivityBy => 'by';
+
+  @override
+  String get adminAffiliateManager => 'Affiliate management';
+
+  @override
+  String get adminAffiliateManagerDesc => 'Review and fix affiliate links per country. Tap a product to edit its country offers.';
+
+  @override
+  String get adminFilterCountry => 'Country';
+
+  @override
+  String get adminFilterCurrency => 'Currency';
+
+  @override
+  String get adminFilterHasOffer => 'Has country offer';
+
+  @override
+  String get adminFilterMissingOffer => 'No country offer';
+
+  @override
+  String get adminFilterInStock => 'In stock';
+
+  @override
+  String get adminFilterOutOfStock => 'Out of stock';
+
+  @override
+  String get adminAnyCountry => 'Any country';
+
+  @override
+  String get adminAnyCurrency => 'Any currency';
+
+  @override
+  String get adminProductsByCountry => 'Products by country';
+
+  @override
+  String get adminByCountryWithOffer => 'with offer';
+
+  @override
+  String get adminByCountryInStock => 'in stock';
+
+  @override
+  String get adminByCountryOutOfStock => 'out of stock';
+
+  @override
+  String get adminByCountryMissingUrl => 'missing link';
+
+  @override
+  String get adminByCountryNone => 'No country offers configured yet.';
+
+  @override
+  String get adminAiDailyGlobalLimit => 'Daily global request limit';
+
+  @override
+  String get adminAiDailyGlobalLimitDesc => 'All users combined, per UTC day. Empty = unlimited.';
+
+  @override
+  String get adminAiDailyUserLimit => 'Daily per-user request limit';
+
+  @override
+  String get adminAiDailyUserLimitDesc => 'Per user, per UTC day (best-effort). Empty = unlimited.';
+
+  @override
+  String get adminAiLimitsBackendNote => 'Limits are enforced by the backend, not the app.';
 }

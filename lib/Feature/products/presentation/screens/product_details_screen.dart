@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:rosivia/Feature/favorites/provider/favorites_provider.dart';
@@ -10,8 +11,11 @@ import 'package:rosivia/core/widgets/app_network_image.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
+import 'package:rosivia/Feature/settings/provider/regional_prefs_provider.dart';
+
 import '../../data/models/product_model.dart';
 import '../../provider/product_details_provider.dart';
+import '../widgets/product_price_text.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final String productId;
@@ -45,7 +49,7 @@ class _ProductDetailsView extends StatelessWidget {
           if (state.data != null) ...[
             IconButton(
               icon: const Icon(Icons.ios_share_rounded),
-              onPressed: () {},
+              onPressed: () => _shareProduct(state.data!),
             ),
             IconButton(
               icon: Icon(
@@ -84,6 +88,18 @@ class _ProductDetailsView extends StatelessWidget {
     }
 
     return _ProductDetailsContent(product: state.data!);
+  }
+
+  void _shareProduct(ProductModel product) {
+    final parts = [
+      if (product.brand != null && product.brand!.isNotEmpty)
+        '${product.brand} ${product.name}'
+      else
+        product.name,
+      if (product.storeUrl != null && product.storeUrl!.isNotEmpty)
+        product.storeUrl!,
+    ];
+    SharePlus.instance.share(ShareParams(text: parts.join('\n')));
   }
 }
 
@@ -138,14 +154,13 @@ class _ProductDetailsContent extends StatelessWidget {
         Text(product.name, style: theme.textTheme.headlineSmall),
         SizedBox(height: 10.h),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (product.price != null)
-              Text(
-                '${product.currency} ${product.price!.toStringAsFixed(2)}',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: colorScheme.primary,
-                ),
-              ),
+            ProductPriceText(
+              product: product,
+              style: theme.textTheme.titleMedium
+                  ?.copyWith(color: colorScheme.primary),
+            ),
             const Spacer(),
             if (product.rating != null) ...[
               const Icon(Icons.star_rounded, color: Colors.amber, size: 18),
@@ -205,13 +220,22 @@ class _ProductDetailsContent extends StatelessWidget {
         SizedBox(height: 10.h),
         _DisclaimerBanner(text: lang.patchTestDisclaimer, isWarning: true),
         SizedBox(height: 24.h),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton.icon(
-            onPressed: () => _openStore(context, product.storeUrl),
-            icon: const Icon(Icons.open_in_new_rounded),
-            label: Text(lang.openStore),
-          ),
+        Builder(
+          builder: (context) {
+            final regional = context.watch<RegionalPrefsProvider?>();
+            // Country-specific affiliate URL when configured, else the
+            // product's default store link. Never fabricated.
+            final buyUrl = product.offerFor(regional?.countryCode).storeUrl;
+            final canBuy = buyUrl != null && buyUrl.isNotEmpty;
+            return SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: canBuy ? () => _openStore(context, buyUrl) : null,
+                icon: const Icon(Icons.open_in_new_rounded),
+                label: Text(lang.openStore),
+              ),
+            );
+          },
         ),
         SizedBox(height: 12.h),
       ],

@@ -17,7 +17,7 @@ class AdminStatCard extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.value,
-    required this.supportingText,
+    this.supportingText = '',
     this.accentColor,
   });
 
@@ -72,15 +72,17 @@ class AdminStatCard extends StatelessWidget {
               height: 1.0,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            supportingText,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: colorScheme.onSurfaceVariant,
+          if (supportingText.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Text(
+              supportingText,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );

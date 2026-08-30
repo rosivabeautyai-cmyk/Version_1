@@ -7,12 +7,17 @@ import 'package:rosivia/core/network/view_state.dart';
 
 import '../data/models/product_model.dart';
 import '../data/models/product_query.dart';
+import '../data/models/search_term_normalizer.dart';
 import '../data/repositories/product_repository.dart';
 
 class SearchProvider extends ChangeNotifier {
   final ProductRepository _repository;
 
-  SearchProvider({ProductRepository? repository})
+  /// Shopper's selected country — applies country-availability
+  /// visibility to search results.
+  final String? country;
+
+  SearchProvider({this.country, ProductRepository? repository})
       : _repository = repository ?? ProductRepository();
 
   final TextEditingController controller = TextEditingController();
@@ -49,7 +54,11 @@ class SearchProvider extends ChangeNotifier {
 
     try {
       final result = await _repository.getProducts(
-        ProductQuery(searchTerm: term, limit: 30),
+        ProductQuery(
+          searchTerm: normalizeSearchTerm(term),
+          limit: 30,
+          country: country,
+        ),
       );
 
       _state = ViewState(

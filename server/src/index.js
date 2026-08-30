@@ -6,14 +6,24 @@ import { throttle } from './middleware/throttle.js';
 import { aiChatHandler } from './routes/aiChat.js';
 
 const app = express();
+app.disable('x-powered-by');
+app.set('trust proxy', true); // behind a PaaS load balancer / TLS terminator
 
-app.use(
-  cors(
-    config.allowedOrigins.length
-      ? { origin: config.allowedOrigins }
-      : {}, // allow all — fine for a mobile app calling the API directly
-  ),
-);
+// CORS. Set ALLOWED_ORIGINS (comma-separated) in production so only the
+// ROSIVA web frontend's origin is allowed. When it is empty every
+// origin is allowed — acceptable for the mobile app (no Origin header)
+// and local development, but you SHOULD set it once the web frontend
+// URL is known. Requests with no Origin header (native apps, curl,
+// health checks) are always allowed.
+const corsOptions = {
+  origin: config.allowedOrigins.length ? config.allowedOrigins : true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Accept', 'x-user-id'],
+  maxAge: 86400,
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
 app.use(express.json({ limit: '32kb' }));
 
 // Health check (Render pings this).
@@ -44,8 +54,11 @@ if (problems.length) {
   );
 }
 
-app.listen(config.port, () => {
-  console.log(`[rosiva-ai-backend] listening on :${config.port} (model: ${config.groq.model})`);
+// Bind on 0.0.0.0 explicitly so every PaaS (Fly.io, Koyeb, Railway,
+// Render, Cloud Run, plain Docker) can route to it. PORT is provided by
+// the platform in production, 8080 locally.
+app.listen(config.port, '0.0.0.0', () => {
+  console.log(`[rosiva-ai-backend] listening on 0.0.0.0:${config.port} (model: ${config.groq.model})`);
 });
 
 export { app };

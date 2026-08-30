@@ -6,7 +6,7 @@
  * Firebase Functions secrets. Downloads the configured Awin feed
  * (CSV, optionally gzipped), streams + parses it without loading the
  * whole file into memory, filters rows down to Skincare/Makeup/Perfume
- * (see awinCategoryMap.mjs), maps each row onto the same
+ * (see rosivaClassifier.mjs), maps each row onto the same
  * ProductModel-compatible document shape the app already expects, and
  * upserts into `products/{aw_product_id}` via BulkWriter so repeated
  * syncs update rather than duplicate.
@@ -31,7 +31,7 @@ import {parse} from "csv-parse";
 import {cert, getApps, initializeApp} from "firebase-admin/app";
 import {getFirestore} from "firebase-admin/firestore";
 
-import {classifyCategory} from "./awinCategoryMap.mjs";
+import {classifyProduct} from "./rosivaClassifier.mjs";
 
 const PRODUCTS_COLLECTION = "products";
 const CATEGORIES_COLLECTION = "categories";
@@ -183,19 +183,37 @@ async function runAwinSync(feedUrl) {
         continue;
       }
 
-      const category = classifyCategory({
-        categoryName: record.category_name,
-        merchantCategory: record.merchant_category,
-        merchantCategoryPath: record.merchant_product_category_path,
-        productName: record.product_name,
-        brandName: record.brand_name,
+      // The Awin feed is a general retailer feed (household
+      // cleaning, electronics, clothing, etc. alongside real beauty
+      // products) — classifyProduct() is ROSIVA's eligibility filter,
+      // not just a category label. Products that fail it (denied, or
+      // matched no beauty category at all) are never written to
+      // Firestore — there's nothing useful to do with a floor cleaner
+      // regardless of gender/visibility flags. Products that pass are
+      // ALWAYS written with isRosivaProduct: true — gender never
+      // affects eligibility, only whether the app's default catalog
+      // query later shows it (see ProductApiService).
+      const classification = classifyProduct({
+        name: record.product_name,
+        // Joined rather than `||`-picking one — every one of these
+        // Awin category-ish fields is a real signal and none should
+        // be discarded just because an earlier one was non-empty.
+        merchantCategory: [
+          record.category_name,
+          record.merchant_category,
+          record.merchant_product_category_path,
+        ]
+          .filter(Boolean)
+          .join(" "),
         description: record.description,
-        keywords: record.keywords,
+        brand: record.brand_name,
+        tags: record.keywords,
       });
-      if (!category) {
+      if (!classification.isRosivaProduct) {
         skipped++;
         continue;
       }
+      const category = classification.rosivaCategory;
 
       const imageUrl =
         record.large_image ||
@@ -220,6 +238,16 @@ async function runAwinSync(feedUrl) {
         rating: parseOptionalNumber(record.average_rating),
         reviewCount: parseOptionalInt(record.reviews),
         category,
+        // ROSIVA eligibility fields — separate from `category` /
+        // `merchantCategory` (Awin's own, untouched taxonomy, kept
+        // below) on purpose: `category` already mirrors
+        // `rosivaCategory` for backward compatibility with the
+        // existing app query layer, but eligibility itself is
+        // decided by `isRosivaProduct`, not by category presence.
+        rosivaCategory: classification.rosivaCategory,
+        isRosivaProduct: classification.isRosivaProduct,
+        gender: classification.gender,
+        classificationReason: classification.classificationReason,
         tags: splitList(record.keywords),
         ingredients: [],
         benefits: "",

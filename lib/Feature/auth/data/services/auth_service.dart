@@ -137,9 +137,50 @@ class AuthService {
     }
   }
 
-  /// Signs in with Google using the official google_sign_in package.
-  /// Returns the resulting [UserCredential].
+  /// Signs in with Google and returns the resulting [UserCredential].
+  ///
+  /// Web and mobile use different, platform-correct flows:
+  ///  * **Web** — Firebase's own popup flow
+  ///    (`signInWithPopup(GoogleAuthProvider())`). The `google_sign_in`
+  ///    package's `signIn()` is not supported on Flutter Web in the 6.x
+  ///    line (it requires the rendered button / One Tap), which is why
+  ///    the pink "continue with Google" button was failing. This path
+  ///    needs the Google provider enabled in the Firebase console and
+  ///    the web domain in Authentication → Settings → Authorized
+  ///    domains (see WEB_DEPLOYMENT.md) — no OAuth client id in code.
+  ///  * **Mobile (Android/iOS)** — the existing `google_sign_in` flow,
+  ///    unchanged.
   Future<UserCredential> googleSignIn() async {
+    if (kIsWeb) {
+      try {
+        final provider = GoogleAuthProvider()..addScope('email');
+        return await _firebaseAuth.signInWithPopup(provider);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'popup-closed-by-user' ||
+            e.code == 'cancelled-popup-request' ||
+            e.code == 'user-cancelled') {
+          throw const AuthFailure(
+            'sign-in-cancelled',
+            'Google sign-in was cancelled.',
+          );
+        }
+        if (e.code == 'popup-blocked') {
+          throw const AuthFailure(
+            'popup-blocked',
+            'Your browser blocked the Google sign-in popup. Allow popups for this site and try again.',
+          );
+        }
+        throw _mapException(e);
+      } on AuthFailure {
+        rethrow;
+      } catch (_) {
+        throw const AuthFailure(
+          'google-sign-in-failed',
+          'Google sign-in failed. Please try again.',
+        );
+      }
+    }
+
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 

@@ -43,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# ROSIVA AI backend secrets — the Groq API key and Firebase service
+# account must never be committed (see server/.env.example).
+/server/.env
+/server/.env.local
+/server/serviceAccount.json
+/server/node_modules/

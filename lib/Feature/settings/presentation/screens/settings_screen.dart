@@ -25,11 +25,10 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => NotificationPrefsProvider()..load()),
-        ChangeNotifierProvider(create: (_) => RegionalPrefsProvider()..load()),
-      ],
+    // RegionalPrefsProvider is now app-wide (see main.dart) so a
+    // country change here immediately reflects on product screens.
+    return ChangeNotifierProvider(
+      create: (_) => NotificationPrefsProvider()..load(),
       child: const _SettingsView(),
     );
   }
@@ -71,7 +70,8 @@ class _SettingsView extends StatelessWidget {
                   trailing: Text(
                     regionalPrefs.countryCode == null
                         ? lang.autoBasedOnLocation
-                        : regionalCountryName(lang, regionalPrefs.countryCode!),
+                        : regionalPrefs.countryName(
+                            lang, regionalPrefs.countryCode!),
                     style: theme.textTheme.bodySmall,
                   ),
                   onTap: () => _showCountryPicker(context, regionalPrefs, lang),
@@ -85,6 +85,10 @@ class _SettingsView extends StatelessWidget {
                   ),
                   onTap: () => _showLanguagePicker(context),
                 ),
+                // Not tappable — currency is derived from the
+                // selected country (see RegionalPrefsProvider), never
+                // picked independently, so there's nothing to open a
+                // picker for here.
                 SettingsTile(
                   icon: Icons.attach_money_rounded,
                   title: lang.currency,
@@ -92,7 +96,6 @@ class _SettingsView extends StatelessWidget {
                     regionalPrefs.currencyCode ?? lang.autoBasedOnLocation,
                     style: theme.textTheme.bodySmall,
                   ),
-                  onTap: () => _showCurrencyPicker(context, regionalPrefs, lang),
                 ),
               ],
             ),
@@ -309,9 +312,9 @@ class _SettingsView extends StatelessWidget {
           selected: regionalPrefs.countryCode == null,
           onTap: () => regionalPrefs.setCountry(null),
         ),
-        for (final code in RegionalPrefsProvider.countryCodes)
+        for (final code in regionalPrefs.resolvedCountryCodes)
           _PickerOption(
-            label: regionalCountryName(lang, code),
+            label: regionalPrefs.countryName(lang, code),
             selected: regionalPrefs.countryCode == code,
             onTap: () => regionalPrefs.setCountry(code),
           ),
@@ -319,29 +322,6 @@ class _SettingsView extends StatelessWidget {
     );
   }
 
-  void _showCurrencyPicker(
-    BuildContext context,
-    RegionalPrefsProvider regionalPrefs,
-    AppLocalizations lang,
-  ) {
-    _showOptionPicker(
-      context: context,
-      title: lang.currency,
-      options: [
-        _PickerOption(
-          label: lang.autoBasedOnLocation,
-          selected: regionalPrefs.currencyCode == null,
-          onTap: () => regionalPrefs.setCurrency(null),
-        ),
-        for (final code in RegionalPrefsProvider.currencyCodes)
-          _PickerOption(
-            label: code,
-            selected: regionalPrefs.currencyCode == code,
-            onTap: () => regionalPrefs.setCurrency(code),
-          ),
-      ],
-    );
-  }
 
   void _showOptionPicker({
     required BuildContext context,

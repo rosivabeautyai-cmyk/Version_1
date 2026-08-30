@@ -1157,6 +1157,42 @@ abstract class AppLocalizations {
   /// **'Ask ROSIVA anything...'**
   String get aiInputHint;
 
+  /// No description provided for @aiSuggestionMascara.
+  ///
+  /// In en, this message translates to:
+  /// **'💄 I want mascara'**
+  String get aiSuggestionMascara;
+
+  /// No description provided for @aiSuggestionLipstick.
+  ///
+  /// In en, this message translates to:
+  /// **'💋 I want lipstick'**
+  String get aiSuggestionLipstick;
+
+  /// No description provided for @aiSuggestionHighlighter.
+  ///
+  /// In en, this message translates to:
+  /// **'✨ I want highlighter'**
+  String get aiSuggestionHighlighter;
+
+  /// No description provided for @aiSuggestionSkincare.
+  ///
+  /// In en, this message translates to:
+  /// **'🧴 I want skincare'**
+  String get aiSuggestionSkincare;
+
+  /// No description provided for @aiSuggestionPerfume.
+  ///
+  /// In en, this message translates to:
+  /// **'🌸 I want women\'s perfume'**
+  String get aiSuggestionPerfume;
+
+  /// No description provided for @aiSuggestionMakeupBrushes.
+  ///
+  /// In en, this message translates to:
+  /// **'🖌️ I want makeup brushes'**
+  String get aiSuggestionMakeupBrushes;
+
   /// No description provided for @aiNotConfigured.
   ///
   /// In en, this message translates to:
@@ -1724,8 +1760,20 @@ abstract class AppLocalizations {
   /// No description provided for @aiNoProductsFound.
   ///
   /// In en, this message translates to:
-  /// **'I couldn\'t find a matching product in ROSIVA right now. Try adjusting your preferences or budget.'**
+  /// **'I couldn\'t find an exact match right now, but I can help you find another skincare, makeup, or perfume product.'**
   String get aiNoProductsFound;
+
+  /// No description provided for @aiErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong with the AI assistant. Please try again ❤️'**
+  String get aiErrorGeneric;
+
+  /// No description provided for @aiQuotaExceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'ROSIVA AI is getting a lot of requests right now. Please wait a moment and try again ❤️'**
+  String get aiQuotaExceeded;
 
   /// No description provided for @aiRecommendationsIntro.
   ///
@@ -2242,6 +2290,744 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Joined in the last 7 days'**
   String get adminNewUsersDesc;
+
+  /// No description provided for @adminSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get adminSave;
+
+  /// No description provided for @adminCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get adminCancel;
+
+  /// No description provided for @adminSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get adminSaved;
+
+  /// No description provided for @adminSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save. Please try again.'**
+  String get adminSaveFailed;
+
+  /// No description provided for @adminDiscardChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes?'**
+  String get adminDiscardChanges;
+
+  /// No description provided for @adminEditProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Product'**
+  String get adminEditProduct;
+
+  /// No description provided for @adminProductOverridesNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Name, price, currency, image and store link are refreshed daily by the Awin sync. Your edits are saved as overrides and always take precedence.'**
+  String get adminProductOverridesNote;
+
+  /// No description provided for @adminFieldName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get adminFieldName;
+
+  /// No description provided for @adminFieldBrand.
+  ///
+  /// In en, this message translates to:
+  /// **'Brand'**
+  String get adminFieldBrand;
+
+  /// No description provided for @adminFieldDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get adminFieldDescription;
+
+  /// No description provided for @adminFieldImageUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL'**
+  String get adminFieldImageUrl;
+
+  /// No description provided for @adminFieldProductType.
+  ///
+  /// In en, this message translates to:
+  /// **'Product type'**
+  String get adminFieldProductType;
+
+  /// No description provided for @adminFieldProductTypeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. mascara, face serum, makeup brush'**
+  String get adminFieldProductTypeHint;
+
+  /// No description provided for @adminFieldCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get adminFieldCategory;
+
+  /// No description provided for @adminFieldGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get adminFieldGender;
+
+  /// No description provided for @adminGenderClassifierNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Set by the classifier — not editable here.'**
+  String get adminGenderClassifierNote;
+
+  /// No description provided for @adminFieldPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get adminFieldPrice;
+
+  /// No description provided for @adminFieldCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get adminFieldCurrency;
+
+  /// No description provided for @adminFieldStoreUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Store / affiliate URL'**
+  String get adminFieldStoreUrl;
+
+  /// No description provided for @adminFieldFeatured.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured'**
+  String get adminFieldFeatured;
+
+  /// No description provided for @adminFieldFeaturedDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Highlight this product across ROSIVA'**
+  String get adminFieldFeaturedDesc;
+
+  /// No description provided for @adminFieldActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get adminFieldActive;
+
+  /// No description provided for @adminFieldActiveDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive products are hidden from shoppers (soft delete)'**
+  String get adminFieldActiveDesc;
+
+  /// No description provided for @adminFieldAdminNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin note (internal)'**
+  String get adminFieldAdminNote;
+
+  /// No description provided for @adminInvalidUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid https:// URL'**
+  String get adminInvalidUrl;
+
+  /// No description provided for @adminInvalidNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid number'**
+  String get adminInvalidNumber;
+
+  /// No description provided for @adminRequiredField.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get adminRequiredField;
+
+  /// No description provided for @adminConfirmSaveProductTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save product changes?'**
+  String get adminConfirmSaveProductTitle;
+
+  /// No description provided for @adminConfirmSaveProductBody.
+  ///
+  /// In en, this message translates to:
+  /// **'These changes take effect immediately for all shoppers.'**
+  String get adminConfirmSaveProductBody;
+
+  /// No description provided for @adminFilterFeatured.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured'**
+  String get adminFilterFeatured;
+
+  /// No description provided for @adminFilterInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get adminFilterInactive;
+
+  /// No description provided for @adminFilterIneligible.
+  ///
+  /// In en, this message translates to:
+  /// **'Ineligible'**
+  String get adminFilterIneligible;
+
+  /// No description provided for @adminFilterMissingLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing link'**
+  String get adminFilterMissingLink;
+
+  /// No description provided for @adminFilterMissingPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing price'**
+  String get adminFilterMissingPrice;
+
+  /// No description provided for @adminBadgeInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get adminBadgeInactive;
+
+  /// No description provided for @adminBadgeFeatured.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured'**
+  String get adminBadgeFeatured;
+
+  /// No description provided for @adminBadgeIneligible.
+  ///
+  /// In en, this message translates to:
+  /// **'Not in catalog'**
+  String get adminBadgeIneligible;
+
+  /// No description provided for @adminCatalogHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Catalog health'**
+  String get adminCatalogHealth;
+
+  /// No description provided for @adminMetricSkincare.
+  ///
+  /// In en, this message translates to:
+  /// **'Skincare'**
+  String get adminMetricSkincare;
+
+  /// No description provided for @adminMetricMakeup.
+  ///
+  /// In en, this message translates to:
+  /// **'Makeup'**
+  String get adminMetricMakeup;
+
+  /// No description provided for @adminMetricPerfume.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfume'**
+  String get adminMetricPerfume;
+
+  /// No description provided for @adminMetricFeatured.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured'**
+  String get adminMetricFeatured;
+
+  /// No description provided for @adminMetricIneligible.
+  ///
+  /// In en, this message translates to:
+  /// **'Ineligible'**
+  String get adminMetricIneligible;
+
+  /// No description provided for @adminMetricMissingLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing affiliate link'**
+  String get adminMetricMissingLink;
+
+  /// No description provided for @adminMetricMissingPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing price'**
+  String get adminMetricMissingPrice;
+
+  /// No description provided for @adminMetricInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get adminMetricInactive;
+
+  /// No description provided for @adminSectionAiAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant'**
+  String get adminSectionAiAssistant;
+
+  /// No description provided for @adminSectionRegions.
+  ///
+  /// In en, this message translates to:
+  /// **'Regions & Currency'**
+  String get adminSectionRegions;
+
+  /// No description provided for @adminManageCountries.
+  ///
+  /// In en, this message translates to:
+  /// **'Countries'**
+  String get adminManageCountries;
+
+  /// No description provided for @adminManageCurrencies.
+  ///
+  /// In en, this message translates to:
+  /// **'Currencies'**
+  String get adminManageCurrencies;
+
+  /// No description provided for @adminAiControls.
+  ///
+  /// In en, this message translates to:
+  /// **'AI controls'**
+  String get adminAiControls;
+
+  /// No description provided for @adminAiControlsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn the assistant on/off and set maintenance mode'**
+  String get adminAiControlsSubtitle;
+
+  /// No description provided for @adminAiEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'AI assistant enabled'**
+  String get adminAiEnabled;
+
+  /// No description provided for @adminAiEnabledDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When off, the assistant is unavailable for every user'**
+  String get adminAiEnabledDesc;
+
+  /// No description provided for @adminAiMaintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance mode'**
+  String get adminAiMaintenance;
+
+  /// No description provided for @adminAiMaintenanceDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Temporarily pause the assistant and show a message'**
+  String get adminAiMaintenanceDesc;
+
+  /// No description provided for @adminAiMaintenanceMsgEn.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance message (English)'**
+  String get adminAiMaintenanceMsgEn;
+
+  /// No description provided for @adminAiMaintenanceMsgAr.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance message (Arabic)'**
+  String get adminAiMaintenanceMsgAr;
+
+  /// No description provided for @adminAiBackendAuthorityNote.
+  ///
+  /// In en, this message translates to:
+  /// **'These switches are enforced by the ROSIVA AI backend, not just the app.'**
+  String get adminAiBackendAuthorityNote;
+
+  /// No description provided for @adminCountriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Countries'**
+  String get adminCountriesTitle;
+
+  /// No description provided for @adminCountriesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where ROSIVA is available, and each country’s currency'**
+  String get adminCountriesSubtitle;
+
+  /// No description provided for @adminAddCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Add country'**
+  String get adminAddCountry;
+
+  /// No description provided for @adminCountryCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Country code (ISO, e.g. EG)'**
+  String get adminCountryCode;
+
+  /// No description provided for @adminCountryNameEn.
+  ///
+  /// In en, this message translates to:
+  /// **'Name (English)'**
+  String get adminCountryNameEn;
+
+  /// No description provided for @adminCountryNameAr.
+  ///
+  /// In en, this message translates to:
+  /// **'Name (Arabic)'**
+  String get adminCountryNameAr;
+
+  /// No description provided for @adminCountrySortOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort order'**
+  String get adminCountrySortOrder;
+
+  /// No description provided for @adminCountryEnabledDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this country in the shopper picker'**
+  String get adminCountryEnabledDesc;
+
+  /// No description provided for @adminCurrenciesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Currencies'**
+  String get adminCurrenciesTitle;
+
+  /// No description provided for @adminCurrenciesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Symbols and USD exchange rates for price display'**
+  String get adminCurrenciesSubtitle;
+
+  /// No description provided for @adminCurrencySymbol.
+  ///
+  /// In en, this message translates to:
+  /// **'Symbol'**
+  String get adminCurrencySymbol;
+
+  /// No description provided for @adminCurrencyRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate to USD'**
+  String get adminCurrencyRate;
+
+  /// No description provided for @adminCurrencyRateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'USD per 1 unit. Empty = no approximate conversion shown.'**
+  String get adminCurrencyRateHint;
+
+  /// No description provided for @adminCurrencyNoRate.
+  ///
+  /// In en, this message translates to:
+  /// **'No rate'**
+  String get adminCurrencyNoRate;
+
+  /// No description provided for @adminConfigLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load configuration.'**
+  String get adminConfigLoadError;
+
+  /// No description provided for @adminNothingToShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to show'**
+  String get adminNothingToShow;
+
+  /// No description provided for @aiMaintenanceBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI assistant is under maintenance.'**
+  String get aiMaintenanceBanner;
+
+  /// No description provided for @adminRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get adminRemove;
+
+  /// No description provided for @adminOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'optional'**
+  String get adminOptional;
+
+  /// No description provided for @adminCountryOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Country offers'**
+  String get adminCountryOffers;
+
+  /// No description provided for @adminCountryOffersDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Per-country price and affiliate link. Countries without an offer keep the default price and link.'**
+  String get adminCountryOffersDesc;
+
+  /// No description provided for @adminAddOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Add offer'**
+  String get adminAddOffer;
+
+  /// No description provided for @adminClearOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear offer for this country'**
+  String get adminClearOffer;
+
+  /// No description provided for @adminOfferInStock.
+  ///
+  /// In en, this message translates to:
+  /// **'In stock'**
+  String get adminOfferInStock;
+
+  /// No description provided for @adminNoEnabledCountries.
+  ///
+  /// In en, this message translates to:
+  /// **'No enabled countries. Add one under Regions & Currency first.'**
+  String get adminNoEnabledCountries;
+
+  /// No description provided for @adminOfferInvalidCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency must be one of the configured currencies'**
+  String get adminOfferInvalidCurrency;
+
+  /// No description provided for @adminOfferNegativePrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Price cannot be negative'**
+  String get adminOfferNegativePrice;
+
+  /// No description provided for @adminCreateProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Create product'**
+  String get adminCreateProduct;
+
+  /// No description provided for @adminNewProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'New product'**
+  String get adminNewProduct;
+
+  /// No description provided for @adminCreateProductDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Manually added products are tagged source = \"admin\" and are excluded from the AI catalog by default.'**
+  String get adminCreateProductDesc;
+
+  /// No description provided for @adminProductCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Product created'**
+  String get adminProductCreated;
+
+  /// No description provided for @adminFieldGenderWomen.
+  ///
+  /// In en, this message translates to:
+  /// **'Women'**
+  String get adminFieldGenderWomen;
+
+  /// No description provided for @adminFieldGenderMen.
+  ///
+  /// In en, this message translates to:
+  /// **'Men'**
+  String get adminFieldGenderMen;
+
+  /// No description provided for @adminFieldGenderUnisex.
+  ///
+  /// In en, this message translates to:
+  /// **'Unisex'**
+  String get adminFieldGenderUnisex;
+
+  /// No description provided for @adminDisableUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable user'**
+  String get adminDisableUser;
+
+  /// No description provided for @adminEnableUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable user'**
+  String get adminEnableUser;
+
+  /// No description provided for @adminUserDisabledBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get adminUserDisabledBadge;
+
+  /// No description provided for @adminConfirmDisableUserBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The account will be marked disabled. Note: this does not block sign-in by itself — a Cloud Function or the Firebase console is still required for that.'**
+  String get adminConfirmDisableUserBody;
+
+  /// No description provided for @adminConfirmEnableUserBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enable this account?'**
+  String get adminConfirmEnableUserBody;
+
+  /// No description provided for @adminActivityLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity log'**
+  String get adminActivityLog;
+
+  /// No description provided for @adminActivityLogDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent admin actions, newest first'**
+  String get adminActivityLogDesc;
+
+  /// No description provided for @adminActivityEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity recorded yet'**
+  String get adminActivityEmpty;
+
+  /// No description provided for @adminActivityBy.
+  ///
+  /// In en, this message translates to:
+  /// **'by'**
+  String get adminActivityBy;
+
+  /// No description provided for @adminAffiliateManager.
+  ///
+  /// In en, this message translates to:
+  /// **'Affiliate management'**
+  String get adminAffiliateManager;
+
+  /// No description provided for @adminAffiliateManagerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Review and fix affiliate links per country. Tap a product to edit its country offers.'**
+  String get adminAffiliateManagerDesc;
+
+  /// No description provided for @adminFilterCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get adminFilterCountry;
+
+  /// No description provided for @adminFilterCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get adminFilterCurrency;
+
+  /// No description provided for @adminFilterHasOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Has country offer'**
+  String get adminFilterHasOffer;
+
+  /// No description provided for @adminFilterMissingOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'No country offer'**
+  String get adminFilterMissingOffer;
+
+  /// No description provided for @adminFilterInStock.
+  ///
+  /// In en, this message translates to:
+  /// **'In stock'**
+  String get adminFilterInStock;
+
+  /// No description provided for @adminFilterOutOfStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of stock'**
+  String get adminFilterOutOfStock;
+
+  /// No description provided for @adminAnyCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Any country'**
+  String get adminAnyCountry;
+
+  /// No description provided for @adminAnyCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Any currency'**
+  String get adminAnyCurrency;
+
+  /// No description provided for @adminProductsByCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Products by country'**
+  String get adminProductsByCountry;
+
+  /// No description provided for @adminByCountryWithOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'with offer'**
+  String get adminByCountryWithOffer;
+
+  /// No description provided for @adminByCountryInStock.
+  ///
+  /// In en, this message translates to:
+  /// **'in stock'**
+  String get adminByCountryInStock;
+
+  /// No description provided for @adminByCountryOutOfStock.
+  ///
+  /// In en, this message translates to:
+  /// **'out of stock'**
+  String get adminByCountryOutOfStock;
+
+  /// No description provided for @adminByCountryMissingUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'missing link'**
+  String get adminByCountryMissingUrl;
+
+  /// No description provided for @adminByCountryNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No country offers configured yet.'**
+  String get adminByCountryNone;
+
+  /// No description provided for @adminAiDailyGlobalLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily global request limit'**
+  String get adminAiDailyGlobalLimit;
+
+  /// No description provided for @adminAiDailyGlobalLimitDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'All users combined, per UTC day. Empty = unlimited.'**
+  String get adminAiDailyGlobalLimitDesc;
+
+  /// No description provided for @adminAiDailyUserLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily per-user request limit'**
+  String get adminAiDailyUserLimit;
+
+  /// No description provided for @adminAiDailyUserLimitDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Per user, per UTC day (best-effort). Empty = unlimited.'**
+  String get adminAiDailyUserLimitDesc;
+
+  /// No description provided for @adminAiLimitsBackendNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Limits are enforced by the backend, not the app.'**
+  String get adminAiLimitsBackendNote;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

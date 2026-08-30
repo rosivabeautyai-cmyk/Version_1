@@ -548,6 +548,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aiInputHint => 'اسألي روزيفيا أي شيء...';
 
   @override
+  String get aiSuggestionMascara => '💄 عايزة ماسكرا';
+
+  @override
+  String get aiSuggestionLipstick => '💋 عايزة روج';
+
+  @override
+  String get aiSuggestionHighlighter => '✨ عايزة هايلايتر';
+
+  @override
+  String get aiSuggestionSkincare => '🧴 عايزة عناية للبشرة';
+
+  @override
+  String get aiSuggestionPerfume => '🌸 عايزة عطر نسائي';
+
+  @override
+  String get aiSuggestionMakeupBrushes => '🖌️ عايزة فرش مكياج';
+
+  @override
   String get aiNotConfigured => 'لم يتم توصيل المساعد الذكي بعد. يرجى المحاولة لاحقًا.';
 
   @override
@@ -836,7 +854,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get passwordResetLinkSent => 'تم إرسال رابط إعادة تعيين كلمة المرور. تحققي من بريدكِ.';
 
   @override
-  String get aiNoProductsFound => 'لم أتمكن من العثور على منتج مطابق في روزيفيا الآن. جربي تعديل تفضيلاتكِ أو ميزانيتكِ.';
+  String get aiNoProductsFound => 'لم أجد منتجات مطابقة لطلبكِ حاليًا، ولكن يمكنني مساعدتكِ في العثور على نوع آخر من منتجات العناية بالبشرة أو المكياج أو العطور.';
+
+  @override
+  String get aiErrorGeneric => 'حصلت مشكلة في تشغيل المساعد حاليًا، جربي تاني ❤️';
+
+  @override
+  String get aiQuotaExceeded => 'في ضغط على المساعد الذكي دلوقتي، استني لحظة وجربي تاني ❤️';
 
   @override
   String get aiRecommendationsIntro => 'إليكِ بعض المنتجات التي قد تكون مناسبة.';
@@ -1134,4 +1158,373 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adminNewUsersDesc => 'انضموا خلال آخر 7 أيام';
+
+  @override
+  String get adminSave => 'حفظ';
+
+  @override
+  String get adminCancel => 'إلغاء';
+
+  @override
+  String get adminSaved => 'تم الحفظ';
+
+  @override
+  String get adminSaveFailed => 'تعذّر الحفظ. حاول مرة أخرى.';
+
+  @override
+  String get adminDiscardChanges => 'تجاهل التغييرات؟';
+
+  @override
+  String get adminEditProduct => 'تعديل المنتج';
+
+  @override
+  String get adminProductOverridesNote => 'الاسم والسعر والعملة والصورة ورابط المتجر تُحدَّث يوميًا من مزامنة Awin. تعديلاتك تُحفظ كتجاوزات ولها الأولوية دائمًا.';
+
+  @override
+  String get adminFieldName => 'الاسم';
+
+  @override
+  String get adminFieldBrand => 'العلامة التجارية';
+
+  @override
+  String get adminFieldDescription => 'الوصف';
+
+  @override
+  String get adminFieldImageUrl => 'رابط الصورة';
+
+  @override
+  String get adminFieldProductType => 'نوع المنتج';
+
+  @override
+  String get adminFieldProductTypeHint => 'مثل: ماسكرا، سيروم للوجه، فرشاة مكياج';
+
+  @override
+  String get adminFieldCategory => 'الفئة';
+
+  @override
+  String get adminFieldGender => 'الفئة المستهدفة';
+
+  @override
+  String get adminGenderClassifierNote => 'يحدده المُصنِّف — غير قابل للتعديل هنا.';
+
+  @override
+  String get adminFieldPrice => 'السعر';
+
+  @override
+  String get adminFieldCurrency => 'العملة';
+
+  @override
+  String get adminFieldStoreUrl => 'رابط المتجر / الأفلييت';
+
+  @override
+  String get adminFieldFeatured => 'مميز';
+
+  @override
+  String get adminFieldFeaturedDesc => 'إبراز هذا المنتج في روزيفيا';
+
+  @override
+  String get adminFieldActive => 'نشط';
+
+  @override
+  String get adminFieldActiveDesc => 'المنتجات غير النشطة مخفية عن المتسوقين (حذف مؤقت)';
+
+  @override
+  String get adminFieldAdminNote => 'ملاحظة إدارية (داخلية)';
+
+  @override
+  String get adminInvalidUrl => 'أدخل رابط https:// صحيحًا';
+
+  @override
+  String get adminInvalidNumber => 'أدخل رقمًا صحيحًا';
+
+  @override
+  String get adminRequiredField => 'هذا الحقل مطلوب';
+
+  @override
+  String get adminConfirmSaveProductTitle => 'حفظ تعديلات المنتج؟';
+
+  @override
+  String get adminConfirmSaveProductBody => 'تُطبَّق هذه التغييرات فورًا على جميع المتسوقين.';
+
+  @override
+  String get adminFilterFeatured => 'مميز';
+
+  @override
+  String get adminFilterInactive => 'غير نشط';
+
+  @override
+  String get adminFilterIneligible => 'غير مؤهل';
+
+  @override
+  String get adminFilterMissingLink => 'بدون رابط';
+
+  @override
+  String get adminFilterMissingPrice => 'بدون سعر';
+
+  @override
+  String get adminBadgeInactive => 'غير نشط';
+
+  @override
+  String get adminBadgeFeatured => 'مميز';
+
+  @override
+  String get adminBadgeIneligible => 'خارج الكتالوج';
+
+  @override
+  String get adminCatalogHealth => 'حالة الكتالوج';
+
+  @override
+  String get adminMetricSkincare => 'العناية بالبشرة';
+
+  @override
+  String get adminMetricMakeup => 'المكياج';
+
+  @override
+  String get adminMetricPerfume => 'العطور';
+
+  @override
+  String get adminMetricFeatured => 'مميزة';
+
+  @override
+  String get adminMetricIneligible => 'غير مؤهلة';
+
+  @override
+  String get adminMetricMissingLink => 'بدون رابط أفلييت';
+
+  @override
+  String get adminMetricMissingPrice => 'بدون سعر';
+
+  @override
+  String get adminMetricInactive => 'غير نشطة';
+
+  @override
+  String get adminSectionAiAssistant => 'المساعد الذكي';
+
+  @override
+  String get adminSectionRegions => 'الدول والعملات';
+
+  @override
+  String get adminManageCountries => 'الدول';
+
+  @override
+  String get adminManageCurrencies => 'العملات';
+
+  @override
+  String get adminAiControls => 'التحكم في المساعد';
+
+  @override
+  String get adminAiControlsSubtitle => 'تشغيل/إيقاف المساعد وضبط وضع الصيانة';
+
+  @override
+  String get adminAiEnabled => 'المساعد الذكي مُفعّل';
+
+  @override
+  String get adminAiEnabledDesc => 'عند الإيقاف، يصبح المساعد غير متاح لكل المستخدمين';
+
+  @override
+  String get adminAiMaintenance => 'وضع الصيانة';
+
+  @override
+  String get adminAiMaintenanceDesc => 'إيقاف المساعد مؤقتًا مع عرض رسالة';
+
+  @override
+  String get adminAiMaintenanceMsgEn => 'رسالة الصيانة (بالإنجليزية)';
+
+  @override
+  String get adminAiMaintenanceMsgAr => 'رسالة الصيانة (بالعربية)';
+
+  @override
+  String get adminAiBackendAuthorityNote => 'هذه المفاتيح يفرضها خادم روزيفيا الذكي، وليس التطبيق فقط.';
+
+  @override
+  String get adminCountriesTitle => 'الدول';
+
+  @override
+  String get adminCountriesSubtitle => 'الدول التي تعمل بها روزيفيا وعملة كل دولة';
+
+  @override
+  String get adminAddCountry => 'إضافة دولة';
+
+  @override
+  String get adminCountryCode => 'رمز الدولة (ISO، مثل EG)';
+
+  @override
+  String get adminCountryNameEn => 'الاسم (بالإنجليزية)';
+
+  @override
+  String get adminCountryNameAr => 'الاسم (بالعربية)';
+
+  @override
+  String get adminCountrySortOrder => 'ترتيب العرض';
+
+  @override
+  String get adminCountryEnabledDesc => 'إظهار هذه الدولة في قائمة اختيار المتسوق';
+
+  @override
+  String get adminCurrenciesTitle => 'العملات';
+
+  @override
+  String get adminCurrenciesSubtitle => 'الرموز وأسعار الصرف مقابل الدولار لعرض الأسعار';
+
+  @override
+  String get adminCurrencySymbol => 'الرمز';
+
+  @override
+  String get adminCurrencyRate => 'السعر مقابل الدولار';
+
+  @override
+  String get adminCurrencyRateHint => 'عدد الدولارات لكل وحدة. فارغ = بدون تحويل تقريبي.';
+
+  @override
+  String get adminCurrencyNoRate => 'بدون سعر';
+
+  @override
+  String get adminConfigLoadError => 'تعذّر تحميل الإعدادات.';
+
+  @override
+  String get adminNothingToShow => 'لا يوجد ما يُعرض';
+
+  @override
+  String get aiMaintenanceBanner => 'المساعد الذكي في وضع الصيانة.';
+
+  @override
+  String get adminRemove => 'إزالة';
+
+  @override
+  String get adminOptional => 'اختياري';
+
+  @override
+  String get adminCountryOffers => 'عروض الدول';
+
+  @override
+  String get adminCountryOffersDesc => 'سعر ورابط أفلييت لكل دولة. الدول بدون عرض تستخدم السعر والرابط الافتراضي.';
+
+  @override
+  String get adminAddOffer => 'إضافة عرض';
+
+  @override
+  String get adminClearOffer => 'مسح عرض هذه الدولة';
+
+  @override
+  String get adminOfferInStock => 'متوفر';
+
+  @override
+  String get adminNoEnabledCountries => 'لا توجد دول مفعّلة. أضف دولة من \"الدول والعملات\" أولًا.';
+
+  @override
+  String get adminOfferInvalidCurrency => 'يجب أن تكون العملة ضمن العملات المُعدّة';
+
+  @override
+  String get adminOfferNegativePrice => 'لا يمكن أن يكون السعر سالبًا';
+
+  @override
+  String get adminCreateProduct => 'إنشاء منتج';
+
+  @override
+  String get adminNewProduct => 'منتج جديد';
+
+  @override
+  String get adminCreateProductDesc => 'المنتجات المُضافة يدويًا تُوسَم بـ source = \"admin\" وتُستبعَد من كتالوج الذكاء الاصطناعي افتراضيًا.';
+
+  @override
+  String get adminProductCreated => 'تم إنشاء المنتج';
+
+  @override
+  String get adminFieldGenderWomen => 'نساء';
+
+  @override
+  String get adminFieldGenderMen => 'رجال';
+
+  @override
+  String get adminFieldGenderUnisex => 'للجنسين';
+
+  @override
+  String get adminDisableUser => 'تعطيل المستخدم';
+
+  @override
+  String get adminEnableUser => 'تفعيل المستخدم';
+
+  @override
+  String get adminUserDisabledBadge => 'معطّل';
+
+  @override
+  String get adminConfirmDisableUserBody => 'سيتم وسم الحساب كمعطّل. ملاحظة: هذا لا يمنع تسجيل الدخول وحده — يلزم Cloud Function أو لوحة Firebase لذلك.';
+
+  @override
+  String get adminConfirmEnableUserBody => 'إعادة تفعيل هذا الحساب؟';
+
+  @override
+  String get adminActivityLog => 'سجل النشاط';
+
+  @override
+  String get adminActivityLogDesc => 'أحدث إجراءات المشرفين، الأحدث أولًا';
+
+  @override
+  String get adminActivityEmpty => 'لا يوجد نشاط مُسجّل بعد';
+
+  @override
+  String get adminActivityBy => 'بواسطة';
+
+  @override
+  String get adminAffiliateManager => 'إدارة الأفلييت';
+
+  @override
+  String get adminAffiliateManagerDesc => 'مراجعة وتصحيح روابط الأفلييت لكل دولة. اضغط على منتج لتعديل عروض دوله.';
+
+  @override
+  String get adminFilterCountry => 'الدولة';
+
+  @override
+  String get adminFilterCurrency => 'العملة';
+
+  @override
+  String get adminFilterHasOffer => 'له عرض دولة';
+
+  @override
+  String get adminFilterMissingOffer => 'بدون عرض دولة';
+
+  @override
+  String get adminFilterInStock => 'متوفر';
+
+  @override
+  String get adminFilterOutOfStock => 'غير متوفر';
+
+  @override
+  String get adminAnyCountry => 'أي دولة';
+
+  @override
+  String get adminAnyCurrency => 'أي عملة';
+
+  @override
+  String get adminProductsByCountry => 'المنتجات حسب الدولة';
+
+  @override
+  String get adminByCountryWithOffer => 'لها عرض';
+
+  @override
+  String get adminByCountryInStock => 'متوفر';
+
+  @override
+  String get adminByCountryOutOfStock => 'غير متوفر';
+
+  @override
+  String get adminByCountryMissingUrl => 'بدون رابط';
+
+  @override
+  String get adminByCountryNone => 'لا توجد عروض دول مُعدّة بعد.';
+
+  @override
+  String get adminAiDailyGlobalLimit => 'الحد اليومي العام للطلبات';
+
+  @override
+  String get adminAiDailyGlobalLimitDesc => 'لكل المستخدمين مجتمعين، لكل يوم UTC. فارغ = بلا حد.';
+
+  @override
+  String get adminAiDailyUserLimit => 'الحد اليومي لكل مستخدم';
+
+  @override
+  String get adminAiDailyUserLimitDesc => 'لكل مستخدم، لكل يوم UTC (أفضل جهد). فارغ = بلا حد.';
+
+  @override
+  String get adminAiLimitsBackendNote => 'يفرض الخادم هذه الحدود، وليس التطبيق.';
 }

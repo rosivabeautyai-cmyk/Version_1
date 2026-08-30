@@ -82,31 +82,42 @@ class FavoritesProvider extends ChangeNotifier {
   Future<void> toggle(String productId) async {
     final wasFavorite = _favoriteIds.contains(productId);
 
-    // Optimistic local update; Firestore stream will reconcile.
+    // Optimistic local update.
     if (wasFavorite) {
       _favoriteIds = {..._favoriteIds}..remove(productId);
     } else {
       _favoriteIds = {..._favoriteIds, productId};
     }
 
-    // Un-favoriting must drop the product from the resolved list (what
-    // the Favorites screen actually renders) immediately — otherwise
-    // it lingers on screen until the Firestore stream round-trips.
-    // Favoriting doesn't need the same treatment here: the newly
-    // favorited product isn't in `_state.data` yet regardless (only
-    // the stream/_resolveProducts fetches its full ProductModel), and
-    // nothing currently on the Favorites screen depends on it
-    // appearing before that completes.
     if (wasFavorite && _state.data != null) {
+      // Un-favoriting must drop the product from the resolved list
+      // (what the Favorites screen actually renders) immediately —
+      // otherwise it lingers on screen until the Firestore stream
+      // round-trips.
       final updated =
           _state.data!.where((p) => p.id != productId).toList();
       _state = ViewState(
         status: updated.isEmpty ? ViewStatus.empty : ViewStatus.success,
         data: updated,
       );
+      notifyListeners();
+    } else if (!wasFavorite) {
+      // Reflect the heart-icon flip immediately everywhere...
+      notifyListeners();
+      // ...then actually fetch the newly-favorited product's data.
+      // This can NOT be left to the `_listen()` stream callback: by
+      // the time Firestore confirms the write, `_favoriteIds` here
+      // already matches (we just optimistically set it above), so
+      // that callback's own "did the id set actually change" check
+      // sees no difference and skips `_resolveProducts()` — meaning
+      // the new favorite's ProductModel would never get fetched and
+      // it would never appear on the Favorites screen. This was the
+      // root cause of "heart fills in but the product never shows up
+      // in Favorites".
+      unawaited(_resolveProducts());
+    } else {
+      notifyListeners();
     }
-
-    notifyListeners();
 
     if (wasFavorite) {
       await _authProvider.removeFavorite(productId);

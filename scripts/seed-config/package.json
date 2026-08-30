@@ -1,0 +1,16 @@
+{
+  "name": "rosiva-seed-config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "One-off / idempotent seed for the ROSIVA global config collections (countries, currencies, app_config). Runs with the Firebase Admin SDK, same service-account secret as scripts/awin-sync.",
+  "scripts": {
+    "seed": "node seed.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.6.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

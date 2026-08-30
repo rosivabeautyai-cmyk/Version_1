@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import 'package:rosivia/Feature/settings/provider/regional_prefs_provider.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -33,6 +34,23 @@ class _AiViewState extends State<_AiView> {
   final TextEditingController _inputController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
+  /// Regional context sent to the backend for currency-aware phrasing.
+  /// Read once from persisted prefs — null while loading / on "auto".
+  String? _country;
+  String? _currency;
+
+  @override
+  void initState() {
+    super.initState();
+    RegionalPrefsProvider.readPersisted().then((prefs) {
+      if (!mounted) return;
+      setState(() {
+        _country = prefs.country;
+        _currency = prefs.currency;
+      });
+    });
+  }
+
   @override
   void dispose() {
     _inputController.dispose();
@@ -51,15 +69,17 @@ class _AiViewState extends State<_AiView> {
     });
   }
 
-  void _send(AiChatProvider provider, AppLocalizations lang) {
-    final text = _inputController.text;
-    if (text.trim().isEmpty) return;
+  void _send(AiChatProvider provider, AppLocalizations lang, [String? text]) {
+    final message = text ?? _inputController.text;
+    if (message.trim().isEmpty) return;
     _inputController.clear();
     provider.sendMessage(
-      text,
-      errorFallback: lang.somethingWentWrongDesc,
-      noResultsFallback: lang.aiNoProductsFound,
-      recommendationsIntroFallback: lang.aiRecommendationsIntro,
+      message,
+      errorFallback: lang.aiErrorGeneric,
+      rateLimitFallback: lang.aiQuotaExceeded,
+      locale: Localizations.localeOf(context).languageCode,
+      country: _country,
+      currency: _currency,
     );
     _scrollToBottom();
   }
@@ -135,9 +155,20 @@ class _AiViewState extends State<_AiView> {
           accentColor: theme.colorScheme.error,
         ),
         SizedBox(height: 8.h),
-        if (showWelcome)
-          ChatBubble(message: _welcomeMessage(lang))
-        else
+        if (showWelcome) ...[
+          ChatBubble(message: _welcomeMessage(lang)),
+          _SuggestedQuestions(
+            suggestions: [
+              lang.aiSuggestionMascara,
+              lang.aiSuggestionLipstick,
+              lang.aiSuggestionHighlighter,
+              lang.aiSuggestionSkincare,
+              lang.aiSuggestionPerfume,
+              lang.aiSuggestionMakeupBrushes,
+            ],
+            onTap: (suggestion) => _send(provider, lang, suggestion),
+          ),
+        ] else
           ...provider.messages.map((m) => ChatBubble(message: m)),
         if (provider.isSending) const TypingIndicatorBubble(),
       ],
@@ -212,6 +243,50 @@ class _AiViewState extends State<_AiView> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Clickable suggestion chips shown alongside the welcome message —
+/// tapping one sends that exact question to the AI immediately, the
+/// same as typing and submitting it.
+class _SuggestedQuestions extends StatelessWidget {
+  final List<String> suggestions;
+  final ValueChanged<String> onTap;
+
+  const _SuggestedQuestions({required this.suggestions, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: EdgeInsets.only(top: 12.h),
+      child: Wrap(
+        spacing: 8.w,
+        runSpacing: 8.h,
+        children: [
+          for (final suggestion in suggestions)
+            Material(
+              color: theme.cardColor,
+              borderRadius: BorderRadius.circular(20.r),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(20.r),
+                onTap: () => onTap(suggestion),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.r),
+                    border: Border.all(
+                      color: theme.colorScheme.outline.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: Text(suggestion, style: theme.textTheme.bodySmall),
+                ),
+              ),
+            ),
         ],
       ),
     );

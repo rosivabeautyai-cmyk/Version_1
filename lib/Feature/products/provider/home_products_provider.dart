@@ -27,7 +27,11 @@ class HomeProductsData {
 class HomeProductsProvider extends ChangeNotifier {
   final ProductRepository _repository;
 
-  HomeProductsProvider({ProductRepository? repository})
+  /// Shopper's selected country — applies country-availability
+  /// visibility to the curated / trending rows.
+  final String? country;
+
+  HomeProductsProvider({this.country, ProductRepository? repository})
       : _repository = repository ?? ProductRepository();
 
   ViewState<HomeProductsData> _state = const ViewState();
@@ -41,10 +45,10 @@ class HomeProductsProvider extends ChangeNotifier {
       final results = await Future.wait([
         _repository.getCategories(),
         _repository.getProducts(
-          const ProductQuery(sort: 'curated', limit: 10),
+          ProductQuery(sort: 'curated', limit: 10, country: country),
         ),
         _repository.getProducts(
-          const ProductQuery(sort: 'trending', limit: 10),
+          ProductQuery(sort: 'trending', limit: 10, country: country),
         ),
       ]);
 

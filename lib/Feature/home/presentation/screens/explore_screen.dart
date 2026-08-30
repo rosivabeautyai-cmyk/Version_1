@@ -14,6 +14,7 @@ import '../../../products/presentation/screens/search_screen.dart';
 import '../../../products/presentation/widgets/category_card.dart';
 import '../../../products/presentation/widgets/product_grid.dart';
 import '../../../products/provider/product_list_provider.dart';
+import 'package:rosivia/Feature/settings/provider/regional_prefs_provider.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -52,7 +53,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
     final lang = AppLocalizations.of(context)!;
 
     return ChangeNotifierProvider(
-      create: (_) => ProductListProvider()..load(refresh: true),
+      create: (context) => ProductListProvider(
+        country: context.read<RegionalPrefsProvider>().countryCode,
+      )..load(refresh: true),
       child: Scaffold(
         appBar: AppBar(
           title: Text(lang.explore, style: theme.textTheme.titleMedium),

@@ -1,10 +1,10 @@
-import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/Feature/auth/provider/auth_provider.dart';
 import 'package:rosivia/Feature/favorites/provider/favorites_provider.dart';
 import 'package:rosivia/Feature/intro/language/language_provider.dart';
+import 'package:rosivia/Feature/settings/provider/regional_prefs_provider.dart';
 import 'package:rosivia/core/providers/theme_provider.dart';
 import 'package:rosivia/core/styles/main_app.dart';
 import 'package:rosivia/firebase_options.dart';
@@ -12,16 +12,10 @@ import 'package:rosivia/firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase
+  // Initialize Firebase (Auth + Firestore only — the AI assistant now
+  // goes through the ROSIVA AI backend, so Firebase App Check / Firebase
+  // AI Logic are no longer used).
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  // App Check for the Firebase AI Logic (Gemini) calls. Debug providers
-  // only for now — see Configuration Required in the implementation
-  // report for enabling real providers before release.
-  await FirebaseAppCheck.instance.activate(
-    providerAndroid: const AndroidDebugProvider(),
-    providerApple: const AppleDebugProvider(),
-  );
 
   final languageProvider = LanguageProvider();
   await languageProvider.loadLanguage();
@@ -34,6 +28,12 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider<LanguageProvider>.value(value: languageProvider),
         ChangeNotifierProvider<ThemeProvider>.value(value: themeProvider),
+        // App-wide so every product-price widget can show the shopper's
+        // currency + an approximate conversion, and the catalog can
+        // apply country-availability visibility.
+        ChangeNotifierProvider<RegionalPrefsProvider>(
+          create: (_) => RegionalPrefsProvider()..load(),
+        ),
         // AuthProvider is provided once at the root so every screen in
         // the app (auth flow and beyond) can read/watch the same
         // authentication state via `context.watch<AuthProvider>()`.

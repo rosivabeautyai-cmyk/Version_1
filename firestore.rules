@@ -4,37 +4,48 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // True if the signed-in caller's own users/{uid} doc has
-    // role == 'admin'. Used to gate admin-only reads below — this
-    // never trusts a client-supplied role, only what's actually
+    // role == 'admin'. Used to gate admin-only reads/writes below —
+    // this never trusts a client-supplied role, only what's actually
     // stored server-side.
     function isAdmin() {
       return request.auth != null &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // The set of product fields an in-app admin is allowed to write.
+    // Everything else on a product document is owned by the Awin sync
+    // (scripts/awin-sync/, Admin SDK, bypasses these rules) and must
+    // never be writable from a client. Admin corrections to sync-owned
+    // fields (price/currency/storeUrl/name/...) live inside
+    // `adminOverrides` and are layered over the sync data at read time.
+    function adminProductFields() {
+      return [
+        'productType', 'featured', 'active', 'adminNote',
+        'adminOverrides', 'countryOffers', 'hasCountryOffers',
+        'adminUpdatedAt', 'adminUpdatedBy', 'source'
+      ];
+    }
+
     match /users/{uid} {
       // A user can read their own document; an admin can read any
-      // user's document (needed for the Admin Dashboard's user
-      // counts/list — verified server-side via isAdmin(), never a
-      // client-supplied role claim). Regular users still cannot read
+      // user's document (Admin Dashboard user list/counts — verified
+      // server-side via isAdmin()). Regular users still cannot read
       // each other's documents.
       allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
 
       // A user may create their own document on sign-up, but ONLY
-      // with role == "user". This is what stops anyone from signing
-      // up and giving themselves the admin role from the client.
+      // with role == "user". This stops anyone signing up and giving
+      // themselves the admin role from the client.
       allow create: if request.auth != null
                     && request.auth.uid == uid
                     && request.resource.data.role == 'user';
 
       // A user may update their own document, but the role field can
-      // never CHANGE through this rule — so no client can promote or
-      // demote an account. The one exception is a doc that has no
-      // role field yet at all (e.g. one left incomplete by an old
-      // partial write): that can only be backfilled with role ==
-      // "user", never "admin". To make someone an admin, edit the
-      // `role` field for their document directly in the Firebase
-      // console (or from a trusted backend / Cloud Function).
+      // never CHANGE through this rule.
       allow update: if request.auth != null
                     && request.auth.uid == uid
                     && (
@@ -43,29 +54,92 @@ service cloud.firestore {
                            : request.resource.data.role == 'user'
                        );
 
+      // An admin may toggle ANOTHER account's `disabled` flag — and
+      // nothing else. `role` is pinned unchanged, so this can never be
+      // used to mint or remove admins. (Blocking the actual Firebase
+      // Auth sign-in still requires a Cloud Function / the console —
+      // see admin_repository.dart docs.)
+      allow update: if isAdmin()
+                    && request.auth.uid != uid
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['disabled'])
+                    && request.resource.data.role == resource.data.role;
+
       allow delete: if false;
     }
 
-    // Product catalog, populated only by the Awin sync script running
-    // in GitHub Actions (scripts/awin-sync/, using a service-account
-    // Admin SDK credential that bypasses these rules entirely — see
-    // .github/workflows/awin-sync.yml). Any signed-in app user can
-    // read; no client (including admins from within the app) may
-    // write.
+    // Product catalog. Populated by the Awin sync (GitHub Actions,
+    // Admin SDK — bypasses these rules). Any signed-in user can read.
+    // An admin may update ONLY the admin-managed fields above (this is
+    // also how "soft delete" works: set active == false). No client
+    // may hard-delete, and no client may touch a sync-owned field.
     match /products/{productId} {
-      allow read: if request.auth != null;
-      allow write: if false;
+      allow read: if isSignedIn();
+      allow update: if isAdmin()
+                    && request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(adminProductFields());
+      // Admin-authored products (not from Awin) — reserved for a later
+      // pass; must be tagged source == 'admin'.
+      allow create: if isAdmin() && request.resource.data.source == 'admin';
+      allow delete: if false;
     }
 
     match /categories/{categoryId} {
-      allow read: if request.auth != null;
+      allow read: if isSignedIn();
       allow write: if false;
     }
 
-    // Sync status / other admin-only operational docs (e.g.
-    // admin/awinSyncStatus), written only by the GitHub Actions sync
-    // script above. Readable by admins so the Admin Dashboard can
-    // show sync state.
+    // Global country configuration — the single source of truth the
+    // app reads instead of a hardcoded list. Any signed-in user reads
+    // it; only an admin writes it.
+    match /countries/{countryCode} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Currency configuration + exchange rates.
+    match /currencies/{currencyCode} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // App configuration (e.g. app_config/ai: AI enable / maintenance
+    // mode). Readable by any signed-in client so the UI can show a
+    // maintenance banner; only an admin writes it. The ROSIVA AI
+    // backend reads app_config/ai with the Admin SDK and remains the
+    // authority on enforcement.
+    match /app_config/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Append-only admin activity log. An admin may only ever append an
+    // entry AS themselves, stamped with the server time — no forging
+    // another actor, no back-dating, no editing or deleting. Not
+    // readable by normal users at all.
+    match /activity_log/{entryId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+                    && request.resource.data.actorUid == request.auth.uid
+                    && request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    // AI usage counters (ai_usage/{YYYY-MM-DD}) and per-user daily
+    // counters (ai_user_usage/{YYYY-MM-DD__uid}). Written ONLY by the
+    // ROSIVA AI backend via the Admin SDK (which bypasses these rules);
+    // no client may write them. Admins may read them for the dashboard.
+    match /ai_usage/{dayId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /ai_user_usage/{docId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // Sync status / other operational docs (admin/awinSyncStatus),
+    // written only by the GitHub Actions sync script. Readable by
+    // admins so the Admin Dashboard can show sync state.
     match /admin/{docId} {
       allow read: if isAdmin();
       allow write: if false;

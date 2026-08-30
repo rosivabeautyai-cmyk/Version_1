@@ -14,8 +14,13 @@ class ProductListProvider extends ChangeNotifier {
   final ProductRepository _repository;
   final String? category;
 
+  /// Shopper's selected country — applies country-availability
+  /// visibility to the grid.
+  final String? country;
+
   ProductListProvider({
     this.category,
+    this.country,
     ProductRepository? repository,
   }) : _repository = repository ?? ProductRepository();
 
@@ -41,7 +46,12 @@ class ProductListProvider extends ChangeNotifier {
 
     try {
       final result = await _repository.getProducts(
-        ProductQuery(category: category, sort: _sort, page: _page),
+        ProductQuery(
+          category: category,
+          sort: _sort,
+          page: _page,
+          country: country,
+        ),
       );
 
       _items.addAll(result.items);

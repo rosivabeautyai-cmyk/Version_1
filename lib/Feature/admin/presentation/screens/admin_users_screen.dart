@@ -6,6 +6,8 @@ import 'package:rosivia/l10n/app_localizations.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 
 import '../../../auth/data/models/user_model.dart';
+import '../../data/repositories/admin_repository.dart';
+import '../widgets/admin_confirm_dialog.dart';
 import '../widgets/admin_stat_card.dart';
 import '../widgets/admin_user_list_item.dart';
 
@@ -290,9 +292,34 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                user.fullName.isNotEmpty ? user.fullName : lang.adminFallbackName,
-                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      user.fullName.isNotEmpty
+                          ? user.fullName
+                          : lang.adminFallbackName,
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  if (user.disabled) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.error.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        lang.adminUserDisabledBadge,
+                        style: theme.textTheme.bodySmall
+                            ?.copyWith(color: theme.colorScheme.error),
+                      ),
+                    ),
+                  ],
+                ],
               ),
               const SizedBox(height: 4),
               Text(user.email, style: theme.textTheme.bodyMedium),
@@ -314,16 +341,47 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                 ),
               const SizedBox(height: 20),
               OutlinedButton.icon(
-                onPressed: () {
-                  Navigator.pop(sheetContext);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(lang.adminDeleteNotAvailable)),
+                onPressed: () async {
+                  final disable = !user.disabled;
+                  final ok = await showAdminConfirmDialog(
+                    context,
+                    title: disable
+                        ? lang.adminDisableUser
+                        : lang.adminEnableUser,
+                    message: disable
+                        ? lang.adminConfirmDisableUserBody
+                        : lang.adminConfirmEnableUserBody,
+                    confirmLabel: disable
+                        ? lang.adminDisableUser
+                        : lang.adminEnableUser,
+                    destructive: disable,
                   );
+                  if (!ok) return;
+                  if (sheetContext.mounted) Navigator.pop(sheetContext);
+                  try {
+                    await AdminRepository().setUserDisabled(user.uid, disable);
+                    if (mounted) _load();
+                  } catch (_) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(lang.adminSaveFailed)),
+                      );
+                    }
+                  }
                 },
-                icon: Icon(Icons.delete_outline_rounded, color: theme.colorScheme.error),
-                label: Text(lang.adminDeleteUser, style: TextStyle(color: theme.colorScheme.error)),
+                icon: Icon(
+                  user.disabled
+                      ? Icons.lock_open_rounded
+                      : Icons.block_rounded,
+                  color: theme.colorScheme.error,
+                ),
+                label: Text(
+                  user.disabled ? lang.adminEnableUser : lang.adminDisableUser,
+                  style: TextStyle(color: theme.colorScheme.error),
+                ),
                 style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: theme.colorScheme.error.withValues(alpha: 0.4)),
+                  side: BorderSide(
+                      color: theme.colorScheme.error.withValues(alpha: 0.4)),
                 ),
               ),
             ],

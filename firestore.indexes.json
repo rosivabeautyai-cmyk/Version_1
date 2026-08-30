@@ -4,7 +4,8 @@
       "collectionGroup": "products",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "isRosivaProduct", "order": "ASCENDING" },
+        { "fieldPath": "rosivaCategory", "order": "ASCENDING" },
         { "fieldPath": "rating", "order": "DESCENDING" }
       ]
     },
@@ -12,7 +13,8 @@
       "collectionGroup": "products",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "isRosivaProduct", "order": "ASCENDING" },
+        { "fieldPath": "rosivaCategory", "order": "ASCENDING" },
         { "fieldPath": "price", "order": "ASCENDING" }
       ]
     },
@@ -20,7 +22,8 @@
       "collectionGroup": "products",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "isRosivaProduct", "order": "ASCENDING" },
+        { "fieldPath": "rosivaCategory", "order": "ASCENDING" },
         { "fieldPath": "price", "order": "DESCENDING" }
       ]
     },
@@ -28,7 +31,48 @@
       "collectionGroup": "products",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "isRosivaProduct", "order": "ASCENDING" },
+        { "fieldPath": "rosivaCategory", "order": "ASCENDING" },
+        { "fieldPath": "syncedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "products",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "isRosivaProduct", "order": "ASCENDING" },
+        { "fieldPath": "rating", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "products",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "isRosivaProduct", "order": "ASCENDING" },
+        { "fieldPath": "price", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "products",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "isRosivaProduct", "order": "ASCENDING" },
+        { "fieldPath": "price", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "products",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "isRosivaProduct", "order": "ASCENDING" },
+        { "fieldPath": "syncedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "products",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "rosivaCategory", "order": "ASCENDING" },
         { "fieldPath": "syncedAt", "order": "DESCENDING" }
       ]
     }

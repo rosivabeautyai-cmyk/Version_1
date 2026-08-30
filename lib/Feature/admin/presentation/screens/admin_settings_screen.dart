@@ -11,6 +11,11 @@ import 'package:rosivia/core/functions/navigations.dart';
 import 'package:rosivia/core/providers/theme_provider.dart';
 
 import '../../../auth/provider/auth_provider.dart';
+import 'admin_activity_screen.dart';
+import 'admin_affiliate_manager_screen.dart';
+import 'admin_ai_controls_screen.dart';
+import 'admin_countries_screen.dart';
+import 'admin_currencies_screen.dart';
 
 /// Admin Settings — every row here connects to functionality that
 /// already exists elsewhere in the app (reused, not duplicated):
@@ -71,6 +76,52 @@ class AdminSettingsScreen extends StatelessWidget {
                     style: theme.textTheme.bodySmall,
                   ),
                   onTap: () => _showLanguagePicker(context),
+                ),
+              ],
+            ),
+            SettingsSectionLabel(lang.adminSectionAiAssistant),
+            SettingsCard(
+              children: [
+                SettingsTile(
+                  icon: Icons.auto_awesome_rounded,
+                  title: lang.adminAiControls,
+                  subtitle: lang.adminAiControlsSubtitle,
+                  onTap: () => pushTo(context, const AdminAiControlsScreen()),
+                ),
+              ],
+            ),
+            SettingsSectionLabel(lang.adminSectionRegions),
+            SettingsCard(
+              children: [
+                SettingsTile(
+                  icon: Icons.public_rounded,
+                  title: lang.adminManageCountries,
+                  subtitle: lang.adminCountriesSubtitle,
+                  onTap: () => pushTo(context, const AdminCountriesScreen()),
+                ),
+                SettingsTile(
+                  icon: Icons.attach_money_rounded,
+                  title: lang.adminManageCurrencies,
+                  subtitle: lang.adminCurrenciesSubtitle,
+                  onTap: () => pushTo(context, const AdminCurrenciesScreen()),
+                ),
+              ],
+            ),
+            SettingsSectionLabel(lang.navProducts),
+            SettingsCard(
+              children: [
+                SettingsTile(
+                  icon: Icons.handshake_rounded,
+                  title: lang.adminAffiliateManager,
+                  subtitle: lang.adminAffiliateManagerDesc,
+                  onTap: () =>
+                      pushTo(context, const AdminAffiliateManagerScreen()),
+                ),
+                SettingsTile(
+                  icon: Icons.history_rounded,
+                  title: lang.adminActivityLog,
+                  subtitle: lang.adminActivityLogDesc,
+                  onTap: () => pushTo(context, const AdminActivityScreen()),
                 ),
               ],
             ),

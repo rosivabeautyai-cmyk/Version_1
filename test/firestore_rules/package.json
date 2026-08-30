@@ -1,0 +1,14 @@
+{
+  "name": "rosiva-firestore-rules-tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Firestore security-rules unit tests. Run: `npm install` here once, then from the repo root `firebase emulators:exec --only firestore \"node --test test/firestore_rules/rules.test.mjs\"`.",
+  "scripts": {
+    "test": "node --test rules.test.mjs"
+  },
+  "dependencies": {
+    "@firebase/rules-unit-testing": "^4.0.1",
+    "firebase": "^11.0.0"
+  }
+}
