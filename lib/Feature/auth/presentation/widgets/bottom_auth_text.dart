@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rosivia/core/styles/colors.dart';
 
-
 /// A centered "Don't have an account? Sign up" style prompt used at
 /// the bottom of the login and register screens.
 class BottomAuthText extends StatelessWidget {
@@ -22,10 +21,7 @@ class BottomAuthText extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          question,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
+        Text(question, style: Theme.of(context).textTheme.bodyMedium),
         GestureDetector(
           onTap: onPressed,
           child: Padding(

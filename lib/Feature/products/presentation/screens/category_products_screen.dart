@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'package:rosivia/core/functions/navigations.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../data/models/product_model.dart';
@@ -54,25 +55,33 @@ class _CategoryProductsView extends StatelessWidget {
             onSelected: provider.updateSort,
             itemBuilder: (context) => [
               PopupMenuItem(value: 'popular', child: Text(lang.trendingNow)),
-              PopupMenuItem(value: 'price_asc', child: Text('${lang.sortBy}: \$ ↑')),
-              PopupMenuItem(value: 'price_desc', child: Text('${lang.sortBy}: \$ ↓')),
+              PopupMenuItem(
+                value: 'price_asc',
+                child: Text('${lang.sortBy}: \$ ↑'),
+              ),
+              PopupMenuItem(
+                value: 'price_desc',
+                child: Text('${lang.sortBy}: \$ ↓'),
+              ),
               PopupMenuItem(value: 'newest', child: Text(lang.newDiscoveries)),
             ],
           ),
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-          child: RefreshIndicator(
-            onRefresh: () => provider.load(refresh: true),
-            child: ProductGrid(
-              state: provider.state,
-              onLoadMore: provider.loadMore,
-              onRetry: () => provider.load(refresh: true),
-              onProductTap: (ProductModel product) {
-                pushTo(context, ProductDetailsScreen(productId: product.id));
-              },
+        child: PageContainer(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+            child: RefreshIndicator(
+              onRefresh: () => provider.load(refresh: true),
+              child: ProductGrid(
+                state: provider.state,
+                onLoadMore: provider.loadMore,
+                onRetry: () => provider.load(refresh: true),
+                onProductTap: (ProductModel product) {
+                  pushTo(context, ProductDetailsScreen(productId: product.id));
+                },
+              ),
             ),
           ),
         ),

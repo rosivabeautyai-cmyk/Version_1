@@ -1527,4 +1527,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adminAiLimitsBackendNote => 'يفرض الخادم هذه الحدود، وليس التطبيق.';
+
+  @override
+  String get pushNotifications => 'الإشعارات الفورية';
+
+  @override
+  String get pushNotificationsDesc => 'تنبيهات عن المنتجات الجديدة وانخفاض الأسعار ونصائح الجمال على هذا الجهاز.';
+
+  @override
+  String get pushStatusEnabled => 'مُفعّلة على هذا الجهاز';
+
+  @override
+  String get pushStatusOff => 'متوقفة';
+
+  @override
+  String get pushBlockedTitle => 'الإشعارات محظورة';
+
+  @override
+  String get pushBlockedBody => 'لقد حظرتِ إشعارات ROSIVA. فعّليها من إعدادات المتصفح أو الجهاز ثم حاولي مجددًا.';
+
+  @override
+  String get pushEnableFailed => 'تعذّر تفعيل الإشعارات الآن. حاولي مرة أخرى.';
+
+  @override
+  String get pushEnabledToast => 'تم تفعيل الإشعارات';
+
+  @override
+  String get pushDisabledToast => 'تم إيقاف الإشعارات';
+
+  @override
+  String get pushNotConfigured => 'الإشعارات الفورية غير متاحة في هذه النسخة.';
 }

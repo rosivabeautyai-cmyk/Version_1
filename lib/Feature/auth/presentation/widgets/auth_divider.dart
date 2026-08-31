@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
-
 /// A labeled divider used to separate email auth from social auth,
 /// e.g. "or continue with".
 class AuthDivider extends StatelessWidget {

@@ -16,11 +16,9 @@ class AuthRepository {
 
   static const String _usersCollection = 'users';
 
-  AuthRepository({
-    AuthService? authService,
-    FirebaseFirestore? firestore,
-  })  : _authService = authService ?? AuthService(),
-        _firestore = firestore ?? FirebaseFirestore.instance;
+  AuthRepository({AuthService? authService, FirebaseFirestore? firestore})
+    : _authService = authService ?? AuthService(),
+      _firestore = firestore ?? FirebaseFirestore.instance;
 
   Stream<User?> get authStateChanges => _authService.authStateChanges;
 
@@ -36,11 +34,11 @@ class AuthRepository {
   /// Also self-heals accounts whose Firestore document never got
   /// created (e.g. if Firestore was disabled/misconfigured at the
   /// time they first signed up) by creating it here if missing.
-  Future<User> login({
-    required String email,
-    required String password,
-  }) async {
-    final credential = await _authService.login(email: email, password: password);
+  Future<User> login({required String email, required String password}) async {
+    final credential = await _authService.login(
+      email: email,
+      password: password,
+    );
     final user = credential.user;
     if (user == null) {
       throw const AuthFailure('unknown', 'Login failed. Please try again.');
@@ -77,12 +75,29 @@ class AuthRepository {
       email: email.trim(),
       photoUrl: user.photoURL,
       isEmailVerified: user.emailVerified,
+      // The register form makes the Terms checkbox mandatory, so an
+      // email/password account has already consented by the time we get
+      // here — record it and let it go straight through after email
+      // verification (no separate consent gate).
+      registrationCompleted: true,
     );
 
     await _usersRef.doc(user.uid).set(newUser.toCreateMap());
     await _authService.verifyEmail();
 
     return user;
+  }
+
+  /// Marks the signed-in user's registration as finished: records the
+  /// Terms/Privacy consent time and flips `registrationCompleted` to
+  /// `true`. Called by the consent gate that a first-time social
+  /// sign-in lands on. A `merge` write on an already-existing doc, so
+  /// the Firestore rules see it as an update with `role` unchanged.
+  Future<void> completeRegistration({required String uid}) {
+    return _usersRef.doc(uid).set({
+      'registrationCompleted': true,
+      'termsAcceptedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
   }
 
   /// Signs out the current user from Firebase, Google, and Apple.
@@ -102,9 +117,9 @@ class AuthRepository {
     if (user == null) return false;
 
     if (user.emailVerified) {
-      await _usersRef
-          .doc(user.uid)
-          .set({'isEmailVerified': true}, SetOptions(merge: true));
+      await _usersRef.doc(user.uid).set({
+        'isEmailVerified': true,
+      }, SetOptions(merge: true));
     }
 
     return user.emailVerified;
@@ -164,12 +179,9 @@ class AuthRepository {
 
   /// Adds [productId] to the current user's `favorites` array.
   Future<void> addFavorite({required String uid, required String productId}) {
-    return _usersRef.doc(uid).set(
-      {
-        'favorites': FieldValue.arrayUnion([productId]),
-      },
-      SetOptions(merge: true),
-    );
+    return _usersRef.doc(uid).set({
+      'favorites': FieldValue.arrayUnion([productId]),
+    }, SetOptions(merge: true));
   }
 
   /// Removes [productId] from the current user's `favorites` array.
@@ -177,12 +189,9 @@ class AuthRepository {
     required String uid,
     required String productId,
   }) {
-    return _usersRef.doc(uid).set(
-      {
-        'favorites': FieldValue.arrayRemove([productId]),
-      },
-      SetOptions(merge: true),
-    );
+    return _usersRef.doc(uid).set({
+      'favorites': FieldValue.arrayRemove([productId]),
+    }, SetOptions(merge: true));
   }
 
   /// Updates a subset of profile fields on the user's Firestore
@@ -228,7 +237,8 @@ class AuthRepository {
     final docRef = _usersRef.doc(user.uid);
     final doc = await docRef.get();
     final data = doc.data();
-    final isIncomplete = !doc.exists || data == null || !data.containsKey('role');
+    final isIncomplete =
+        !doc.exists || data == null || !data.containsKey('role');
 
     if (isIncomplete) {
       final newUser = UserModel.newUser(
@@ -248,9 +258,8 @@ class AuthRepository {
     // or a legacy account from before Firestore was enabled). `set`
     // with merge creates it if missing and just updates the field
     // otherwise — either way this never throws NOT_FOUND.
-    await _usersRef.doc(uid).set(
-      {'lastLogin': FieldValue.serverTimestamp()},
-      SetOptions(merge: true),
-    );
+    await _usersRef.doc(uid).set({
+      'lastLogin': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
   }
 }

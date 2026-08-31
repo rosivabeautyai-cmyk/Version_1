@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/responsive/responsive.dart';
 import '../../../../core/styles/colors.dart';
-
-
 
 /// A single section within a legal document: a bold heading followed
 /// by a paragraph of body text.
@@ -40,39 +39,44 @@ class LegalDocumentScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-          children: [
-            Text(
-              lastUpdated,
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: theme.colorScheme.onSurfaceVariant,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            SizedBox(height: 16.h),
-            for (final section in sections) ...[
+        // Cap the reading column on wide screens so lines stay a
+        // comfortable length instead of stretching edge-to-edge.
+        child: PageContainer(
+          maxWidth: 760,
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+            children: [
               Text(
-                section.title,
+                lastUpdated,
                 style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
+                  fontSize: 12.sp,
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontStyle: FontStyle.italic,
                 ),
               ),
-              SizedBox(height: 8.h),
-              Text(
-                section.body,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  height: 1.6,
-                  color: theme.colorScheme.onSurface,
+              SizedBox(height: 16.h),
+              for (final section in sections) ...[
+                Text(
+                  section.title,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary,
+                  ),
                 ),
-              ),
-              SizedBox(height: 20.h),
+                SizedBox(height: 8.h),
+                Text(
+                  section.body,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    height: 1.6,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

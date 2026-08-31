@@ -21,6 +21,7 @@ dependencies:
   firebase_core: ^4.12.1
   firebase_auth: ^6.0.0
   cloud_firestore: ^6.0.0
+  firebase_messaging: ^16.0.0
 
   # Authentication
   google_sign_in: ^6.2.1
@@ -67,6 +68,28 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+
+  # App launcher / favicon icon generation only (not bundled at runtime).
+  flutter_launcher_icons: ^0.14.3
+  # Used once by tool/make_app_icon.dart to prep a clean icon source.
+  image: ^4.3.0
+
+# Generates ONLY the OS-level application icon (Android launcher +
+# adaptive, iOS AppIcon, web favicon / PWA icons). Does not touch splash
+# screens or any in-app imagery. Regenerate with:
+#   dart run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: "assets/branding/rosiva_app_icon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  background_color_ios: "#000000"
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/branding/rosiva_app_icon_fg.png"
+  adaptive_icon_foreground_inset: 10
+  web:
+    generate: true
+    image_path: "assets/branding/rosiva_app_icon.png"
 
 flutter:
   generate: true

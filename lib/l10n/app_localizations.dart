@@ -3028,6 +3028,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Limits are enforced by the backend, not the app.'**
   String get adminAiLimitsBackendNote;
+
+  /// No description provided for @pushNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Push notifications'**
+  String get pushNotifications;
+
+  /// No description provided for @pushNotificationsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts about new arrivals, price drops and beauty tips on this device.'**
+  String get pushNotificationsDesc;
+
+  /// No description provided for @pushStatusEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled on this device'**
+  String get pushStatusEnabled;
+
+  /// No description provided for @pushStatusOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get pushStatusOff;
+
+  /// No description provided for @pushBlockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are blocked'**
+  String get pushBlockedTitle;
+
+  /// No description provided for @pushBlockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve blocked notifications for ROSIVA. Turn them back on in your browser or device settings, then try again.'**
+  String get pushBlockedBody;
+
+  /// No description provided for @pushEnableFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t enable notifications right now. Please try again.'**
+  String get pushEnableFailed;
+
+  /// No description provided for @pushEnabledToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications enabled'**
+  String get pushEnabledToast;
+
+  /// No description provided for @pushDisabledToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications turned off'**
+  String get pushDisabledToast;
+
+  /// No description provided for @pushNotConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'Push notifications aren\'t available in this build.'**
+  String get pushNotConfigured;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

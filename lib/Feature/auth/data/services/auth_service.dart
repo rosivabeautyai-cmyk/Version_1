@@ -33,6 +33,15 @@ class AuthService {
       _googleSignIn = googleSignIn ?? GoogleSignIn(scopes: ['email']);
 
   /// Stream of auth state changes (null when signed out).
+  ///
+  /// Deliberately NOT memoised: `firebase_auth_web`'s implementation is
+  /// an `async*` generator that yields `currentUser` first on each new
+  /// subscription. A fresh call therefore primes a late subscriber
+  /// (e.g. the new `AuthGate` created by `pushNamedAndRemoveUntil`
+  /// right after a Google popup) with the already-signed-in user —
+  /// which is exactly how the user reaches Home. Re-subscription churn
+  /// on rebuilds is handled by `AuthGate` caching this once per
+  /// instance, not here.
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   /// Currently signed-in Firebase user, if any.

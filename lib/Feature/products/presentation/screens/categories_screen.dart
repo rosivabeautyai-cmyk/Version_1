@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:rosivia/core/functions/navigations.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -61,11 +62,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         title: Text(lang.categories, style: theme.textTheme.titleMedium),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-          child: RefreshIndicator(
-            onRefresh: _load,
-            child: _buildBody(context, lang),
+        child: PageContainer(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+            child: RefreshIndicator(
+              onRefresh: _load,
+              child: _buildBody(context, lang),
+            ),
           ),
         ),
       ),
@@ -94,26 +97,35 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       );
     }
 
-    return GridView.builder(
-      physics: const AlwaysScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 16.h,
-        crossAxisSpacing: 16.w,
-        childAspectRatio: 1.1,
-      ),
-      itemCount: _categories.length,
-      itemBuilder: (context, index) {
-        final category = _categories[index];
-        return _CategoryTile(
-          category: category,
-          onTap: () => pushTo(
-            context,
-            CategoryProductsScreen(
-              categorySlug: category.slug,
-              title: category.name,
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = responsiveGridColumns(
+          constraints.maxWidth,
+          min: 2,
+          max: 4,
+        );
+        return GridView.builder(
+          physics: const AlwaysScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
+            mainAxisSpacing: 16.h,
+            crossAxisSpacing: 16.w,
+            childAspectRatio: 1.1,
           ),
+          itemCount: _categories.length,
+          itemBuilder: (context, index) {
+            final category = _categories[index];
+            return _CategoryTile(
+              category: category,
+              onTap: () => pushTo(
+                context,
+                CategoryProductsScreen(
+                  categorySlug: category.slug,
+                  title: category.name,
+                ),
+              ),
+            );
+          },
         );
       },
     );

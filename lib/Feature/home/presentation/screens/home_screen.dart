@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/functions/navigations.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/core/widgets/main_button.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -92,22 +93,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   onRefresh: _refresh,
                   child: Consumer<HomeProductsProvider>(
                     builder: (context, productsProvider, _) {
-                      return ListView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        padding: EdgeInsets.all(20.w),
-                        children: [
-                          WelcomeCard(userData: _userData),
-                          SizedBox(height: 24.h),
-                          _Greeting(lang: lang),
-                          SizedBox(height: 20.h),
-                          _AiSearchEntry(
-                            onTap: () => pushTo(context, const AiScreen()),
-                          ),
-                          SizedBox(height: 28.h),
-                          ..._buildProductSections(context, lang, productsProvider),
-                          _AffiliateDisclosure(text: lang.affiliateDisclosureShort),
-                          SizedBox(height: 24.h),
-                        ],
+                      return PageContainer(
+                        child: ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.all(20.w),
+                          children: [
+                            WelcomeCard(userData: _userData),
+                            SizedBox(height: 24.h),
+                            _Greeting(lang: lang),
+                            SizedBox(height: 20.h),
+                            _AiSearchEntry(
+                              onTap: () => pushTo(context, const AiScreen()),
+                            ),
+                            SizedBox(height: 28.h),
+                            ..._buildProductSections(
+                              context,
+                              lang,
+                              productsProvider,
+                            ),
+                            _AffiliateDisclosure(
+                              text: lang.affiliateDisclosureShort,
+                            ),
+                            SizedBox(height: 24.h),
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -214,7 +223,9 @@ class _AiSearchEntry extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: colorScheme.primary.withValues(alpha: 0.25)),
+            border: Border.all(
+              color: colorScheme.primary.withValues(alpha: 0.25),
+            ),
           ),
           child: Row(
             children: [
@@ -306,8 +317,9 @@ class _ProductsRow extends StatelessWidget {
             product: product,
             width: 150,
             isFavorite: favorites?.isFavorite(product.id) ?? false,
-            onFavoriteTap:
-                favorites == null ? null : () => favorites.toggle(product.id),
+            onFavoriteTap: favorites == null
+                ? null
+                : () => favorites.toggle(product.id),
             onTap: () =>
                 pushTo(context, ProductDetailsScreen(productId: product.id)),
           );
@@ -326,26 +338,32 @@ class _ProductsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final favorites = context.watch<FavoritesProvider?>();
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 16.h,
-        crossAxisSpacing: 16.w,
-        childAspectRatio: 0.62,
-      ),
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        final product = products[index];
-        return ProductCard(
-          product: product,
-          width: double.infinity,
-          isFavorite: favorites?.isFavorite(product.id) ?? false,
-          onFavoriteTap:
-              favorites == null ? null : () => favorites.toggle(product.id),
-          onTap: () =>
-              pushTo(context, ProductDetailsScreen(productId: product.id)),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = responsiveGridColumns(constraints.maxWidth);
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
+            mainAxisSpacing: 16.h,
+            crossAxisSpacing: 16.w,
+            childAspectRatio: columns >= 4 ? 0.72 : 0.62,
+          ),
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            final product = products[index];
+            return ProductCard(
+              product: product,
+              width: double.infinity,
+              isFavorite: favorites?.isFavorite(product.id) ?? false,
+              onFavoriteTap: favorites == null
+                  ? null
+                  : () => favorites.toggle(product.id),
+              onTap: () =>
+                  pushTo(context, ProductDetailsScreen(productId: product.id)),
+            );
+          },
         );
       },
     );

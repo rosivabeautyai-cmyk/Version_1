@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/services/snackbar_service.dart';
 import '../../auth_routes.dart';
 import '../../provider/auth_provider.dart';
+import '../widgets/auth_shell.dart';
 import '../widgets/loading_button.dart';
 
 /// The verify-email screen.
@@ -131,112 +132,105 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     final lang = AppLocalizations.of(context)!;
     final email = auth.currentUser?.email ?? lang.yourEmailFallback;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 24.h),
-
-              Center(
-                child: Container(
-                  height: 120.h,
-                  width: 120.h,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.25),
-                        blurRadius: 30,
-                        spreadRadius: 2,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
+    return AuthShell(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              height: 120,
+              width: 120,
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.25),
+                    blurRadius: 30,
+                    spreadRadius: 2,
+                    offset: const Offset(0, 8),
                   ),
-                  child: Icon(
-                    Icons.mark_email_unread_rounded,
-                    color: Colors.white,
-                    size: 56.sp,
-                  ),
-                ),
+                ],
               ),
-
-              SizedBox(height: 28.h),
-
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(30.r),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.2),
-                      blurRadius: 30,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      lang.verifyYourEmail,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.displayMedium,
-                    ),
-
-                    SizedBox(height: 12.h),
-
-                    Text(
-                      lang.verifyEmailMessage(email),
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-
-                    SizedBox(height: 28.h),
-
-                    LoadingButton(
-                      label: lang.openMailApp,
-                      isLoading: false,
-                      onPressed: _handleOpenMail,
-                      icon: Icons.open_in_new_rounded,
-                    ),
-
-                    SizedBox(height: 14.h),
-
-                    LoadingButton(
-                      label: lang.iveVerified,
-                      isLoading: auth.isCheckingVerification,
-                      onPressed: () => _handleIveVerified(auth),
-                      icon: Icons.check_circle_outline_rounded,
-                    ),
-
-                    SizedBox(height: 18.h),
-
-                    Center(
-                      child: TextButton(
-                        onPressed: _resendCooldown > 0 || auth.isResendingEmail
-                            ? null
-                            : () => _handleResend(auth),
-                        child: Text(
-                          auth.isResendingEmail
-                              ? lang.sending
-                              : _resendCooldown > 0
-                              ? lang.resendInSeconds(_resendCooldown)
-                              : lang.resendEmailPrompt,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              child: const Icon(
+                Icons.mark_email_unread_rounded,
+                color: Colors.white,
+                size: 56,
               ),
-            ],
+            ),
           ),
-        ),
+
+          SizedBox(height: 28.h),
+
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(30.r),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.2),
+                  blurRadius: 30,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  lang.verifyYourEmail,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.displayMedium,
+                ),
+
+                SizedBox(height: 12.h),
+
+                Text(
+                  lang.verifyEmailMessage(email),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+
+                SizedBox(height: 28.h),
+
+                LoadingButton(
+                  label: lang.openMailApp,
+                  isLoading: false,
+                  onPressed: _handleOpenMail,
+                  icon: Icons.open_in_new_rounded,
+                ),
+
+                SizedBox(height: 14.h),
+
+                LoadingButton(
+                  label: lang.iveVerified,
+                  isLoading: auth.isCheckingVerification,
+                  onPressed: () => _handleIveVerified(auth),
+                  icon: Icons.check_circle_outline_rounded,
+                ),
+
+                SizedBox(height: 18.h),
+
+                Center(
+                  child: TextButton(
+                    onPressed: _resendCooldown > 0 || auth.isResendingEmail
+                        ? null
+                        : () => _handleResend(auth),
+                    child: Text(
+                      auth.isResendingEmail
+                          ? lang.sending
+                          : _resendCooldown > 0
+                          ? lang.resendInSeconds(_resendCooldown)
+                          : lang.resendEmailPrompt,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

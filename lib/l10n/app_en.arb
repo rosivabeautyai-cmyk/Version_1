@@ -585,5 +585,15 @@
   "adminAiDailyGlobalLimitDesc": "All users combined, per UTC day. Empty = unlimited.",
   "adminAiDailyUserLimit": "Daily per-user request limit",
   "adminAiDailyUserLimitDesc": "Per user, per UTC day (best-effort). Empty = unlimited.",
-  "adminAiLimitsBackendNote": "Limits are enforced by the backend, not the app."
+  "adminAiLimitsBackendNote": "Limits are enforced by the backend, not the app.",
+  "pushNotifications": "Push notifications",
+  "pushNotificationsDesc": "Alerts about new arrivals, price drops and beauty tips on this device.",
+  "pushStatusEnabled": "Enabled on this device",
+  "pushStatusOff": "Off",
+  "pushBlockedTitle": "Notifications are blocked",
+  "pushBlockedBody": "You've blocked notifications for ROSIVA. Turn them back on in your browser or device settings, then try again.",
+  "pushEnableFailed": "Couldn't enable notifications right now. Please try again.",
+  "pushEnabledToast": "Notifications enabled",
+  "pushDisabledToast": "Notifications turned off",
+  "pushNotConfigured": "Push notifications aren't available in this build."
 }

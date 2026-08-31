@@ -585,5 +585,15 @@
   "adminAiDailyGlobalLimitDesc": "لكل المستخدمين مجتمعين، لكل يوم UTC. فارغ = بلا حد.",
   "adminAiDailyUserLimit": "الحد اليومي لكل مستخدم",
   "adminAiDailyUserLimitDesc": "لكل مستخدم، لكل يوم UTC (أفضل جهد). فارغ = بلا حد.",
-  "adminAiLimitsBackendNote": "يفرض الخادم هذه الحدود، وليس التطبيق."
+  "adminAiLimitsBackendNote": "يفرض الخادم هذه الحدود، وليس التطبيق.",
+  "pushNotifications": "الإشعارات الفورية",
+  "pushNotificationsDesc": "تنبيهات عن المنتجات الجديدة وانخفاض الأسعار ونصائح الجمال على هذا الجهاز.",
+  "pushStatusEnabled": "مُفعّلة على هذا الجهاز",
+  "pushStatusOff": "متوقفة",
+  "pushBlockedTitle": "الإشعارات محظورة",
+  "pushBlockedBody": "لقد حظرتِ إشعارات ROSIVA. فعّليها من إعدادات المتصفح أو الجهاز ثم حاولي مجددًا.",
+  "pushEnableFailed": "تعذّر تفعيل الإشعارات الآن. حاولي مرة أخرى.",
+  "pushEnabledToast": "تم تفعيل الإشعارات",
+  "pushDisabledToast": "تم إيقاف الإشعارات",
+  "pushNotConfigured": "الإشعارات الفورية غير متاحة في هذه النسخة."
 }

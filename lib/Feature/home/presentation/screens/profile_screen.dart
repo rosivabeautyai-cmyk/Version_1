@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/functions/navigations.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../../auth/data/models/user_model.dart';
@@ -53,99 +54,104 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: _loadUser,
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.all(20.w),
-            children: [
-              _ProfileHeader(userData: _userData, loading: _loading),
-              SizedBox(height: 24.h),
+          child: PageContainer(
+            maxWidth: 720,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.all(20.w),
+              children: [
+                _ProfileHeader(userData: _userData, loading: _loading),
+                SizedBox(height: 24.h),
 
-              Row(
-                children: [
-                  Expanded(
-                    child: _QuickAction(
-                      icon: Icons.face_retouching_natural_rounded,
-                      title: lang.myBeautyProfile,
-                      subtitle: lang.myBeautyProfileDesc,
-                      onTap: () =>
-                          pushTo(context, const MyBeautyProfileScreen()),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _QuickAction(
+                        icon: Icons.face_retouching_natural_rounded,
+                        title: lang.myBeautyProfile,
+                        subtitle: lang.myBeautyProfileDesc,
+                        onTap: () =>
+                            pushTo(context, const MyBeautyProfileScreen()),
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: _QuickAction(
-                      icon: Icons.favorite_rounded,
-                      title: lang.favoritesAndCollections,
-                      subtitle: lang.favoritesSubtitle,
-                      onTap: widget.onShowFavorites,
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: _QuickAction(
+                        icon: Icons.favorite_rounded,
+                        title: lang.favoritesAndCollections,
+                        subtitle: lang.favoritesSubtitle,
+                        onTap: widget.onShowFavorites,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 24.h),
-
-              _ProfileSectionLabel(lang.accountSettings),
-              _ProfileCard(
-                children: [
-                  _ProfileTile(
-                    icon: Icons.person_outline_rounded,
-                    title: lang.editProfile,
-                    onTap: () => pushTo(context, const EditProfileScreen()),
-                  ),
-                  _ProfileTile(
-                    icon: Icons.lock_outline_rounded,
-                    title: lang.security,
-                    onTap: () => pushTo(context, const SecurityScreen()),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-
-              _ProfileSectionLabel(lang.preferences),
-              _ProfileCard(
-                children: [
-                  _ProfileTile(
-                    icon: Icons.settings_outlined,
-                    title: lang.settings,
-                    subtitle: lang.settingsSubtitle,
-                    onTap: () => pushTo(context, const SettingsScreen()),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-
-              _ProfileSectionLabel(lang.support),
-              _ProfileCard(
-                children: [
-                  _ProfileTile(
-                    icon: Icons.help_outline_rounded,
-                    title: lang.helpCenter,
-                    onTap: () => pushTo(context, const HelpCenterScreen()),
-                  ),
-                  _ProfileTile(
-                    icon: Icons.mail_outline_rounded,
-                    title: lang.contactUs,
-                    onTap: () => pushTo(context, const ContactUsScreen()),
-                  ),
-                ],
-              ),
-              SizedBox(height: 28.h),
-
-              OutlinedButton.icon(
-                onPressed: () => _confirmLogout(context, lang),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 52.h),
-                  foregroundColor: theme.colorScheme.error,
-                  side: BorderSide(color: theme.colorScheme.error.withValues(alpha: 0.4)),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14.r),
-                  ),
+                  ],
                 ),
-                icon: const Icon(Icons.logout_rounded),
-                label: Text(lang.logOut),
-              ),
-              SizedBox(height: 12.h),
-            ],
+                SizedBox(height: 24.h),
+
+                _ProfileSectionLabel(lang.accountSettings),
+                _ProfileCard(
+                  children: [
+                    _ProfileTile(
+                      icon: Icons.person_outline_rounded,
+                      title: lang.editProfile,
+                      onTap: () => pushTo(context, const EditProfileScreen()),
+                    ),
+                    _ProfileTile(
+                      icon: Icons.lock_outline_rounded,
+                      title: lang.security,
+                      onTap: () => pushTo(context, const SecurityScreen()),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20.h),
+
+                _ProfileSectionLabel(lang.preferences),
+                _ProfileCard(
+                  children: [
+                    _ProfileTile(
+                      icon: Icons.settings_outlined,
+                      title: lang.settings,
+                      subtitle: lang.settingsSubtitle,
+                      onTap: () => pushTo(context, const SettingsScreen()),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20.h),
+
+                _ProfileSectionLabel(lang.support),
+                _ProfileCard(
+                  children: [
+                    _ProfileTile(
+                      icon: Icons.help_outline_rounded,
+                      title: lang.helpCenter,
+                      onTap: () => pushTo(context, const HelpCenterScreen()),
+                    ),
+                    _ProfileTile(
+                      icon: Icons.mail_outline_rounded,
+                      title: lang.contactUs,
+                      onTap: () => pushTo(context, const ContactUsScreen()),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 28.h),
+
+                OutlinedButton.icon(
+                  onPressed: () => _confirmLogout(context, lang),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 52.h),
+                    foregroundColor: theme.colorScheme.error,
+                    side: BorderSide(
+                      color: theme.colorScheme.error.withValues(alpha: 0.4),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.r),
+                    ),
+                  ),
+                  icon: const Icon(Icons.logout_rounded),
+                  label: Text(lang.logOut),
+                ),
+                SizedBox(height: 12.h),
+              ],
+            ),
           ),
         ),
       ),
@@ -275,7 +281,9 @@ class _QuickAction extends StatelessWidget {
           padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18.r),
-            border: Border.all(color: colorScheme.outline.withValues(alpha: 0.15)),
+            border: Border.all(
+              color: colorScheme.outline.withValues(alpha: 0.15),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,7 +347,9 @@ class _ProfileCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.12)),
+        border: Border.all(
+          color: theme.colorScheme.outline.withValues(alpha: 0.12),
+        ),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(

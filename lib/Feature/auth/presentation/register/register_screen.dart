@@ -11,6 +11,7 @@ import '../../presentation/legal/terms_of_service_screen.dart';
 import '../../provider/auth_provider.dart';
 import '../widgets/auth_divider.dart';
 import '../widgets/auth_header.dart';
+import '../widgets/auth_shell.dart';
 import '../widgets/auth_textfield.dart';
 import '../widgets/bottom_auth_text.dart';
 import '../widgets/loading_button.dart';
@@ -98,159 +99,147 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final auth = context.watch<AuthProvider>();
     final lang = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: 24.h),
-                AuthHeader(
-                  icon: Icons.auto_awesome_rounded,
-                  title: lang.createAccount,
-                  subtitle: lang.registerSubtitle,
-                ),
-                SizedBox(height: 32.h),
+    return AuthShell(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AuthHeader(
+              icon: Icons.auto_awesome_rounded,
+              title: lang.createAccount,
+              subtitle: lang.registerSubtitle,
+            ),
+            SizedBox(height: 32.h),
 
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 24.w,
-                    vertical: 24.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(30.r),
-                    
-                    
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.2),
-                        blurRadius: 30,
-                        spreadRadius: 2,
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(30.r),
 
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      AuthTextField(
-                        controller: auth.nameController,
-                        label: lang.fullName,
-                        hint: lang.fullNameHint,
-                        prefixIcon: Icons.person_outline_rounded,
-                        keyboardType: TextInputType.name,
-                        textInputAction: TextInputAction.next,
-                        validator: (value) => Validators.fullName(value, lang),
-                      ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.2),
+                    blurRadius: 30,
+                    spreadRadius: 2,
 
-                      SizedBox(height: 18.h),
-
-                      AuthTextField(
-                        controller: auth.emailController,
-                        label: lang.email,
-                        hint: lang.emailHint,
-                        prefixIcon: Icons.email_outlined,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) => Validators.email(value, lang),
-                      ),
-
-                      SizedBox(height: 18.h),
-
-                      PasswordTextField(
-                        controller: auth.passwordController,
-                        label: lang.password,
-                        hint: lang.createStrongPassword,
-                        obscureText: auth.obscurePassword,
-                        onToggleVisibility: auth.togglePassword,
-                        validator: (value) => Validators.password(value, lang),
-                      ),
-
-                      SizedBox(height: 18.h),
-
-                      PasswordTextField(
-                        controller: auth.confirmPasswordController,
-                        label: lang.confirmPassword,
-                        hint: lang.confirmPasswordHint,
-                        obscureText: auth.obscureConfirmPassword,
-                        onToggleVisibility: auth.toggleConfirmPassword,
-                        textInputAction: TextInputAction.done,
-                        validator: (value) => Validators.confirmPassword(
-                          value,
-                          auth.passwordController.text,
-                          lang,
-                        ),
-                        onFieldSubmitted: (_) => _handleRegister(auth),
-                      ),
-
-                      SizedBox(height: 18.h),
-
-                      TermsCheckbox(
-                        value: auth.agreedToTerms,
-                        onChanged: (_) => auth.toggleAgreedToTerms(),
-                        onTermsTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const TermsOfServiceScreen(),
-                          ),
-                        ),
-                        onPrivacyTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const PrivacyPolicyScreen(),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: 24.h),
-
-                      LoadingButton(
-                        label: lang.createAccountButton,
-                        isLoading: auth.isLoading,
-                        onPressed: () => _handleRegister(auth),
-                      ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: 30.h),
-
-                const AuthDivider(),
-
-                SizedBox(height: 20.h),
-                SocialButton(
-                  provider: SocialProvider.google,
-                  isLoading: _isGoogleLoading,
-                  onPressed: auth.isLoading
-                      ? null
-                      : () => _handleGoogleSignUp(auth),
-                ),
-                if (auth.isAppleSignInAvailable) ...[
-                  SizedBox(height: 14.h),
-                  SocialButton(
-                    provider: SocialProvider.apple,
-                    isLoading: _isAppleLoading,
-                    onPressed: auth.isLoading
-                        ? null
-                        : () => _handleAppleSignUp(auth),
+                    offset: const Offset(0, 6),
                   ),
                 ],
-                SizedBox(height: 32.h),
-                BottomAuthText(
-                  question: '${lang.alreadyHaveAccount} ',
-                  actionLabel: lang.logIn,
-                  onPressed: () {
-                    Navigator.of(
-                      context,
-                    ).pushReplacementNamed(AuthRoutes.login);
-                  },
-                ),
-                SizedBox(height: 24.h),
-              ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AuthTextField(
+                    controller: auth.nameController,
+                    label: lang.fullName,
+                    hint: lang.fullNameHint,
+                    prefixIcon: Icons.person_outline_rounded,
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.next,
+                    validator: (value) => Validators.fullName(value, lang),
+                  ),
+
+                  SizedBox(height: 18.h),
+
+                  AuthTextField(
+                    controller: auth.emailController,
+                    label: lang.email,
+                    hint: lang.emailHint,
+                    prefixIcon: Icons.email_outlined,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) => Validators.email(value, lang),
+                  ),
+
+                  SizedBox(height: 18.h),
+
+                  PasswordTextField(
+                    controller: auth.passwordController,
+                    label: lang.password,
+                    hint: lang.createStrongPassword,
+                    obscureText: auth.obscurePassword,
+                    onToggleVisibility: auth.togglePassword,
+                    validator: (value) => Validators.password(value, lang),
+                  ),
+
+                  SizedBox(height: 18.h),
+
+                  PasswordTextField(
+                    controller: auth.confirmPasswordController,
+                    label: lang.confirmPassword,
+                    hint: lang.confirmPasswordHint,
+                    obscureText: auth.obscureConfirmPassword,
+                    onToggleVisibility: auth.toggleConfirmPassword,
+                    textInputAction: TextInputAction.done,
+                    validator: (value) => Validators.confirmPassword(
+                      value,
+                      auth.passwordController.text,
+                      lang,
+                    ),
+                    onFieldSubmitted: (_) => _handleRegister(auth),
+                  ),
+
+                  SizedBox(height: 18.h),
+
+                  TermsCheckbox(
+                    value: auth.agreedToTerms,
+                    onChanged: (_) => auth.toggleAgreedToTerms(),
+                    onTermsTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const TermsOfServiceScreen(),
+                      ),
+                    ),
+                    onPrivacyTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PrivacyPolicyScreen(),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 24.h),
+
+                  LoadingButton(
+                    label: lang.createAccountButton,
+                    isLoading: auth.isLoading,
+                    onPressed: () => _handleRegister(auth),
+                  ),
+                ],
+              ),
             ),
-          ),
+
+            SizedBox(height: 30.h),
+
+            const AuthDivider(),
+
+            SizedBox(height: 20.h),
+            SocialButton(
+              provider: SocialProvider.google,
+              isLoading: _isGoogleLoading,
+              onPressed: auth.isLoading
+                  ? null
+                  : () => _handleGoogleSignUp(auth),
+            ),
+            if (auth.isAppleSignInAvailable) ...[
+              SizedBox(height: 14.h),
+              SocialButton(
+                provider: SocialProvider.apple,
+                isLoading: _isAppleLoading,
+                onPressed: auth.isLoading
+                    ? null
+                    : () => _handleAppleSignUp(auth),
+              ),
+            ],
+            SizedBox(height: 32.h),
+            BottomAuthText(
+              question: '${lang.alreadyHaveAccount} ',
+              actionLabel: lang.logIn,
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed(AuthRoutes.login);
+              },
+            ),
+            SizedBox(height: 24.h),
+          ],
         ),
       ),
     );

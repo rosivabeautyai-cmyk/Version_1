@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rosivia/core/styles/colors.dart';
 
-
 /// A themed password field with a visibility toggle icon.
 class PasswordTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -35,10 +34,7 @@ class PasswordTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+        Text(label, style: Theme.of(context).textTheme.labelLarge),
         SizedBox(height: 8.h),
         TextFormField(
           controller: controller,
@@ -56,7 +52,7 @@ class PasswordTextField extends StatelessWidget {
             hintText: hint,
             prefixIcon: Icon(
               Icons.lock_outline_rounded,
-              size: 20.sp,
+              size: 22,
               color: AppColors.primary,
             ),
             suffixIcon: IconButton(
@@ -65,7 +61,7 @@ class PasswordTextField extends StatelessWidget {
                 obscureText
                     ? Icons.visibility_off_rounded
                     : Icons.visibility_rounded,
-                size: 20.sp,
+                size: 22,
                 color: AppColors.primary,
               ),
             ),

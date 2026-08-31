@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:rosivia/core/functions/navigations.dart';
 import 'package:rosivia/core/network/view_state.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -41,28 +42,30 @@ class _SearchView extends StatelessWidget {
         title: Text(lang.search, style: theme.textTheme.titleMedium),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-          child: Column(
-            children: [
-              TextField(
-                controller: provider.controller,
-                onChanged: provider.onChanged,
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                  hintText: lang.searchHint,
-                  prefixIcon: const Icon(Icons.search_rounded),
-                  suffixIcon: provider.query.isEmpty
-                      ? null
-                      : IconButton(
-                          icon: const Icon(Icons.close_rounded),
-                          onPressed: provider.clear,
-                        ),
+        child: PageContainer(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+            child: Column(
+              children: [
+                TextField(
+                  controller: provider.controller,
+                  onChanged: provider.onChanged,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    hintText: lang.searchHint,
+                    prefixIcon: const Icon(Icons.search_rounded),
+                    suffixIcon: provider.query.isEmpty
+                        ? null
+                        : IconButton(
+                            icon: const Icon(Icons.close_rounded),
+                            onPressed: provider.clear,
+                          ),
+                  ),
                 ),
-              ),
-              SizedBox(height: 16.h),
-              Expanded(child: _buildBody(context, provider, lang)),
-            ],
+                SizedBox(height: 16.h),
+                Expanded(child: _buildBody(context, provider, lang)),
+              ],
+            ),
           ),
         ),
       ),

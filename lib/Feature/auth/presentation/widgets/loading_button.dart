@@ -63,7 +63,7 @@ class LoadingButton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (icon != null) ...[
-                        Icon(icon, size: 20.sp),
+                        Icon(icon, size: 20),
                         SizedBox(width: 8.w),
                       ],
                       Text(label),

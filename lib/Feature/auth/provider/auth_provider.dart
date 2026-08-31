@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/services/notification_service.dart';
 import '../../../core/services/remember_me_service.dart';
 import '../data/models/user_model.dart';
 import '../data/repositories/auth_repository.dart';
@@ -15,7 +16,7 @@ class AuthProvider extends ChangeNotifier {
   final AuthRepository _repository;
 
   AuthProvider({AuthRepository? repository})
-      : _repository = repository ?? AuthRepository() {
+    : _repository = repository ?? AuthRepository() {
     _restoreRememberedEmail();
   }
 
@@ -198,6 +199,12 @@ class AuthProvider extends ChangeNotifier {
   /// Signs the current user out and clears all controllers.
   Future<void> logout() async {
     _setLoading(true);
+    // Best-effort: drop this device's push token from the account
+    // that's signing out, BEFORE the credential is gone.
+    final uid = currentUser?.uid;
+    try {
+      await NotificationService.instance.onLogout(uid);
+    } catch (_) {}
     try {
       await _repository.logout();
       _clearControllers();
@@ -324,6 +331,29 @@ class AuthProvider extends ChangeNotifier {
     final user = currentUser;
     if (user == null) return;
     await _repository.ensureUserDoc(user);
+  }
+
+  /// Records Terms/Privacy consent for the signed-in user and marks
+  /// their registration complete. Used by the consent gate that a
+  /// first-time Google/Apple sign-in is routed to. Returns true on
+  /// success.
+  Future<bool> completeRegistration() async {
+    final uid = currentUser?.uid;
+    if (uid == null) return false;
+    _errorMessage = null;
+    _setLoading(true);
+    try {
+      await _repository.completeRegistration(uid: uid);
+      return true;
+    } on AuthFailure catch (e) {
+      _errorMessage = e.message;
+      return false;
+    } catch (_) {
+      _errorMessage = 'Something went wrong. Please try again.';
+      return false;
+    } finally {
+      _setLoading(false);
+    }
   }
 
   /// Reloads the current user and returns whether the email is verified.

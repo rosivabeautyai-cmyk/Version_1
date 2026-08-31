@@ -6,44 +6,53 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'package:rosivia/Feature/auth/auth_routes.dart';
+import 'package:rosivia/Feature/auth/presentation/auth_gate/auth_gate.dart';
 import 'package:rosivia/Feature/intro/language/language_provider.dart';
 import 'package:rosivia/core/constants/app_fonts.dart';
 import 'package:rosivia/core/providers/theme_provider.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
+import 'package:rosivia/core/services/notification_service.dart';
 import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
-  /// On the **web** at tablet/desktop widths, ROSIVA renders inside a
-  /// centered, phone-width frame. This is the smallest change that makes
-  /// the existing mobile design — and `flutter_screenutil`'s
-  /// width-based scaling — render at its intended size instead of being
-  /// multiplied by a 1400px+ desktop viewport (which is what made icons
-  /// and spacing huge and forms stretch edge-to-edge). Native Android /
-  /// iOS / desktop builds are completely untouched (`kIsWeb` guard).
-  static const double _webFrameWidth = 480;
-
-  static bool _shouldFrame(BuildContext context) {
-    if (!kIsWeb) return false;
+  /// The mobile UI is authored on a 375-wide canvas and scaled by
+  /// `flutter_screenutil`. On a desktop browser that same width-based
+  /// scaling multiplies every `.w/.h/.sp/.r` by a 1400px+ viewport,
+  /// which is what made icons, text and spacing look oversized.
+  ///
+  /// Instead of trapping the app in a fake phone frame, on the **web at
+  /// tablet width and up** we hand `flutter_screenutil` a `designSize`
+  /// equal to the real viewport, so every `.w/.h/.sp/.r` resolves 1:1 to
+  /// the pixel value it was authored with — a compact, professional
+  /// baseline. Real responsiveness (content max-width, grid columns,
+  /// side vs. bottom navigation) is then driven from the true
+  /// `MediaQuery` width by the helpers in `core/responsive`. Native
+  /// Android / iOS and narrow mobile-web are untouched: they keep the
+  /// 375x812 design canvas.
+  static Size _designSize(BuildContext context) {
+    if (!kIsWeb) return const Size(375, 812);
     final size = MediaQuery.maybeOf(context)?.size;
-    return size != null && size.width > 600;
+    if (size == null || size.width <= Breakpoints.tablet) {
+      return const Size(375, 812);
+    }
+    return size;
   }
-
-  static MediaQueryData _framed(MediaQueryData data) =>
-      data.copyWith(size: Size(_webFrameWidth, data.size.height));
 
   @override
   Widget build(BuildContext context) {
-    final frame = _shouldFrame(context);
-
-    final Widget app = ScreenUtilInit(
-      designSize: const Size(375, 812),
+    return ScreenUtilInit(
+      designSize: _designSize(context),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
+
+          // Lets a notification tap route without a BuildContext.
+          navigatorKey: NotificationService.navigatorKey,
 
           // ==============================
           // APP THEME
@@ -66,41 +75,28 @@ class MainApp extends StatelessWidget {
           // ==============================
           initialRoute: AuthRoutes.splash,
           routes: AuthRoutes.routes,
+          // Any unknown deep link (a stale `#/home`, a typo, an old
+          // bookmark) resolves to the auth gate — never a dead end, and
+          // never a bypass of authentication.
+          onUnknownRoute: (settings) => MaterialPageRoute(
+            builder: (_) => const AuthGate(),
+            settings: const RouteSettings(name: AuthRoutes.gate),
+          ),
 
           // ==============================
           // GLOBAL BUILDER
           // ==============================
           builder: (context, child) {
-            final Widget content = SafeArea(
+            return SafeArea(
               top: false,
               bottom:
                   !kIsWeb && defaultTargetPlatform == TargetPlatform.android,
               child: child ?? const SizedBox(),
             );
-            if (!frame) return content;
-            // The screens live below `WidgetsApp`'s own MediaQuery
-            // (derived from the physical view), so the clamp applied
-            // above `ScreenUtilInit` doesn't reach them — re-assert the
-            // framed size here, then physically constrain + centre the
-            // render so nothing stretches across the full window.
-            return ColoredBox(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: Center(
-                child: MediaQuery(
-                  data: _framed(MediaQuery.of(context)),
-                  child: SizedBox(width: _webFrameWidth, child: content),
-                ),
-              ),
-            );
           },
         );
       },
     );
-
-    if (!frame) return app;
-    // Feed the clamped width to `flutter_screenutil`, which initialises
-    // from the MediaQuery that sits *above* MaterialApp.
-    return MediaQuery(data: _framed(MediaQuery.of(context)), child: app);
   }
 }
 
@@ -155,9 +151,7 @@ ThemeData buildAppTheme(Brightness brightness) {
       foregroundColor: textColor,
       elevation: 0,
       centerTitle: true,
-      iconTheme: IconThemeData(
-        color: AppColors.primary,
-      ),
+      iconTheme: IconThemeData(color: AppColors.primary),
     ),
 
     // ==============================
@@ -189,14 +183,8 @@ ThemeData buildAppTheme(Brightness brightness) {
         fontWeight: FontWeight.w600,
         color: textColor,
       ),
-      bodyMedium: TextStyle(
-        fontSize: 14,
-        color: mutedTextColor,
-      ),
-      bodySmall: TextStyle(
-        fontSize: 12,
-        color: mutedTextColor,
-      ),
+      bodyMedium: TextStyle(fontSize: 14, color: mutedTextColor),
+      bodySmall: TextStyle(fontSize: 12, color: mutedTextColor),
     ),
 
     // ==============================
@@ -207,68 +195,46 @@ ThemeData buildAppTheme(Brightness brightness) {
       elevation: 0,
       height: 72.h,
 
-      indicatorColor: AppColors.primary.withValues(
-        alpha: 0.12,
-      ),
+      indicatorColor: AppColors.primary.withValues(alpha: 0.12),
 
-      labelTextStyle: WidgetStateProperty.resolveWith(
-        (states) {
-          final isSelected = states.contains(
-            WidgetState.selected,
-          );
+      labelTextStyle: WidgetStateProperty.resolveWith((states) {
+        final isSelected = states.contains(WidgetState.selected);
 
-          return TextStyle(
-            fontFamily: AppFonts.beVietnamPro,
-            fontSize: 11.sp,
-            fontWeight: isSelected
-                ? FontWeight.w700
-                : FontWeight.w500,
-            color: isSelected
-                ? AppColors.primary
-                : mutedTextColor,
-          );
-        },
-      ),
+        return TextStyle(
+          fontFamily: AppFonts.beVietnamPro,
+          fontSize: 11.sp,
+          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+          color: isSelected ? AppColors.primary : mutedTextColor,
+        );
+      }),
 
-      iconTheme: WidgetStateProperty.resolveWith(
-        (states) {
-          final isSelected = states.contains(
-            WidgetState.selected,
-          );
+      iconTheme: WidgetStateProperty.resolveWith((states) {
+        final isSelected = states.contains(WidgetState.selected);
 
-          return IconThemeData(
-            size: isSelected ? 25.sp : 24.sp,
-            color: isSelected
-                ? AppColors.primary
-                : mutedTextColor,
-          );
-        },
-      ),
+        return IconThemeData(
+          size: isSelected ? 25.sp : 24.sp,
+          color: isSelected ? AppColors.primary : mutedTextColor,
+        );
+      }),
     ),
 
     // ==============================
     // CHECKBOX
     // ==============================
     checkboxTheme: CheckboxThemeData(
-      fillColor: WidgetStateProperty.resolveWith(
-        (states) {
-          return states.contains(WidgetState.selected)
-              ? AppColors.primary
-              : Colors.transparent;
-        },
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
+      fillColor: WidgetStateProperty.resolveWith((states) {
+        return states.contains(WidgetState.selected)
+            ? AppColors.primary
+            : Colors.transparent;
+      }),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
     ),
 
     // ==============================
     // TEXT BUTTON
     // ==============================
     textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: AppColors.primary,
-      ),
+      style: TextButton.styleFrom(foregroundColor: AppColors.primary),
     ),
 
     // ==============================
@@ -277,13 +243,8 @@ ThemeData buildAppTheme(Brightness brightness) {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.primary,
-        side: BorderSide(
-          color: borderColor,
-          width: 1.2,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        side: BorderSide(color: borderColor, width: 1.2),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     ),
 
@@ -294,9 +255,7 @@ ThemeData buildAppTheme(Brightness brightness) {
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     ),
 
@@ -308,52 +267,34 @@ ThemeData buildAppTheme(Brightness brightness) {
 
       fillColor: cardColor,
 
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 14,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
 
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(
-          color: borderColor,
-        ),
+        borderSide: BorderSide(color: borderColor),
       ),
 
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(
-          color: borderColor,
-        ),
+        borderSide: BorderSide(color: borderColor),
       ),
 
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(
-          color: AppColors.primary,
-          width: 1.4,
-        ),
+        borderSide: const BorderSide(color: AppColors.primary, width: 1.4),
       ),
 
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(
-          color: AppColors.errorcolor,
-        ),
+        borderSide: const BorderSide(color: AppColors.errorcolor),
       ),
 
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(
-          color: AppColors.errorcolor,
-          width: 1.4,
-        ),
+        borderSide: const BorderSide(color: AppColors.errorcolor, width: 1.4),
       ),
 
-      hintStyle: TextStyle(
-        color: mutedTextColor,
-        fontSize: 14,
-      ),
+      hintStyle: TextStyle(color: mutedTextColor, fontSize: 14),
     ),
   );
 }

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'package:rosivia/core/functions/navigations.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -28,28 +29,34 @@ class FavoritesScreen extends StatelessWidget {
         // Same horizontal/vertical padding every other product-grid
         // screen (Explore, CategoryProducts, Search) uses, so cards
         // never touch the screen edges and spacing stays consistent
-        // across the app.
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-          child: favorites == null
-              ? AppEmptyView(
-                  icon: Icons.favorite_border_rounded,
-                  title: lang.noFavoritesYetTitle,
-                  description: lang.noFavoritesYetDesc,
-                )
-              : RefreshIndicator(
-                  onRefresh: favorites.refresh,
-                  child: ProductGrid(
-                    state: favorites.state,
-                    emptyIcon: Icons.favorite_border_rounded,
-                    emptyTitle: lang.noFavoritesYetTitle,
-                    emptyDescription: lang.noFavoritesYetDesc,
-                    onRetry: favorites.refresh,
-                    onProductTap: (ProductModel product) {
-                      pushTo(context, ProductDetailsScreen(productId: product.id));
-                    },
+        // across the app. PageContainer centres + caps the width on
+        // desktop web; it is a no-op on mobile.
+        child: PageContainer(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+            child: favorites == null
+                ? AppEmptyView(
+                    icon: Icons.favorite_border_rounded,
+                    title: lang.noFavoritesYetTitle,
+                    description: lang.noFavoritesYetDesc,
+                  )
+                : RefreshIndicator(
+                    onRefresh: favorites.refresh,
+                    child: ProductGrid(
+                      state: favorites.state,
+                      emptyIcon: Icons.favorite_border_rounded,
+                      emptyTitle: lang.noFavoritesYetTitle,
+                      emptyDescription: lang.noFavoritesYetDesc,
+                      onRetry: favorites.refresh,
+                      onProductTap: (ProductModel product) {
+                        pushTo(
+                          context,
+                          ProductDetailsScreen(productId: product.id),
+                        );
+                      },
+                    ),
                   ),
-                ),
+          ),
         ),
       ),
     );

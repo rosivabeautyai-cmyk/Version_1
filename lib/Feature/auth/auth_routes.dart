@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:rosivia/Feature/intro/language/language_view.dart';
+import 'package:rosivia/Feature/intro/onboarding/presentation/page/onboarding_view.dart';
 import 'package:rosivia/Feature/intro/splash/page/splash.dart';
 
-import '../home/presentation/screens/main_screen.dart';
 import 'presentation/auth_gate/auth_gate.dart';
+import 'presentation/complete_registration/complete_registration_screen.dart';
 import 'presentation/forgot_password/forgot_password_screen.dart';
 import 'presentation/legal/privacy_policy_screen.dart';
 import 'presentation/legal/terms_of_service_screen.dart';
@@ -18,35 +20,44 @@ class AuthRoutes {
   AuthRoutes._();
 
   static const String splash = '/splash';
+  static const String language = '/language';
+  static const String onboarding = '/onboarding';
   static const String gate = '/';
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
   static const String verifyEmail = '/verify-email';
+  static const String completeRegistration = '/complete-registration';
   static const String termsOfService = '/terms-of-service';
   static const String privacyPolicy = '/privacy-policy';
 
-  /// Main application screen that contains
-  /// the Bottom Navigation Bar.
+  /// The authenticated shopper shell. Reached ONLY by [AuthGate]
+  /// rendering [MainScreen] directly once auth + registration checks
+  /// pass — it is intentionally NOT a named route, so a bare
+  /// `#/home` URL can't bypass the gate.
   static const String home = '/home';
 
   static Map<String, WidgetBuilder> get routes => {
-        splash: (_) => const SplashScreen(),
+    splash: (_) => const SplashScreen(),
 
-        gate: (_) => const AuthGate(),
+    language: (_) => const LanguageView(),
 
-        login: (_) => const LoginScreen(),
+    onboarding: (_) => const OnboardingView(),
 
-        register: (_) => const RegisterScreen(),
+    gate: (_) => const AuthGate(),
 
-        forgotPassword: (_) => const ForgotPasswordScreen(),
+    login: (_) => const LoginScreen(),
 
-        verifyEmail: (_) => const VerifyEmailScreen(),
+    register: (_) => const RegisterScreen(),
 
-        termsOfService: (_) => const TermsOfServiceScreen(),
+    forgotPassword: (_) => const ForgotPasswordScreen(),
 
-        privacyPolicy: (_) => const PrivacyPolicyScreen(),
+    verifyEmail: (_) => const VerifyEmailScreen(),
 
-        home: (_) => const MainScreen(),
-      };
+    completeRegistration: (_) => const CompleteRegistrationScreen(),
+
+    termsOfService: (_) => const TermsOfServiceScreen(),
+
+    privacyPolicy: (_) => const PrivacyPolicyScreen(),
+  };
 }

@@ -16,6 +16,18 @@ class UserModel {
   final DateTime? lastLogin;
   final bool isEmailVerified;
 
+  /// When the user accepted the Terms of Service + Privacy Policy.
+  /// `null` on legacy accounts created before consent was recorded.
+  final DateTime? termsAcceptedAt;
+
+  /// Tri-state on purpose:
+  ///  * `true`  — registration finished (terms accepted, doc complete).
+  ///  * `false` — a fresh social sign-in that still owes consent; the
+  ///    app must route to the consent gate, NOT Home.
+  ///  * `null`  — legacy account from before this field existed; treated
+  ///    as complete so existing users are never bounced.
+  final bool? registrationCompleted;
+
   /// Admin-set advisory flag. `true` marks the account disabled in the
   /// Admin panel. NOTE: on its own this does NOT block Firebase Auth
   /// sign-in — that still requires a Cloud Function / the console.
@@ -47,9 +59,16 @@ class UserModel {
     this.isEmailVerified = false,
     this.disabled = false,
     this.role = roleUser,
+    this.termsAcceptedAt,
+    this.registrationCompleted,
   });
 
   bool get isAdmin => role == roleAdmin;
+
+  /// The account may enter the app. Only an explicit `false` (a social
+  /// sign-in that hasn't accepted the Terms yet) blocks Home; `null`
+  /// (legacy) and `true` both pass.
+  bool get isRegistrationComplete => registrationCompleted != false;
 
   /// Creates a new [UserModel] for first-time registration, using
   /// server timestamps for the date fields. Always created with the
@@ -60,6 +79,7 @@ class UserModel {
     required String email,
     String? photoUrl,
     bool isEmailVerified = false,
+    bool registrationCompleted = false,
   }) {
     return UserModel(
       uid: uid,
@@ -74,6 +94,7 @@ class UserModel {
       lastLogin: null,
       isEmailVerified: isEmailVerified,
       role: roleUser,
+      registrationCompleted: registrationCompleted,
     );
   }
 
@@ -87,7 +108,8 @@ class UserModel {
       country: map['country'] as String?,
       language: map['language'] as String?,
       skinType: map['skinType'] as String?,
-      favorites: (map['favorites'] as List<dynamic>?)
+      favorites:
+          (map['favorites'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           const [],
@@ -96,6 +118,10 @@ class UserModel {
       isEmailVerified: map['isEmailVerified'] as bool? ?? false,
       disabled: map['disabled'] as bool? ?? false,
       role: map['role'] as String? ?? roleUser,
+      termsAcceptedAt: _toDateTime(map['termsAcceptedAt']),
+      // Absent key stays null (legacy = allowed); only a stored bool
+      // is read through verbatim.
+      registrationCompleted: map['registrationCompleted'] as bool?,
     );
   }
 
@@ -126,6 +152,12 @@ class UserModel {
       'lastLogin': FieldValue.serverTimestamp(),
       'isEmailVerified': isEmailVerified,
       'role': role,
+      // A social sign-in creates its doc with `false` and owes consent;
+      // the email/password path passes `true` (the register form makes
+      // the checkbox mandatory) and stamps the acceptance time.
+      'registrationCompleted': registrationCompleted ?? false,
+      if (registrationCompleted == true)
+        'termsAcceptedAt': FieldValue.serverTimestamp(),
     };
   }
 
@@ -144,6 +176,10 @@ class UserModel {
       'lastLogin': lastLogin != null ? Timestamp.fromDate(lastLogin!) : null,
       'isEmailVerified': isEmailVerified,
       'role': role,
+      'termsAcceptedAt': termsAcceptedAt != null
+          ? Timestamp.fromDate(termsAcceptedAt!)
+          : null,
+      'registrationCompleted': registrationCompleted,
     };
   }
 
@@ -161,6 +197,8 @@ class UserModel {
     bool? isEmailVerified,
     bool? disabled,
     String? role,
+    DateTime? termsAcceptedAt,
+    bool? registrationCompleted,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -176,6 +214,9 @@ class UserModel {
       isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       disabled: disabled ?? this.disabled,
       role: role ?? this.role,
+      termsAcceptedAt: termsAcceptedAt ?? this.termsAcceptedAt,
+      registrationCompleted:
+          registrationCompleted ?? this.registrationCompleted,
     );
   }
 

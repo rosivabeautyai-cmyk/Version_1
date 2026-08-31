@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:rosivia/Feature/favorites/provider/favorites_provider.dart';
 import 'package:rosivia/core/network/view_state.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/core/services/snackbar_service.dart';
 import 'package:rosivia/core/widgets/app_network_image.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
@@ -114,130 +115,164 @@ class _ProductDetailsContent extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final lang = AppLocalizations.of(context)!;
 
+    final imageBlock = Stack(
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: AppNetworkImage(
+            url: product.imageUrl,
+            borderRadius: BorderRadius.circular(24.r),
+          ),
+        ),
+        if (product.isEditorsChoice)
+          Positioned(
+            left: 12.w,
+            top: 12.h,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+              decoration: BoxDecoration(
+                color: colorScheme.primary,
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+              child: Text(
+                lang.editorsChoice,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+
+    final infoChildren = <Widget>[
+      if (product.brand != null)
+        Text(product.brand!, style: theme.textTheme.bodyMedium),
+      SizedBox(height: 4.h),
+      Text(product.name, style: theme.textTheme.headlineSmall),
+      SizedBox(height: 10.h),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ProductPriceText(
+            product: product,
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: colorScheme.primary,
+            ),
+          ),
+          const Spacer(),
+          if (product.rating != null) ...[
+            const Icon(Icons.star_rounded, color: Colors.amber, size: 18),
+            SizedBox(width: 4.w),
+            Text(
+              '${product.rating!.toStringAsFixed(1)}'
+              '${product.reviewCount != null ? ' (${product.reviewCount})' : ''}',
+              style: theme.textTheme.bodyMedium,
+            ),
+          ],
+        ],
+      ),
+      if (product.whyRecommended != null) ...[
+        SizedBox(height: 18.h),
+        _InfoCard(
+          icon: Icons.auto_awesome_rounded,
+          title: lang.whyRosivaRecommends,
+          body: product.whyRecommended!,
+        ),
+      ],
+      if (product.ingredients.isNotEmpty) ...[
+        SizedBox(height: 18.h),
+        _ExpandableSection(
+          title: lang.ingredients,
+          initiallyExpanded: true,
+          child: Wrap(
+            spacing: 8.w,
+            runSpacing: 8.h,
+            children: product.ingredients
+                .map(
+                  (tag) => Chip(
+                    label: Text(tag),
+                    backgroundColor: colorScheme.primary.withValues(
+                      alpha: 0.08,
+                    ),
+                    side: BorderSide.none,
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      ],
+      if (product.benefits != null) ...[
+        SizedBox(height: 10.h),
+        _ExpandableSection(
+          title: lang.benefits,
+          child: Text(product.benefits!, style: theme.textTheme.bodyMedium),
+        ),
+      ],
+      if (product.howToUse != null) ...[
+        SizedBox(height: 10.h),
+        _ExpandableSection(
+          title: lang.howToUse,
+          child: Text(product.howToUse!, style: theme.textTheme.bodyMedium),
+        ),
+      ],
+      SizedBox(height: 20.h),
+      _DisclaimerBanner(text: lang.priceAvailabilityDisclaimer),
+      SizedBox(height: 10.h),
+      _DisclaimerBanner(text: lang.patchTestDisclaimer, isWarning: true),
+      SizedBox(height: 24.h),
+      Builder(
+        builder: (context) {
+          final regional = context.watch<RegionalPrefsProvider?>();
+          // Country-specific affiliate URL when configured, else the
+          // product's default store link. Never fabricated.
+          final buyUrl = product.offerFor(regional?.countryCode).storeUrl;
+          final canBuy = buyUrl != null && buyUrl.isNotEmpty;
+          return SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: canBuy ? () => _openStore(context, buyUrl) : null,
+              icon: const Icon(Icons.open_in_new_rounded),
+              label: Text(lang.openStore),
+            ),
+          );
+        },
+      ),
+      SizedBox(height: 12.h),
+    ];
+
+    // Desktop / wide tablet: image on the left, details on the right —
+    // capped and centred. Mobile keeps the single stacked scroll view.
+    if (context.screenWidth >= 900) {
+      return PageContainer(
+        maxWidth: 1100,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(24.w, 20.h, 24.w, 20.h),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 5, child: imageBlock),
+              SizedBox(width: 32.w),
+              Expanded(
+                flex: 6,
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: infoChildren,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return ListView(
       padding: EdgeInsets.all(20.w),
       children: [
-        Stack(
-          children: [
-            AspectRatio(
-              aspectRatio: 1,
-              child: AppNetworkImage(
-                url: product.imageUrl,
-                borderRadius: BorderRadius.circular(24.r),
-              ),
-            ),
-            if (product.isEditorsChoice)
-              Positioned(
-                left: 12.w,
-                top: 12.h,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-                  decoration: BoxDecoration(
-                    color: colorScheme.primary,
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: Text(
-                    lang.editorsChoice,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
+        imageBlock,
         SizedBox(height: 18.h),
-        if (product.brand != null)
-          Text(product.brand!, style: theme.textTheme.bodyMedium),
-        SizedBox(height: 4.h),
-        Text(product.name, style: theme.textTheme.headlineSmall),
-        SizedBox(height: 10.h),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ProductPriceText(
-              product: product,
-              style: theme.textTheme.titleMedium
-                  ?.copyWith(color: colorScheme.primary),
-            ),
-            const Spacer(),
-            if (product.rating != null) ...[
-              const Icon(Icons.star_rounded, color: Colors.amber, size: 18),
-              SizedBox(width: 4.w),
-              Text(
-                '${product.rating!.toStringAsFixed(1)}'
-                '${product.reviewCount != null ? ' (${product.reviewCount})' : ''}',
-                style: theme.textTheme.bodyMedium,
-              ),
-            ],
-          ],
-        ),
-        if (product.whyRecommended != null) ...[
-          SizedBox(height: 18.h),
-          _InfoCard(
-            icon: Icons.auto_awesome_rounded,
-            title: lang.whyRosivaRecommends,
-            body: product.whyRecommended!,
-          ),
-        ],
-        if (product.ingredients.isNotEmpty) ...[
-          SizedBox(height: 18.h),
-          _ExpandableSection(
-            title: lang.ingredients,
-            initiallyExpanded: true,
-            child: Wrap(
-              spacing: 8.w,
-              runSpacing: 8.h,
-              children: product.ingredients
-                  .map(
-                    (tag) => Chip(
-                      label: Text(tag),
-                      backgroundColor: colorScheme.primary.withValues(alpha: 0.08),
-                      side: BorderSide.none,
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        ],
-        if (product.benefits != null) ...[
-          SizedBox(height: 10.h),
-          _ExpandableSection(
-            title: lang.benefits,
-            child: Text(product.benefits!, style: theme.textTheme.bodyMedium),
-          ),
-        ],
-        if (product.howToUse != null) ...[
-          SizedBox(height: 10.h),
-          _ExpandableSection(
-            title: lang.howToUse,
-            child: Text(product.howToUse!, style: theme.textTheme.bodyMedium),
-          ),
-        ],
-        SizedBox(height: 20.h),
-        _DisclaimerBanner(text: lang.priceAvailabilityDisclaimer),
-        SizedBox(height: 10.h),
-        _DisclaimerBanner(text: lang.patchTestDisclaimer, isWarning: true),
-        SizedBox(height: 24.h),
-        Builder(
-          builder: (context) {
-            final regional = context.watch<RegionalPrefsProvider?>();
-            // Country-specific affiliate URL when configured, else the
-            // product's default store link. Never fabricated.
-            final buyUrl = product.offerFor(regional?.countryCode).storeUrl;
-            final canBuy = buyUrl != null && buyUrl.isNotEmpty;
-            return SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: canBuy ? () => _openStore(context, buyUrl) : null,
-                icon: const Icon(Icons.open_in_new_rounded),
-                label: Text(lang.openStore),
-              ),
-            );
-          },
-        ),
-        SizedBox(height: 12.h),
+        ...infoChildren,
       ],
     );
   }
@@ -249,7 +284,10 @@ class _ProductDetailsContent extends StatelessWidget {
 
     final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!launched && context.mounted) {
-      SnackbarService.error(context, AppLocalizations.of(context)!.somethingWentWrong);
+      SnackbarService.error(
+        context,
+        AppLocalizations.of(context)!.somethingWentWrong,
+      );
     }
   }
 }
@@ -259,7 +297,11 @@ class _InfoCard extends StatelessWidget {
   final String title;
   final String body;
 
-  const _InfoCard({required this.icon, required this.title, required this.body});
+  const _InfoCard({
+    required this.icon,
+    required this.title,
+    required this.body,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +326,9 @@ class _InfoCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: theme.textTheme.titleSmall?.copyWith(color: colorScheme.primary),
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: colorScheme.primary,
+                  ),
                 ),
                 SizedBox(height: 6.h),
                 Text(body, style: theme.textTheme.bodyMedium),
@@ -334,7 +378,9 @@ class _DisclaimerBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = isWarning ? theme.colorScheme.error : theme.colorScheme.primary;
+    final color = isWarning
+        ? theme.colorScheme.error
+        : theme.colorScheme.primary;
 
     return Container(
       padding: EdgeInsets.all(12.w),
@@ -347,7 +393,9 @@ class _DisclaimerBanner extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
-            isWarning ? Icons.warning_amber_rounded : Icons.info_outline_rounded,
+            isWarning
+                ? Icons.warning_amber_rounded
+                : Icons.info_outline_rounded,
             size: 16.sp,
             color: color,
           ),

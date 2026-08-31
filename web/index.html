@@ -31,16 +31,65 @@
 
   <title>ROSIVA</title>
   <link rel="manifest" href="manifest.json">
+
+  <!--
+    Pre-load the Firebase JS SDK statically.
+
+    `firebase_core_web` otherwise injects the Firebase SDK ES-modules at
+    RUNTIME with concurrent dynamic `import()`s. Those imports race on the
+    shared `firebase-app.js` module and can leave `onAuthStateChanged`
+    reading a namespace whose bindings are still in the temporal dead
+    zone — an "Uncaught Error" in `auth_impl.ts` that was crashing
+    `/login` on the deployed web build
+    (flutter/flutterfire#18436).
+
+    When `window.firebase_core` / `firebase_auth` / `firebase_firestore`
+    are already present, `firebase_core_web` skips that fragile path
+    entirely. The version and the module names below MUST match what the
+    resolved `firebase_core_web` expects (see
+    `firebase_sdk_version.dart` -> supportedFirebaseJsSdkVersion, and the
+    `_services` map: core->firebase-app.js, auth->firebase-auth.js,
+    firestore->firebase-firestore-pipelines.js).
+
+    If the CDN is unreachable the preload fails quietly and Flutter falls
+    back to `firebase_core_web`'s own injection — no worse than before.
+  -->
+  <script type="module">
+    const FIREBASE_JS_SDK_VERSION = "12.18.0";
+    const base = `https://www.gstatic.com/firebasejs/${FIREBASE_JS_SDK_VERSION}/`;
+    window._rosivaFirebasePreload = (async () => {
+      try {
+        const [core, authMod, firestoreMod] = await Promise.all([
+          import(base + "firebase-app.js"),
+          import(base + "firebase-auth.js"),
+          import(base + "firebase-firestore-pipelines.js"),
+        ]);
+        window.firebase_core = core;
+        window.firebase_auth = authMod;
+        window.firebase_firestore = firestoreMod;
+      } catch (e) {
+        console.warn(
+          "ROSIVA: Firebase SDK preload failed; falling back to flutterfire runtime injection.",
+          e
+        );
+      }
+    })();
+  </script>
 </head>
 <body>
   <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
-
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
+    Start Flutter only AFTER the Firebase SDK preload above has settled,
+    so `Firebase.initializeApp()` inside the Dart `main()` finds the SDK
+    already on `window` and takes the reliable path.
   -->
-  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    window.addEventListener("load", async function () {
+      try { await window._rosivaFirebasePreload; } catch (_) {}
+      const s = document.createElement("script");
+      s.src = "flutter_bootstrap.js";
+      s.async = true;
+      document.body.appendChild(s);
+    });
+  </script>
 </body>
 </html>

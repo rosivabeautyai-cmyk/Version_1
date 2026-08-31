@@ -51,10 +51,13 @@ class AuthTextField extends StatelessWidget {
           onFieldSubmitted: onFieldSubmitted,
           onChanged: onChanged,
           enabled: enabled,
-          style: TextStyle(fontSize: 15.sp, color: Theme.of(context).colorScheme.onSurface),
+          style: TextStyle(
+            fontSize: 15.sp,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
           decoration: InputDecoration(
             hintText: hint,
-            prefixIcon: Icon(prefixIcon, size: 20.sp, color: AppColors.primary),
+            prefixIcon: Icon(prefixIcon, size: 22, color: AppColors.primary),
           ),
         ),
       ],

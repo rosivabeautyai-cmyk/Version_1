@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:rosivia/Feature/favorites/provider/favorites_provider.dart';
 import 'package:rosivia/core/network/view_state.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -70,31 +71,42 @@ class ProductGrid extends StatelessWidget {
         }
         return false;
       },
-      child: GridView.builder(
-        padding: EdgeInsets.only(bottom: 24.h),
-        physics: const AlwaysScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 16.h,
-          crossAxisSpacing: 16.w,
-          childAspectRatio: 0.62,
-        ),
-        itemCount: items.length + (state.isLoadingMore ? 2 : 0),
-        itemBuilder: (context, index) {
-          if (index >= items.length) {
-            return AppSkeletonBox(height: double.infinity, width: double.infinity);
-          }
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final columns = responsiveGridColumns(constraints.maxWidth);
+          return GridView.builder(
+            padding: EdgeInsets.only(bottom: 24.h),
+            physics: const AlwaysScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columns,
+              mainAxisSpacing: 16.h,
+              crossAxisSpacing: 16.w,
+              // Wider cards (fewer columns / larger screens) need a
+              // slightly taller ratio; on desktop the narrower 4–5 col
+              // cards would otherwise leave dead space under each tile.
+              childAspectRatio: columns >= 4 ? 0.72 : 0.62,
+            ),
+            itemCount: items.length + (state.isLoadingMore ? columns : 0),
+            itemBuilder: (context, index) {
+              if (index >= items.length) {
+                return AppSkeletonBox(
+                  height: double.infinity,
+                  width: double.infinity,
+                );
+              }
 
-          final product = items[index];
+              final product = items[index];
 
-          return ProductCard(
-            product: product,
-            width: double.infinity,
-            isFavorite: favorites?.isFavorite(product.id) ?? false,
-            onTap: () => onProductTap(product),
-            onFavoriteTap: favorites == null
-                ? null
-                : () => favorites.toggle(product.id),
+              return ProductCard(
+                product: product,
+                width: double.infinity,
+                isFavorite: favorites?.isFavorite(product.id) ?? false,
+                onTap: () => onProductTap(product),
+                onFavoriteTap: favorites == null
+                    ? null
+                    : () => favorites.toggle(product.id),
+              );
+            },
           );
         },
       ),

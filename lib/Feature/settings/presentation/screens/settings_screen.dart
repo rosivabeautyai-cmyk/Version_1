@@ -11,6 +11,9 @@ import 'package:rosivia/Feature/intro/language/language_provider.dart';
 import 'package:rosivia/Feature/intro/language/language_tile.dart';
 import 'package:rosivia/core/functions/navigations.dart';
 import 'package:rosivia/core/providers/theme_provider.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
+import 'package:rosivia/core/services/notification_service.dart';
+import 'package:rosivia/core/services/snackbar_service.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../provider/notification_prefs_provider.dart';
@@ -53,200 +56,222 @@ class _SettingsView extends StatelessWidget {
         title: Text(lang.settings, style: theme.textTheme.titleMedium),
       ),
       body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.all(20.w),
-          children: [
-            Text(lang.settings, style: theme.textTheme.headlineSmall),
-            SizedBox(height: 4.h),
-            Text(lang.settingsSubtitle, style: theme.textTheme.bodyMedium),
-            SizedBox(height: 20.h),
+        child: PageContainer(
+          maxWidth: 720,
+          child: ListView(
+            padding: EdgeInsets.all(20.w),
+            children: [
+              Text(lang.settings, style: theme.textTheme.headlineSmall),
+              SizedBox(height: 4.h),
+              Text(lang.settingsSubtitle, style: theme.textTheme.bodyMedium),
+              SizedBox(height: 20.h),
 
-            SettingsSectionLabel(lang.localization),
-            SettingsCard(
-              children: [
-                SettingsTile(
-                  icon: Icons.public_rounded,
-                  title: lang.country,
-                  trailing: Text(
-                    regionalPrefs.countryCode == null
-                        ? lang.autoBasedOnLocation
-                        : regionalPrefs.countryName(
-                            lang, regionalPrefs.countryCode!),
-                    style: theme.textTheme.bodySmall,
+              SettingsSectionLabel(lang.localization),
+              SettingsCard(
+                children: [
+                  SettingsTile(
+                    icon: Icons.public_rounded,
+                    title: lang.country,
+                    trailing: Text(
+                      regionalPrefs.countryCode == null
+                          ? lang.autoBasedOnLocation
+                          : regionalPrefs.countryName(
+                              lang,
+                              regionalPrefs.countryCode!,
+                            ),
+                      style: theme.textTheme.bodySmall,
+                    ),
+                    onTap: () =>
+                        _showCountryPicker(context, regionalPrefs, lang),
                   ),
-                  onTap: () => _showCountryPicker(context, regionalPrefs, lang),
-                ),
-                SettingsTile(
-                  icon: Icons.translate_rounded,
-                  title: lang.language,
-                  trailing: Text(
-                    isArabic ? 'العربية' : 'English',
-                    style: theme.textTheme.bodySmall,
+                  SettingsTile(
+                    icon: Icons.translate_rounded,
+                    title: lang.language,
+                    trailing: Text(
+                      isArabic ? 'العربية' : 'English',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                    onTap: () => _showLanguagePicker(context),
                   ),
-                  onTap: () => _showLanguagePicker(context),
-                ),
-                // Not tappable — currency is derived from the
-                // selected country (see RegionalPrefsProvider), never
-                // picked independently, so there's nothing to open a
-                // picker for here.
-                SettingsTile(
-                  icon: Icons.attach_money_rounded,
-                  title: lang.currency,
-                  trailing: Text(
-                    regionalPrefs.currencyCode ?? lang.autoBasedOnLocation,
-                    style: theme.textTheme.bodySmall,
-                  ),
-                ),
-              ],
-            ),
-
-            SettingsSectionLabel(lang.notifications),
-            SettingsCard(
-              children: [
-                SettingsTile(
-                  icon: Icons.auto_awesome_rounded,
-                  title: lang.aiRecommendations,
-                  subtitle: lang.aiRecommendationsDesc,
-                  trailing: Switch(
-                    value: notifPrefs.aiRecommendations,
-                    onChanged: notifPrefs.setAiRecommendations,
-                  ),
-                ),
-                SettingsTile(
-                  icon: Icons.sell_outlined,
-                  title: lang.priceDrops,
-                  subtitle: lang.priceDropsDesc,
-                  trailing: Switch(
-                    value: notifPrefs.priceDrops,
-                    onChanged: notifPrefs.setPriceDrops,
-                  ),
-                ),
-                SettingsTile(
-                  icon: Icons.explore_outlined,
-                  title: lang.newDiscoveries,
-                  subtitle: lang.newDiscoveriesDesc,
-                  trailing: Switch(
-                    value: notifPrefs.newDiscoveries,
-                    onChanged: notifPrefs.setNewDiscoveries,
-                  ),
-                ),
-              ],
-            ),
-
-            SettingsSectionLabel(lang.transparencyAndLegal),
-            SettingsCard(
-              children: [
-                SettingsTile(
-                  icon: Icons.handshake_outlined,
-                  title: lang.affiliateTransparency,
-                  onTap: () => pushTo(
-                    context,
-                    LegalInfoScreen(
-                      title: lang.affiliateTransparency,
-                      body: lang.affiliateTransparencyDesc,
-                      icon: Icons.handshake_outlined,
+                  // Not tappable — currency is derived from the
+                  // selected country (see RegionalPrefsProvider), never
+                  // picked independently, so there's nothing to open a
+                  // picker for here.
+                  SettingsTile(
+                    icon: Icons.attach_money_rounded,
+                    title: lang.currency,
+                    trailing: Text(
+                      regionalPrefs.currencyCode ?? lang.autoBasedOnLocation,
+                      style: theme.textTheme.bodySmall,
                     ),
                   ),
-                ),
-                SettingsTile(
-                  icon: Icons.health_and_safety_outlined,
-                  title: lang.medicalDisclaimer,
-                  onTap: () => pushTo(
-                    context,
-                    LegalInfoScreen(
-                      title: lang.medicalAdviceDisclaimerTitle,
-                      body: lang.medicalAdviceDisclaimerDesc,
-                      icon: Icons.health_and_safety_outlined,
-                    ),
-                  ),
-                ),
-                SettingsTile(
-                  icon: Icons.verified_user_outlined,
-                  title: lang.aiAccuracyTitle,
-                  onTap: () => pushTo(
-                    context,
-                    LegalInfoScreen(
-                      title: lang.aiAccuracyTitle,
-                      body: lang.aiAccuracyDesc,
-                      icon: Icons.verified_user_outlined,
-                    ),
-                  ),
-                ),
-                SettingsTile(
-                  icon: Icons.description_outlined,
-                  title: lang.termsOfServiceShort,
-                  onTap: () => pushTo(context, const TermsOfServiceScreen()),
-                ),
-                SettingsTile(
-                  icon: Icons.privacy_tip_outlined,
-                  title: lang.privacyPolicy,
-                  onTap: () => pushTo(context, const PrivacyPolicyScreen()),
-                ),
-              ],
-            ),
-
-            SettingsSectionLabel(lang.accountSettings),
-            SettingsCard(
-              children: [
-                SettingsTile(
-                  icon: Icons.person_outline_rounded,
-                  title: lang.editProfile,
-                  onTap: () => pushTo(context, const EditProfileScreen()),
-                ),
-                SettingsTile(
-                  icon: Icons.lock_outline_rounded,
-                  title: lang.security,
-                  onTap: () => pushTo(context, const SecurityScreen()),
-                ),
-              ],
-            ),
-
-            SettingsSectionLabel(lang.support),
-            SettingsCard(
-              children: [
-                SettingsTile(
-                  icon: Icons.help_outline_rounded,
-                  title: lang.helpCenter,
-                  onTap: () => pushTo(context, const HelpCenterScreen()),
-                ),
-                SettingsTile(
-                  icon: Icons.mail_outline_rounded,
-                  title: lang.contactUs,
-                  onTap: () => pushTo(context, const ContactUsScreen()),
-                ),
-              ],
-            ),
-
-            SettingsSectionLabel(lang.preferences),
-            SettingsCard(
-              children: [
-                SettingsTile(
-                  icon: Icons.dark_mode_outlined,
-                  title: lang.darkMode,
-                  trailing: Text(
-                    themeModeLabel(lang, themeProvider.themeMode),
-                    style: theme.textTheme.bodySmall,
-                  ),
-                  onTap: () => showThemeModePicker(context, themeProvider),
-                ),
-                SettingsTile(
-                  icon: Icons.logout_rounded,
-                  title: lang.logOut,
-                  iconColor: theme.colorScheme.error,
-                  onTap: () => _confirmLogout(context, lang),
-                ),
-              ],
-            ),
-
-            SizedBox(height: 12.h),
-            Center(
-              child: Text(
-                lang.appVersion('2.4.0 (102)'),
-                style: theme.textTheme.bodySmall,
+                ],
               ),
-            ),
-            SizedBox(height: 24.h),
-          ],
+
+              SettingsSectionLabel(lang.notifications),
+              SettingsCard(
+                children: [
+                  SettingsTile(
+                    icon: Icons.notifications_active_outlined,
+                    title: lang.pushNotifications,
+                    subtitle: _pushSubtitle(lang, notifPrefs.pushStatus),
+                    trailing: notifPrefs.pushBusy
+                        ? const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Switch(
+                            value: notifPrefs.pushOn,
+                            onChanged: (v) =>
+                                _togglePush(context, notifPrefs, lang, v),
+                          ),
+                  ),
+                  SettingsTile(
+                    icon: Icons.auto_awesome_rounded,
+                    title: lang.aiRecommendations,
+                    subtitle: lang.aiRecommendationsDesc,
+                    trailing: Switch(
+                      value: notifPrefs.aiRecommendations,
+                      onChanged: notifPrefs.setAiRecommendations,
+                    ),
+                  ),
+                  SettingsTile(
+                    icon: Icons.sell_outlined,
+                    title: lang.priceDrops,
+                    subtitle: lang.priceDropsDesc,
+                    trailing: Switch(
+                      value: notifPrefs.priceDrops,
+                      onChanged: notifPrefs.setPriceDrops,
+                    ),
+                  ),
+                  SettingsTile(
+                    icon: Icons.explore_outlined,
+                    title: lang.newDiscoveries,
+                    subtitle: lang.newDiscoveriesDesc,
+                    trailing: Switch(
+                      value: notifPrefs.newDiscoveries,
+                      onChanged: notifPrefs.setNewDiscoveries,
+                    ),
+                  ),
+                ],
+              ),
+
+              SettingsSectionLabel(lang.transparencyAndLegal),
+              SettingsCard(
+                children: [
+                  SettingsTile(
+                    icon: Icons.handshake_outlined,
+                    title: lang.affiliateTransparency,
+                    onTap: () => pushTo(
+                      context,
+                      LegalInfoScreen(
+                        title: lang.affiliateTransparency,
+                        body: lang.affiliateTransparencyDesc,
+                        icon: Icons.handshake_outlined,
+                      ),
+                    ),
+                  ),
+                  SettingsTile(
+                    icon: Icons.health_and_safety_outlined,
+                    title: lang.medicalDisclaimer,
+                    onTap: () => pushTo(
+                      context,
+                      LegalInfoScreen(
+                        title: lang.medicalAdviceDisclaimerTitle,
+                        body: lang.medicalAdviceDisclaimerDesc,
+                        icon: Icons.health_and_safety_outlined,
+                      ),
+                    ),
+                  ),
+                  SettingsTile(
+                    icon: Icons.verified_user_outlined,
+                    title: lang.aiAccuracyTitle,
+                    onTap: () => pushTo(
+                      context,
+                      LegalInfoScreen(
+                        title: lang.aiAccuracyTitle,
+                        body: lang.aiAccuracyDesc,
+                        icon: Icons.verified_user_outlined,
+                      ),
+                    ),
+                  ),
+                  SettingsTile(
+                    icon: Icons.description_outlined,
+                    title: lang.termsOfServiceShort,
+                    onTap: () => pushTo(context, const TermsOfServiceScreen()),
+                  ),
+                  SettingsTile(
+                    icon: Icons.privacy_tip_outlined,
+                    title: lang.privacyPolicy,
+                    onTap: () => pushTo(context, const PrivacyPolicyScreen()),
+                  ),
+                ],
+              ),
+
+              SettingsSectionLabel(lang.accountSettings),
+              SettingsCard(
+                children: [
+                  SettingsTile(
+                    icon: Icons.person_outline_rounded,
+                    title: lang.editProfile,
+                    onTap: () => pushTo(context, const EditProfileScreen()),
+                  ),
+                  SettingsTile(
+                    icon: Icons.lock_outline_rounded,
+                    title: lang.security,
+                    onTap: () => pushTo(context, const SecurityScreen()),
+                  ),
+                ],
+              ),
+
+              SettingsSectionLabel(lang.support),
+              SettingsCard(
+                children: [
+                  SettingsTile(
+                    icon: Icons.help_outline_rounded,
+                    title: lang.helpCenter,
+                    onTap: () => pushTo(context, const HelpCenterScreen()),
+                  ),
+                  SettingsTile(
+                    icon: Icons.mail_outline_rounded,
+                    title: lang.contactUs,
+                    onTap: () => pushTo(context, const ContactUsScreen()),
+                  ),
+                ],
+              ),
+
+              SettingsSectionLabel(lang.preferences),
+              SettingsCard(
+                children: [
+                  SettingsTile(
+                    icon: Icons.dark_mode_outlined,
+                    title: lang.darkMode,
+                    trailing: Text(
+                      themeModeLabel(lang, themeProvider.themeMode),
+                      style: theme.textTheme.bodySmall,
+                    ),
+                    onTap: () => showThemeModePicker(context, themeProvider),
+                  ),
+                  SettingsTile(
+                    icon: Icons.logout_rounded,
+                    title: lang.logOut,
+                    iconColor: theme.colorScheme.error,
+                    onTap: () => _confirmLogout(context, lang),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 12.h),
+              Center(
+                child: Text(
+                  lang.appVersion('2.4.0 (102)'),
+                  style: theme.textTheme.bodySmall,
+                ),
+              ),
+              SizedBox(height: 24.h),
+            ],
+          ),
         ),
       ),
     );
@@ -268,7 +293,10 @@ class _SettingsView extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(lang.language, style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                lang.language,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               SizedBox(height: 18.h),
               LanguageTile(
                 title: 'العربية',
@@ -322,7 +350,6 @@ class _SettingsView extends StatelessWidget {
     );
   }
 
-
   void _showOptionPicker({
     required BuildContext context,
     required String title,
@@ -373,6 +400,76 @@ class _SettingsView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  String _pushSubtitle(AppLocalizations lang, PushStatus status) {
+    switch (status) {
+      case PushStatus.enabled:
+        return lang.pushStatusEnabled;
+      case PushStatus.denied:
+        return lang.pushBlockedTitle;
+      case PushStatus.notConfigured:
+        return lang.pushNotConfigured;
+      case PushStatus.notEnabled:
+      case PushStatus.unknown:
+        return lang.pushNotificationsDesc;
+    }
+  }
+
+  Future<void> _togglePush(
+    BuildContext context,
+    NotificationPrefsProvider prefs,
+    AppLocalizations lang,
+    bool value,
+  ) async {
+    final uid = context.read<AuthProvider>().currentUser?.uid;
+    if (uid == null) return;
+
+    if (!value) {
+      await prefs.disablePush(uid);
+      if (context.mounted) {
+        SnackbarService.info(context, lang.pushDisabledToast);
+      }
+      return;
+    }
+
+    if (prefs.pushStatus == PushStatus.denied) {
+      if (context.mounted) _showPushBlockedDialog(context, lang);
+      return;
+    }
+
+    final res = await prefs.enablePush(uid);
+    if (!context.mounted) return;
+    switch (res) {
+      case PushEnableResult.enabled:
+        SnackbarService.success(context, lang.pushEnabledToast);
+        break;
+      case PushEnableResult.denied:
+        _showPushBlockedDialog(context, lang);
+        break;
+      case PushEnableResult.notConfigured:
+        SnackbarService.info(context, lang.pushNotConfigured);
+        break;
+      case PushEnableResult.error:
+        SnackbarService.error(context, lang.pushEnableFailed);
+        break;
+    }
+  }
+
+  void _showPushBlockedDialog(BuildContext context, AppLocalizations lang) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(lang.pushBlockedTitle),
+        content: Text(lang.pushBlockedBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(lang.done),
+          ),
+        ],
+      ),
     );
   }
 

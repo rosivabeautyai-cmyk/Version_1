@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rosivia/Feature/intro/language/language_view.dart';
+import 'package:rosivia/Feature/auth/auth_routes.dart';
 import 'package:rosivia/core/constants/app_images.dart';
+import 'package:rosivia/core/services/intro_prefs.dart';
 import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/core/styles/text_style.dart';
 
@@ -17,27 +18,29 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _startApp();
+    // Fade the logo in on the first frame — a visual flourish only; it
+    // never gates navigation.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) setState(() => _opacity = 1.0);
+    });
+    _route();
   }
 
-  Future<void> _startApp() async {
-    // بدء الأنيميشن
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    if (mounted) {
-      setState(() {
-        _opacity = 1.0;
-      });
-    }
-
-    // انتظار 3 ثواني
-    await Future.delayed(const Duration(seconds: 3));
-
+  /// The launch decision is data-driven — NOT a fixed timer:
+  ///  * first run (intro not seen yet) -> the language / onboarding flow;
+  ///  * every later run -> [AuthGate], which resolves Firebase Auth +
+  ///    the Firestore user doc (verified? registration complete? admin?)
+  ///    and routes to Login / VerifyEmail / CompleteRegistration / Home.
+  ///
+  /// The only wait here is the SharedPreferences read (a few ms).
+  Future<void> _route() async {
+    final seenIntro = await IntroPrefs.hasSeenIntro();
     if (!mounted) return;
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const LanguageView()),
+    // Named replacements so the browser URL always reflects the real
+    // screen (never stays stuck on `#/splash`).
+    Navigator.of(context).pushReplacementNamed(
+      seenIntro ? AuthRoutes.gate : AuthRoutes.language,
     );
   }
 

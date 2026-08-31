@@ -1518,4 +1518,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminAiLimitsBackendNote => 'Limits are enforced by the backend, not the app.';
+
+  @override
+  String get pushNotifications => 'Push notifications';
+
+  @override
+  String get pushNotificationsDesc => 'Alerts about new arrivals, price drops and beauty tips on this device.';
+
+  @override
+  String get pushStatusEnabled => 'Enabled on this device';
+
+  @override
+  String get pushStatusOff => 'Off';
+
+  @override
+  String get pushBlockedTitle => 'Notifications are blocked';
+
+  @override
+  String get pushBlockedBody => 'You\'ve blocked notifications for ROSIVA. Turn them back on in your browser or device settings, then try again.';
+
+  @override
+  String get pushEnableFailed => 'Couldn\'t enable notifications right now. Please try again.';
+
+  @override
+  String get pushEnabledToast => 'Notifications enabled';
+
+  @override
+  String get pushDisabledToast => 'Notifications turned off';
+
+  @override
+  String get pushNotConfigured => 'Push notifications aren\'t available in this build.';
 }

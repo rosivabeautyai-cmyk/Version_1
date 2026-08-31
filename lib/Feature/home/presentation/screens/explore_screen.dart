@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'package:rosivia/core/functions/navigations.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../../products/data/models/category_model.dart';
@@ -61,20 +62,24 @@ class _ExploreScreenState extends State<ExploreScreen> {
           title: Text(lang.explore, style: theme.textTheme.titleMedium),
         ),
         body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-            child: Column(
-              children: [
-                _SearchBar(onTap: () => pushTo(context, const SearchScreen())),
-                SizedBox(height: 18.h),
-                if (!_loadingCategories && _categories.isNotEmpty) ...[
-                  _CategoryRow(categories: _categories),
-                  SizedBox(height: 16.h),
+          child: PageContainer(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+              child: Column(
+                children: [
+                  _SearchBar(
+                    onTap: () => pushTo(context, const SearchScreen()),
+                  ),
+                  SizedBox(height: 18.h),
+                  if (!_loadingCategories && _categories.isNotEmpty) ...[
+                    _CategoryRow(categories: _categories),
+                    SizedBox(height: 16.h),
+                  ],
+                  _SortRow(),
+                  SizedBox(height: 8.h),
+                  Expanded(child: _ProductsSection()),
                 ],
-                _SortRow(),
-                SizedBox(height: 8.h),
-                Expanded(child: _ProductsSection()),
-              ],
+              ),
             ),
           ),
         ),
@@ -101,9 +106,7 @@ class _SearchBar extends StatelessWidget {
         decoration: BoxDecoration(
           color: theme.cardColor,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(
-            color: colorScheme.outline.withValues(alpha: 0.2),
-          ),
+          border: Border.all(color: colorScheme.outline.withValues(alpha: 0.2)),
         ),
         child: Row(
           children: [
@@ -181,8 +184,14 @@ class _SortRow extends StatelessWidget {
           onSelected: provider.updateSort,
           itemBuilder: (context) => [
             PopupMenuItem(value: 'popular', child: Text(lang.trendingNow)),
-            PopupMenuItem(value: 'price_asc', child: Text('${lang.sortBy}: \$ ↑')),
-            PopupMenuItem(value: 'price_desc', child: Text('${lang.sortBy}: \$ ↓')),
+            PopupMenuItem(
+              value: 'price_asc',
+              child: Text('${lang.sortBy}: \$ ↑'),
+            ),
+            PopupMenuItem(
+              value: 'price_desc',
+              child: Text('${lang.sortBy}: \$ ↓'),
+            ),
             PopupMenuItem(value: 'newest', child: Text(lang.newDiscoveries)),
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'package:rosivia/Feature/settings/provider/regional_prefs_provider.dart';
+import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -117,15 +118,18 @@ class _AiViewState extends State<_AiView> {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: provider.isConfigured
-                  ? _buildChat(context, provider, lang)
-                  : _buildNotConfigured(context, lang),
-            ),
-            _buildInputBar(context, provider, lang),
-          ],
+        child: PageContainer(
+          maxWidth: 900,
+          child: Column(
+            children: [
+              Expanded(
+                child: provider.isConfigured
+                    ? _buildChat(context, provider, lang)
+                    : _buildNotConfigured(context, lang),
+              ),
+              _buildInputBar(context, provider, lang),
+            ],
+          ),
         ),
       ),
     );
@@ -176,11 +180,11 @@ class _AiViewState extends State<_AiView> {
   }
 
   ChatMessageModel _welcomeMessage(AppLocalizations lang) => ChatMessageModel(
-        id: 'welcome',
-        role: ChatRole.assistant,
-        text: lang.aiWelcomeMessage,
-        timestamp: DateTime.now(),
-      );
+    id: 'welcome',
+    role: ChatRole.assistant,
+    text: lang.aiWelcomeMessage,
+    timestamp: DateTime.now(),
+  );
 
   Widget _buildNotConfigured(BuildContext context, AppLocalizations lang) {
     return AppEmptyView(
@@ -276,7 +280,10 @@ class _SuggestedQuestions extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.r),
                 onTap: () => onTap(suggestion),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 14.w,
+                    vertical: 10.h,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.r),
                     border: Border.all(

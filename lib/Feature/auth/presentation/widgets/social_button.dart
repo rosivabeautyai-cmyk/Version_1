@@ -51,11 +51,18 @@ class SocialButton extends StatelessWidget {
                 children: [
                   _ProviderIcon(isGoogle: isGoogle, isDark: isDark),
                   SizedBox(width: 10.w),
-                  Text(
-                    isGoogle ? lang.continueWithGoogle : lang.continueWithApple,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
+                  Flexible(
+                    child: Text(
+                      isGoogle
+                          ? lang.continueWithGoogle
+                          : lang.continueWithApple,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -74,17 +81,15 @@ class _ProviderIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isGoogle) {
-      return Container(
-        height: 30.sp,
-        width: 30.sp,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(shape: BoxShape.circle),
-        child: Image.asset(AppImages.google),
+      return SizedBox(
+        height: 22,
+        width: 22,
+        child: Image.asset(AppImages.google, fit: BoxFit.contain),
       );
     }
     return Icon(
       Icons.apple_rounded,
-      size: 50.sp,
+      size: 24,
       color: isDark ? Colors.white : AppColors.blackcolor,
     );
   }

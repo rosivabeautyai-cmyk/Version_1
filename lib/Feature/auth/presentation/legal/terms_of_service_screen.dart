@@ -22,30 +22,12 @@ class TermsOfServiceScreen extends StatelessWidget {
       title: lang.termsOfService,
       lastUpdated: lang.legalLastUpdatedPlaceholder,
       sections: [
-        LegalSection(
-          title: lang.tosSection1Title,
-          body: lang.tosSection1Body,
-        ),
-        LegalSection(
-          title: lang.tosSection2Title,
-          body: lang.tosSection2Body,
-        ),
-        LegalSection(
-          title: lang.tosSection3Title,
-          body: lang.tosSection3Body,
-        ),
-        LegalSection(
-          title: lang.tosSection4Title,
-          body: lang.tosSection4Body,
-        ),
-        LegalSection(
-          title: lang.tosSection5Title,
-          body: lang.tosSection5Body,
-        ),
-        LegalSection(
-          title: lang.tosSection6Title,
-          body: lang.tosSection6Body,
-        ),
+        LegalSection(title: lang.tosSection1Title, body: lang.tosSection1Body),
+        LegalSection(title: lang.tosSection2Title, body: lang.tosSection2Body),
+        LegalSection(title: lang.tosSection3Title, body: lang.tosSection3Body),
+        LegalSection(title: lang.tosSection4Title, body: lang.tosSection4Body),
+        LegalSection(title: lang.tosSection5Title, body: lang.tosSection5Body),
+        LegalSection(title: lang.tosSection6Title, body: lang.tosSection6Body),
       ],
     );
   }

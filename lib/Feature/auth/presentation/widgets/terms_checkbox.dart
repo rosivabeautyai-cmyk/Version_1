@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
-
 /// A checkbox row for agreeing to the Terms of Service and Privacy
 /// Policy, with tappable inline links.
 class TermsCheckbox extends StatelessWidget {
@@ -30,10 +29,7 @@ class TermsCheckbox extends StatelessWidget {
         SizedBox(
           height: 22.h,
           width: 22.h,
-          child: Checkbox(
-            value: value,
-            onChanged: onChanged,
-          ),
+          child: Checkbox(value: value, onChanged: onChanged),
         ),
         SizedBox(width: 8.w),
         Expanded(
@@ -55,10 +51,7 @@ class TermsCheckbox extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(
-                lang.termsAnd,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
+              Text(lang.termsAnd, style: Theme.of(context).textTheme.bodySmall),
               GestureDetector(
                 onTap: onPrivacyTap,
                 child: Text(
