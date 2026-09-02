@@ -246,9 +246,10 @@ export async function aiChatHandler(req, res) {
     return res.status(400).json({ error: parsed.error, reply: null, products: [] });
   }
 
-  // Advisory per-request user id (same source the throttle uses) — used
-  // only for the optional per-user daily limit and usage counters.
-  const userId = String(req.headers['x-user-id'] || '').slice(0, 128) || undefined;
+  // Identity is the VERIFIED Firebase uid (the verifyUser middleware ran
+  // before this handler). Used for the per-user daily limit and usage
+  // counters — no longer the spoofable `x-user-id` header.
+  const userId = req.authUser?.uid || undefined;
 
   const { status, body } = await runChat({
     request: { ...parsed.value, userId },

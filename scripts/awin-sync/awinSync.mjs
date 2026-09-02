@@ -226,13 +226,19 @@ async function runAwinSync(feedUrl) {
         record.alternate_image_three,
       ].filter((v) => !!v && v.trim().length > 0);
 
+      const currencyRaw = record.currency?.trim();
+
       const doc = {
         id: productId,
         name: record.product_name?.trim() || "",
         brand: record.brand_name?.trim() || null,
         description: record.description?.trim() || null,
         price: parsePrice(record),
-        currency: record.currency?.trim() || "USD",
+        currency: currencyRaw || "USD",
+        // True only when the feed row carried no currency and we had to
+        // default. The app suppresses the approximate converted price
+        // for these — a wrong number is worse than none.
+        currencyAssumed: !currencyRaw,
         imageUrl,
         images,
         rating: parseOptionalNumber(record.average_rating),

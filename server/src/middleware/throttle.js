@@ -17,6 +17,9 @@ const lastRequestAt = new Map(); // key -> ms
 const recentResponses = new Map(); // key -> { message, body, at }
 
 function clientKey(req) {
+  // Prefer the verified Firebase uid (set by verifyUser). It cannot be
+  // spoofed via a forged X-Forwarded-For, unlike the IP fallback.
+  if (req.authUser?.uid) return `uid:${req.authUser.uid}`;
   const ip =
     (req.headers['x-forwarded-for'] || '').split(',')[0].trim() ||
     req.socket?.remoteAddress ||

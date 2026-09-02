@@ -6,17 +6,30 @@ import { getDb } from './firebase.js';
  * on/off and maintenance switches — the Flutter client only mirrors
  * them for a friendlier banner.
  *
- * Fail-open by design: if the document is missing, malformed, or
- * Firestore is unreachable, the assistant stays ENABLED. A config
- * read must never be able to take the assistant down.
+ * Fail-open for enabled / maintenanceMode: if the document is missing,
+ * malformed, or Firestore is unreachable, the assistant stays ENABLED.
+ * A config read must never be able to take the assistant down.
+ *
+ * Fail-CLOSED for dailyGlobalLimit: it is NEVER null. If the document
+ * doesn't set it (or can't be read) a finite fallback still applies, so
+ * a single abusive account can't run the Groq / Firestore bill up
+ * without bound. Admins raise the ceiling from the dashboard (or via
+ * AI_DAILY_GLOBAL_LIMIT_FALLBACK) as real traffic grows; there is
+ * deliberately no "unlimited" setting.
  */
+
+/** Fail-closed backstop for the daily global request cap. */
+export const GLOBAL_LIMIT_FALLBACK = (() => {
+  const n = Number(process.env.AI_DAILY_GLOBAL_LIMIT_FALLBACK);
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 5000;
+})();
 
 const DEFAULT = Object.freeze({
   enabled: true,
   maintenanceMode: false,
   maintenanceMessageEn: '',
   maintenanceMessageAr: '',
-  dailyGlobalLimit: null,
+  dailyGlobalLimit: GLOBAL_LIMIT_FALLBACK,
   dailyUserLimit: null,
 });
 
@@ -54,7 +67,8 @@ export async function getAiConfig({ _db, force = false } = {}) {
         typeof d.maintenanceMessageEn === 'string' ? d.maintenanceMessageEn : '',
       maintenanceMessageAr:
         typeof d.maintenanceMessageAr === 'string' ? d.maintenanceMessageAr : '',
-      dailyGlobalLimit: posIntOrNull(d.dailyGlobalLimit),
+      // Explicit doc value wins; absence / invalid -> fail-closed fallback.
+      dailyGlobalLimit: posIntOrNull(d.dailyGlobalLimit) ?? GLOBAL_LIMIT_FALLBACK,
       dailyUserLimit: posIntOrNull(d.dailyUserLimit),
     };
     cache = { value, at: now };

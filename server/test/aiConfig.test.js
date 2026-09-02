@@ -1,7 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { getAiConfig, __resetAiConfigCache } from '../src/appConfig.js';
+import {
+  getAiConfig,
+  __resetAiConfigCache,
+  GLOBAL_LIMIT_FALLBACK,
+} from '../src/appConfig.js';
 import { runChat } from '../src/routes/aiChat.js';
 
 /** Fake Firestore returning one app_config/ai doc. */
@@ -25,18 +29,37 @@ function fakeDb(docData, { throwOnGet = false } = {}) {
   };
 }
 
-test('getAiConfig: missing doc -> fail-open default (enabled, no maintenance)', async () => {
+test('getAiConfig: missing doc -> fail-open enabled, fail-CLOSED global limit', async () => {
   __resetAiConfigCache();
   const cfg = await getAiConfig({ _db: fakeDb(null), force: true });
   assert.equal(cfg.enabled, true);
   assert.equal(cfg.maintenanceMode, false);
+  // A4: no document must NOT mean "unlimited".
+  assert.equal(cfg.dailyGlobalLimit, GLOBAL_LIMIT_FALLBACK);
+  assert.ok(cfg.dailyGlobalLimit > 0);
 });
 
-test('getAiConfig: Firestore throws -> fail-open default', async () => {
+test('getAiConfig: Firestore throws -> enabled, but global limit still enforced', async () => {
   __resetAiConfigCache();
   const cfg = await getAiConfig({ _db: fakeDb({}, { throwOnGet: true }), force: true });
   assert.equal(cfg.enabled, true);
   assert.equal(cfg.maintenanceMode, false);
+  assert.equal(cfg.dailyGlobalLimit, GLOBAL_LIMIT_FALLBACK);
+});
+
+test('getAiConfig: explicit dailyGlobalLimit in the doc wins', async () => {
+  __resetAiConfigCache();
+  const cfg = await getAiConfig({ _db: fakeDb({ dailyGlobalLimit: 250 }), force: true });
+  assert.equal(cfg.dailyGlobalLimit, 250);
+});
+
+test('getAiConfig: invalid dailyGlobalLimit (0 / negative) -> fail-closed fallback', async () => {
+  __resetAiConfigCache();
+  let cfg = await getAiConfig({ _db: fakeDb({ dailyGlobalLimit: 0 }), force: true });
+  assert.equal(cfg.dailyGlobalLimit, GLOBAL_LIMIT_FALLBACK);
+  __resetAiConfigCache();
+  cfg = await getAiConfig({ _db: fakeDb({ dailyGlobalLimit: -10 }), force: true });
+  assert.equal(cfg.dailyGlobalLimit, GLOBAL_LIMIT_FALLBACK);
 });
 
 test('getAiConfig: reads real fields from the doc', async () => {

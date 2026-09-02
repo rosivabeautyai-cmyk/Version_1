@@ -3,6 +3,7 @@ import cors from 'cors';
 
 import { config, validateConfig } from './config.js';
 import { throttle } from './middleware/throttle.js';
+import { verifyUser } from './middleware/verifyUser.js';
 import { aiChatHandler } from './routes/aiChat.js';
 import { affiliateAdminRouter } from './routes/affiliateAdmin.js';
 
@@ -37,7 +38,10 @@ app.get('/health', (_req, res) => {
   });
 });
 
-app.post('/api/ai/chat', throttle, aiChatHandler);
+// A verified Firebase ID token is REQUIRED (verifyUser) before the
+// per-client throttle and the handler run — the endpoint costs Groq +
+// Firestore usage per call and must not be reachable anonymously.
+app.post('/api/ai/chat', verifyUser, throttle, aiChatHandler);
 
 // Admin-only affiliate store operations (Test Connection / Sync Now).
 // Every route inside is gated by verifyAdmin (Firebase ID token +

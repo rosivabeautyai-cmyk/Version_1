@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:rosivia/core/network/app_config.dart';
@@ -49,13 +50,32 @@ class AiBackendService {
   final String _baseUrl;
   final http.Client _client;
 
+  /// Supplies the current user's Firebase ID token for the
+  /// `Authorization: Bearer` header the backend now requires. Injectable
+  /// for tests; defaults to the signed-in Firebase user.
+  final Future<String?> Function() _idToken;
+
   /// How many prior turns to send as context. Bounded to keep requests
   /// small against the free-tier budget.
   static const int maxHistoryTurns = 16;
 
-  AiBackendService({String? baseUrl, http.Client? client})
-      : _baseUrl = _trimTrailingSlash(baseUrl ?? AppConfig.aiBackendBaseUrl),
-        _client = client ?? http.Client();
+  AiBackendService({
+    String? baseUrl,
+    http.Client? client,
+    Future<String?> Function()? idTokenProvider,
+  })  : _baseUrl = _trimTrailingSlash(baseUrl ?? AppConfig.aiBackendBaseUrl),
+        _client = client ?? http.Client(),
+        _idToken = idTokenProvider ?? _defaultIdToken;
+
+  /// Never throws — a token failure just means the request goes out
+  /// without one and the backend answers 401 (mapped to "unavailable").
+  static Future<String?> _defaultIdToken() async {
+    try {
+      return await FirebaseAuth.instance.currentUser?.getIdToken();
+    } catch (_) {
+      return null;
+    }
+  }
 
   static String _trimTrailingSlash(String url) =>
       url.endsWith('/') ? url.substring(0, url.length - 1) : url;
@@ -104,17 +124,17 @@ class AiBackendService {
 
     final uri = Uri.parse('$_baseUrl/api/ai/chat');
 
+    final token = await _idToken();
+    final headers = <String, String>{
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
+    };
+
     http.Response res;
     try {
       res = await _client
-          .post(
-            uri,
-            headers: const {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-            body: jsonEncode(payload),
-          )
+          .post(uri, headers: headers, body: jsonEncode(payload))
           .timeout(AppConfig.aiRequestTimeout);
     } on TimeoutException {
       throw const AiUnavailableException('timeout');
@@ -130,6 +150,12 @@ class AiBackendService {
 
     if (res.statusCode == 429) {
       throw AiRateLimitException(_parseRetryAfter(res.headers['retry-after']));
+    }
+
+    // Session expired / not signed in — the backend now requires a valid
+    // Firebase ID token. Surfaced to the user as a generic "unavailable".
+    if (res.statusCode == 401 || res.statusCode == 403) {
+      throw const AiUnavailableException('unauthorized');
     }
 
     Map<String, dynamic>? decoded;
