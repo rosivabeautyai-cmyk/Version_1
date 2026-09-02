@@ -75,6 +75,14 @@
         { "fieldPath": "rosivaCategory", "order": "ASCENDING" },
         { "fieldPath": "syncedAt", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "affiliateSyncLogs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "storeId", "order": "ASCENDING" },
+        { "fieldPath": "startedAt", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

@@ -1,0 +1,20 @@
+{
+  "name": "rosiva-affiliate-sync",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Generalized, multi-store affiliate product sync for ROSIVA. Runs from GitHub Actions (see .github/workflows/affiliate-sync.yml), not Firebase Cloud Functions, so it works on the Firebase Spark (free) plan. Supersedes scripts/awin-sync/ (kept until this is verified).",
+  "scripts": {
+    "sync": "node runScheduledSync.mjs",
+    "sync:store": "node runScheduledSync.mjs --store",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "csv-parse": "^5.6.0",
+    "fast-xml-parser": "^4.5.0",
+    "firebase-admin": "^13.6.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

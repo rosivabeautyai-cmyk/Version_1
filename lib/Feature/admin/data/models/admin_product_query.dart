@@ -27,6 +27,11 @@ class AdminProductQuery {
   final bool missingCountryOffer;
   final bool inStockOnly;
   final bool outOfStockOnly;
+
+  /// Restrict to products imported from a specific affiliate store
+  /// (`products.storeId`). Null = any source.
+  final String? storeId;
+
   final int limit;
 
   const AdminProductQuery({
@@ -43,6 +48,7 @@ class AdminProductQuery {
     this.missingCountryOffer = false,
     this.inStockOnly = false,
     this.outOfStockOnly = false,
+    this.storeId,
     this.limit = 40,
   });
 
@@ -58,7 +64,8 @@ class AdminProductQuery {
       hasCountryOffer ||
       missingCountryOffer ||
       inStockOnly ||
-      outOfStockOnly;
+      outOfStockOnly ||
+      storeId != null;
 
   AdminProductQuery copyWith({
     String? category,
@@ -77,6 +84,8 @@ class AdminProductQuery {
     bool? missingCountryOffer,
     bool? inStockOnly,
     bool? outOfStockOnly,
+    String? storeId,
+    bool clearStoreId = false,
   }) {
     return AdminProductQuery(
       category: clearCategory ? null : (category ?? this.category),
@@ -92,6 +101,7 @@ class AdminProductQuery {
       missingCountryOffer: missingCountryOffer ?? this.missingCountryOffer,
       inStockOnly: inStockOnly ?? this.inStockOnly,
       outOfStockOnly: outOfStockOnly ?? this.outOfStockOnly,
+      storeId: clearStoreId ? null : (storeId ?? this.storeId),
       limit: limit,
     );
   }
@@ -103,6 +113,7 @@ class AdminProductQuery {
     if (onlyInactive && p.active) return false;
     if (onlyIneligible && p.isRosivaProduct) return false;
     if (missingPrice && p.price != null) return false;
+    if (storeId != null && p.storeId != storeId) return false;
 
     final anyOfferUrl =
         p.countryOffers.values.any((o) => (o.affiliateUrl ?? '').isNotEmpty);

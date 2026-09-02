@@ -1,9 +1,11 @@
 import { cert, getApps, initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 
 import { config } from './config.js';
 
 let db = null;
+let authAdmin = null;
 
 /**
  * Lazily initialize the Firebase Admin SDK from
@@ -30,7 +32,25 @@ export function getDb() {
   return db;
 }
 
+/**
+ * Firebase Admin Auth — used to verify the caller's Firebase ID token
+ * on the admin affiliate endpoints. Shares the same lazily-initialized
+ * app as getDb().
+ * @return {import('firebase-admin/auth').Auth}
+ */
+export function getAuthAdmin() {
+  if (authAdmin) return authAdmin;
+  getDb(); // ensures initializeApp() has run
+  authAdmin = getAuth();
+  return authAdmin;
+}
+
 /** Test seam: inject a fake Firestore. */
 export function __setDbForTests(fake) {
   db = fake;
+}
+
+/** Test seam: inject a fake Auth. */
+export function __setAuthForTests(fake) {
+  authAdmin = fake;
 }

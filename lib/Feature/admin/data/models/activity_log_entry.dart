@@ -57,4 +57,10 @@ abstract class ActivityAction {
   static const countryConfigChanged = 'country_config_changed';
   static const currencyConfigChanged = 'currency_config_changed';
   static const aiConfigChanged = 'ai_config_changed';
+  static const affiliateStoreCreated = 'affiliate_store_created';
+  static const affiliateStoreUpdated = 'affiliate_store_updated';
+  static const affiliateStoreDeleted = 'affiliate_store_deleted';
+  static const affiliateStoreEnabled = 'affiliate_store_enabled';
+  static const affiliateStoreDisabled = 'affiliate_store_disabled';
+  static const affiliateSyncTriggered = 'affiliate_sync_triggered';
 }

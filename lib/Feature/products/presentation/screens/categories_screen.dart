@@ -3,6 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:rosivia/core/functions/navigations.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
+import 'package:rosivia/core/styles/app_dimens.dart';
+import 'package:rosivia/core/widgets/motion/app_shimmer.dart';
+import 'package:rosivia/core/widgets/motion/pressable_scale.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -77,7 +80,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   Widget _buildBody(BuildContext context, AppLocalizations lang) {
     if (_loading) {
-      return AppLoadingView(message: lang.loadingProducts);
+      return const _CategoriesSkeleton();
     }
 
     if (_hasError) {
@@ -144,61 +147,98 @@ class _CategoryTile extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final lang = AppLocalizations.of(context)!;
 
-    return Material(
-      color: theme.cardColor,
-      borderRadius: BorderRadius.circular(20.r),
-      child: InkWell(
+    return PressableScale(
+      child: Material(
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(20.r),
-        onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(
-              color: colorScheme.outline.withValues(alpha: 0.15),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20.r),
+          onTap: onTap,
+          child: Container(
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
+              border: Border.all(
+                color: colorScheme.outline.withValues(alpha: 0.15),
+              ),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 44.w,
-                height: 44.w,
-                decoration: BoxDecoration(
-                  color: colorScheme.primary.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(14.r),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 44.w,
+                  height: 44.w,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary.withValues(alpha: 0.10),
+                    borderRadius: BorderRadius.circular(14.r),
+                  ),
+                  child: Icon(
+                    Icons.spa_rounded,
+                    color: colorScheme.primary,
+                    size: 22.sp,
+                  ),
                 ),
-                child: Icon(
-                  Icons.spa_rounded,
-                  color: colorScheme.primary,
-                  size: 22.sp,
-                ),
-              ),
-              SizedBox(height: 12.h),
-              Text(
-                category.name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleSmall,
-              ),
-              if (category.productCount != null) ...[
-                SizedBox(height: 4.h),
+                SizedBox(height: 12.h),
                 Text(
-                  // This is a product count, not a category count — reuse
-                  // the existing bare "Products"/"المنتجات" nav label
-                  // rather than the "Categories" string (a real bug: the
-                  // tile was showing e.g. "378 Categories" instead of
-                  // "378 Products").
-                  '${category.productCount} ${lang.navProducts}',
+                  category.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodySmall,
+                  style: theme.textTheme.titleSmall,
                 ),
+                if (category.productCount != null) ...[
+                  SizedBox(height: 4.h),
+                  Text(
+                    // This is a product count, not a category count — reuse
+                    // the existing bare "Products"/"المنتجات" nav label
+                    // rather than the "Categories" string (a real bug: the
+                    // tile was showing e.g. "378 Categories" instead of
+                    // "378 Products").
+                    '${category.productCount} ${lang.navProducts}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Shimmering placeholder grid for the categories screen's first load.
+class _CategoriesSkeleton extends StatelessWidget {
+  const _CategoriesSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppShimmer(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final columns = responsiveGridColumns(
+            constraints.maxWidth,
+            min: 2,
+            max: 4,
+          );
+          return GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columns,
+              mainAxisSpacing: 16.h,
+              crossAxisSpacing: 16.w,
+              childAspectRatio: 1.1,
+            ),
+            itemCount: columns * 3,
+            itemBuilder: (context, index) => AppSkeletonBox(
+              height: double.infinity,
+              width: double.infinity,
+              borderRadius: BorderRadius.circular(AppRadius.xl),
+            ),
+          );
+        },
       ),
     );
   }

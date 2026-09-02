@@ -126,9 +126,21 @@ class _AppNetworkImageState extends State<AppNetworkImage> {
                 ? null
                 : (targetHeight * dpr).round(),
             webHtmlElementStrategy: WebHtmlElementStrategy.fallback,
-            loadingBuilder: (context, child, progress) {
-              if (progress == null) return child;
-              return _loading(theme);
+            // Cross-fade from the loading tile to the photo once its
+            // first frame decodes, instead of a hard pop. Cached frames
+            // appear instantly.
+            frameBuilder: (context, child, frame, wasSyncLoaded) {
+              if (wasSyncLoaded) return child;
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 260),
+                switchInCurve: Curves.easeOut,
+                child: frame == null
+                    ? _loading(theme)
+                    : KeyedSubtree(
+                        key: const ValueKey('img'),
+                        child: child,
+                      ),
+              );
             },
             errorBuilder: (context, error, stackTrace) {
               // First failure on the web + we were using the proxy →

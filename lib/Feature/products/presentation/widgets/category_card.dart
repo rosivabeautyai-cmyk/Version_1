@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:rosivia/core/styles/app_dimens.dart';
 import 'package:rosivia/core/widgets/app_network_image.dart';
+import 'package:rosivia/core/widgets/motion/pressable_scale.dart';
 
 import '../../data/models/category_model.dart';
 
@@ -15,7 +17,7 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return GestureDetector(
+    return PressableScale(
       onTap: onTap,
       child: Container(
         width: 90.w,
@@ -75,10 +77,11 @@ class CategoryChip extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return GestureDetector(
+    return PressableScale(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
+        duration: AppDuration.button,
+        curve: AppCurve.standard,
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 9.h),
         margin: EdgeInsetsDirectional.only(end: 8.w),
         decoration: BoxDecoration(
@@ -90,12 +93,18 @@ class CategoryChip extends StatelessWidget {
                 : colorScheme.outline.withValues(alpha: 0.3),
           ),
         ),
-        child: Text(
-          label,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: selected ? Colors.white : theme.textTheme.bodyMedium?.color,
-            fontWeight: FontWeight.w600,
-          ),
+        child: AnimatedDefaultTextStyle(
+          duration: AppDuration.button,
+          curve: AppCurve.standard,
+          style:
+              theme.textTheme.bodySmall?.copyWith(
+                color: selected
+                    ? Colors.white
+                    : theme.textTheme.bodyMedium?.color,
+                fontWeight: FontWeight.w600,
+              ) ??
+              const TextStyle(),
+          child: Text(label),
         ),
       ),
     );

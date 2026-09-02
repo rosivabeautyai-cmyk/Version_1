@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'motion/app_shimmer.dart';
+
 /// Centered spinner used for full-screen or full-section loading.
 class AppLoadingView extends StatelessWidget {
   final String? message;
@@ -150,8 +152,11 @@ class AppErrorView extends StatelessWidget {
   }
 }
 
-/// Shimmer-free skeleton placeholder box, used to build lightweight
-/// loading skeletons for cards/grids without extra dependencies.
+/// Skeleton placeholder box for building lightweight loading states.
+///
+/// Renders a flat tint on its own; when wrapped in an [AppShimmer] it
+/// picks up a soft moving highlight driven by that ancestor's single
+/// shared controller (so a whole grid shimmers from one ticker).
 class AppSkeletonBox extends StatelessWidget {
   final double? width;
   final double height;
@@ -167,14 +172,37 @@ class AppSkeletonBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final base = theme.colorScheme.onSurface.withValues(alpha: 0.08);
+    final highlight = theme.colorScheme.onSurface.withValues(alpha: 0.02);
+    final radius = borderRadius ?? BorderRadius.circular(12.r);
 
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: theme.colorScheme.outline.withValues(alpha: 0.12),
-        borderRadius: borderRadius ?? BorderRadius.circular(12.r),
-      ),
+    final shimmer = AppShimmer.of(context);
+    if (shimmer == null) {
+      return Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(color: base, borderRadius: radius),
+      );
+    }
+
+    return AnimatedBuilder(
+      animation: shimmer,
+      builder: (context, _) {
+        final dx = (shimmer.value * 2) - 1; // -1 .. 1 sweep
+        return Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            gradient: LinearGradient(
+              begin: Alignment(-1 - dx, 0),
+              end: Alignment(1 - dx, 0),
+              colors: [base, highlight, base],
+              stops: const [0.35, 0.5, 0.65],
+            ),
+          ),
+        );
+      },
     );
   }
 }

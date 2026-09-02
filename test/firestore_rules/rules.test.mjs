@@ -66,6 +66,16 @@ test.before(async () => {
     await setDoc(doc(db, 'countries/EG'), { countryCode: 'EG', enabled: true });
     await setDoc(doc(db, 'currencies/EGP'), { code: 'EGP', symbol: 'x' });
     await setDoc(doc(db, 'app_config/ai'), { enabled: true, maintenanceMode: false });
+    await setDoc(doc(db, 'affiliateStores/shein'), {
+      name: 'SHEIN', slug: 'shein', integrationType: 'product_feed',
+      status: 'active', syncStatus: 'idle', productCount: 0,
+    });
+    await setDoc(doc(db, 'affiliateStores/hidden'), {
+      name: 'Hidden', slug: 'hidden', status: 'inactive',
+    });
+    await setDoc(doc(db, 'affiliateSyncLogs/l1'), { storeId: 'shein', status: 'success' });
+    await setDoc(doc(db, 'affiliateSyncJobs/j1'), { storeId: 'shein', status: 'queued' });
+    await setDoc(doc(db, 'categoryMappings/m1'), { sourceCategory: 'Foundation', rosivaCategory: 'makeup' });
   });
 });
 
@@ -287,6 +297,64 @@ test('activity_log: normal user cannot create or read', async () => {
 test('activity_log: nobody can update or delete an entry', async () => {
   await assertFails(updateDoc(doc(asAdmin(), 'activity_log/e1'), { summary: 'edited' }));
   await assertFails(deleteDoc(doc(asAdmin(), 'activity_log/e1')));
+});
+
+// ---------------------------------------------------------------------
+// Affiliate Stores + multi-store sync
+// ---------------------------------------------------------------------
+
+test('affiliateStores: signed-in user can GET an active store, not an inactive one', async () => {
+  const db = asUser();
+  await assertSucceeds(getDoc(doc(db, 'affiliateStores/shein')));
+  await assertFails(getDoc(doc(db, 'affiliateStores/hidden')));
+});
+
+test('affiliateStores: normal user cannot write; admin can', async () => {
+  await assertFails(
+    setDoc(doc(asUser(), 'affiliateStores/evil'), { name: 'E', status: 'active' }),
+  );
+  await assertFails(
+    updateDoc(doc(asUser(), 'affiliateStores/shein'), { defaultCommissionRate: 99 }),
+  );
+  await assertSucceeds(
+    setDoc(doc(asAdmin(), 'affiliateStores/newstore'), {
+      name: 'New', slug: 'newstore', integrationType: 'manual', status: 'active',
+    }),
+  );
+  await assertSucceeds(
+    updateDoc(doc(asAdmin(), 'affiliateStores/shein'), { defaultCommissionRate: 10 }),
+  );
+  await assertSucceeds(deleteDoc(doc(asAdmin(), 'affiliateStores/newstore')));
+  await assertFails(deleteDoc(doc(asUser(), 'affiliateStores/shein')));
+});
+
+test('affiliateStores: anonymous cannot read', async () => {
+  await assertFails(getDoc(doc(asAnon(), 'affiliateStores/shein')));
+});
+
+test('affiliateSyncLogs: admin reads, nobody writes from a client', async () => {
+  await assertSucceeds(getDoc(doc(asAdmin(), 'affiliateSyncLogs/l1')));
+  await assertFails(getDoc(doc(asUser(), 'affiliateSyncLogs/l1')));
+  await assertFails(setDoc(doc(asAdmin(), 'affiliateSyncLogs/l2'), { storeId: 'shein' }));
+  await assertFails(setDoc(doc(asUser(), 'affiliateSyncLogs/l3'), { storeId: 'shein' }));
+});
+
+test('affiliateSyncJobs: admin reads, nobody writes from a client', async () => {
+  await assertSucceeds(getDoc(doc(asAdmin(), 'affiliateSyncJobs/j1')));
+  await assertFails(getDoc(doc(asUser(), 'affiliateSyncJobs/j1')));
+  await assertFails(setDoc(doc(asAdmin(), 'affiliateSyncJobs/j2'), { storeId: 'shein', status: 'queued' }));
+  await assertFails(setDoc(doc(asUser(), 'affiliateSyncJobs/j3'), { storeId: 'shein', status: 'queued' }));
+});
+
+test('categoryMappings: signed-in reads, only admin writes', async () => {
+  await assertSucceeds(getDoc(doc(asUser(), 'categoryMappings/m1')));
+  await assertFails(getDoc(doc(asAnon(), 'categoryMappings/m1')));
+  await assertFails(
+    setDoc(doc(asUser(), 'categoryMappings/m2'), { sourceCategory: 'x', rosivaCategory: 'makeup' }),
+  );
+  await assertSucceeds(
+    setDoc(doc(asAdmin(), 'categoryMappings/m2'), { sourceCategory: 'x', rosivaCategory: 'makeup' }),
+  );
 });
 
 test('ai_usage / ai_user_usage: admin reads, nobody writes', async () => {

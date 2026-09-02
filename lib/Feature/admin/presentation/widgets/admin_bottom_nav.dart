@@ -56,9 +56,9 @@ class AdminBottomNav extends StatelessWidget {
                 label: lang.navProducts,
               ),
               NavigationDestination(
-                icon: const Icon(Icons.hub_outlined),
-                selectedIcon: const Icon(Icons.hub_rounded),
-                label: lang.navPlatforms,
+                icon: const Icon(Icons.storefront_outlined),
+                selectedIcon: const Icon(Icons.storefront_rounded),
+                label: lang.navAffiliateStores,
               ),
             ],
           ),

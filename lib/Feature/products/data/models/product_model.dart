@@ -38,6 +38,45 @@ class ProductModel {
   final String? storeUrl;
   final bool inStock;
 
+  /// Affiliate / deep link used for "Shop Now" when present, in
+  /// preference to [storeUrl]. Populated by the affiliate sync engine
+  /// (scripts/affiliate-sync). Falls back to [storeUrl] for legacy /
+  /// Awin-legacy / admin-authored products that only have that field.
+  final String? affiliateUrl;
+
+  /// The plain merchant product page (no affiliate tracking). Optional;
+  /// informational only — "Shop Now" never uses this in preference to
+  /// [affiliateUrl].
+  final String? productUrl;
+
+  /// Which pipeline created this document: `awin` (legacy sync),
+  /// `affiliate` (generalized sync engine), `admin` (hand-authored), or
+  /// null for pre-existing documents.
+  final String? source;
+
+  /// The affiliate store this product was imported from
+  /// (`affiliateStores/{storeId}`). Null for legacy / admin products.
+  final String? storeId;
+
+  /// Stable id of the product in the external source. Combined with
+  /// [storeId] this is the document id for imported products.
+  final String? externalProductId;
+
+  /// Availability as reported by the source: `in_stock` / `out_of_stock`
+  /// / `unknown`. Separate from [inStock] (a bool) for round-tripping.
+  final String? availability;
+
+  /// Configured commission metadata for this product (NOT confirmed
+  /// earnings). Resolved by priority product > store > system in the
+  /// backend normalizer.
+  final num? commissionRate;
+
+  /// Hard visibility flag owned by the sync engine: a product the
+  /// trusted source stopped returning is set to `false` (never hard
+  /// deleted). Defaults to `true` so every pre-existing document — which
+  /// has no `isActive` key — behaves exactly as before.
+  final bool isActive;
+
   /// Whether this product is in ROSIVA's beauty scope at all — set by
   /// the Awin sync/backfill classifier, completely separate from
   /// [category]. Defaults to `true` for any document that predates
@@ -90,6 +129,14 @@ class ProductModel {
     this.isEditorsChoice = false,
     this.storeUrl,
     this.inStock = true,
+    this.affiliateUrl,
+    this.productUrl,
+    this.source,
+    this.storeId,
+    this.externalProductId,
+    this.availability,
+    this.commissionRate,
+    this.isActive = true,
     this.isRosivaProduct = true,
     this.gender = 'unknown',
     this.productType,
@@ -134,9 +181,21 @@ class ProductModel {
       whyRecommended:
           json['whyRecommended'] as String? ?? json['aiReason'] as String?,
       isEditorsChoice: json['isEditorsChoice'] as bool? ?? false,
-      storeUrl:
-          ov<String>('storeUrl') ?? json['storeUrl'] as String? ?? json['url'] as String?,
+      storeUrl: ov<String>('storeUrl') ??
+          json['storeUrl'] as String? ??
+          json['affiliateUrl'] as String? ??
+          json['url'] as String?,
       inStock: json['inStock'] as bool? ?? true,
+      affiliateUrl: ov<String>('affiliateUrl') ??
+          json['affiliateUrl'] as String? ??
+          json['storeUrl'] as String?,
+      productUrl: json['productUrl'] as String? ?? json['url'] as String?,
+      source: json['source'] as String?,
+      storeId: json['storeId'] as String?,
+      externalProductId: json['externalProductId'] as String?,
+      availability: json['availability'] as String?,
+      commissionRate: json['commissionRate'] as num?,
+      isActive: json['isActive'] as bool? ?? true,
       isRosivaProduct: json['isRosivaProduct'] as bool? ?? true,
       gender: json['gender'] as String? ?? 'unknown',
       productType: json['productType'] as String?,
@@ -176,7 +235,10 @@ class ProductModel {
       return (
         price: price,
         currency: currency,
-        storeUrl: storeUrl,
+        // "Shop Now" prefers the affiliate/deep link over the plain
+        // merchant URL. `storeUrl` already holds the affiliate link for
+        // imported products; `affiliateUrl` is the explicit field.
+        storeUrl: affiliateUrl ?? storeUrl,
         inStock: inStock
       );
     }

@@ -9,8 +9,8 @@ import '../../provider/admin_config_provider.dart';
 import '../widgets/admin_bottom_nav.dart';
 import '../widgets/admin_header.dart';
 import '../widgets/admin_sidebar.dart';
+import 'admin_affiliate_stores_screen.dart';
 import 'admin_dashboard_screen.dart';
-import 'admin_platforms_screen.dart';
 import 'admin_products_screen.dart';
 import 'admin_settings_screen.dart';
 import 'admin_users_screen.dart';
@@ -70,7 +70,7 @@ class _AdminShellState extends State<AdminShell> {
       ),
       const AdminUsersScreen(),
       const AdminProductsScreen(),
-      const AdminPlatformsScreen(),
+      const AdminAffiliateStoresScreen(),
     ];
 
     final sidebar = AdminSidebar(

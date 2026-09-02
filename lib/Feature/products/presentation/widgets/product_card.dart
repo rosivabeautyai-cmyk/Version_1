@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:rosivia/core/widgets/app_network_image.dart';
+import 'package:rosivia/core/widgets/motion/favorite_button.dart';
+import 'package:rosivia/core/widgets/motion/pressable_scale.dart';
 
 import '../../data/models/product_model.dart';
 import 'product_price_text.dart';
@@ -27,7 +29,7 @@ class ProductCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return GestureDetector(
+    return PressableScale(
       onTap: onTap,
       child: SizedBox(
         width: width.w,
@@ -47,21 +49,17 @@ class ProductCard extends StatelessWidget {
                   Positioned(
                     top: 6.h,
                     right: 6.w,
-                    child: GestureDetector(
-                      onTap: onFavoriteTap,
-                      child: Container(
-                        padding: EdgeInsets.all(6.w),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          isFavorite
-                              ? Icons.favorite_rounded
-                              : Icons.favorite_border_rounded,
-                          size: 16.sp,
-                          color: colorScheme.primary,
-                        ),
+                    child: Container(
+                      padding: EdgeInsets.all(6.w),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: FavoriteButton(
+                        isFavorite: isFavorite,
+                        onTap: onFavoriteTap,
+                        size: 16.sp,
+                        color: colorScheme.primary,
                       ),
                     ),
                   ),
@@ -112,8 +110,9 @@ class ProductCard extends StatelessWidget {
                 ProductPriceText(
                   product: product,
                   showApprox: false,
-                  style: theme.textTheme.titleSmall
-                      ?.copyWith(color: colorScheme.primary),
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    color: colorScheme.primary,
+                  ),
                 ),
                 const Spacer(),
                 if (product.rating != null) ...[

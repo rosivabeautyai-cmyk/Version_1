@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:rosivia/Feature/favorites/provider/favorites_provider.dart';
 import 'package:rosivia/core/network/view_state.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
+import 'package:rosivia/core/styles/app_dimens.dart';
+import 'package:rosivia/core/widgets/motion/app_shimmer.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -40,7 +42,7 @@ class ProductGrid extends StatelessWidget {
     final favorites = context.watch<FavoritesProvider?>();
 
     if (state.isLoading) {
-      return AppLoadingView(message: lang.loadingProducts);
+      return const _ProductGridSkeleton();
     }
 
     if (state.isError && (state.data == null || state.data!.isEmpty)) {
@@ -71,7 +73,11 @@ class ProductGrid extends StatelessWidget {
         }
         return false;
       },
-      child: LayoutBuilder(
+      // The single shimmer controller only runs while more pages are
+      // streaming in.
+      child: AppShimmer(
+        enabled: state.isLoadingMore,
+        child: LayoutBuilder(
         builder: (context, constraints) {
           final columns = responsiveGridColumns(constraints.maxWidth);
           return GridView.builder(
@@ -107,6 +113,55 @@ class ProductGrid extends StatelessWidget {
                     : () => favorites.toggle(product.id),
               );
             },
+          );
+        },
+      ),
+      ),
+    );
+  }
+}
+
+/// A shimmering skeleton that mirrors the real grid's layout while the
+/// first page loads — a premium replacement for a bare spinner.
+class _ProductGridSkeleton extends StatelessWidget {
+  const _ProductGridSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppShimmer(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final columns = responsiveGridColumns(constraints.maxWidth);
+          return GridView.builder(
+            padding: EdgeInsets.only(bottom: 24.h),
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columns,
+              mainAxisSpacing: 16.h,
+              crossAxisSpacing: 16.w,
+              childAspectRatio: columns >= 4 ? 0.72 : 0.62,
+            ),
+            itemCount: columns * 3,
+            itemBuilder: (context, index) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Expanded(
+                  child: AppSkeletonBox(height: double.infinity),
+                ),
+                SizedBox(height: 8.h),
+                AppSkeletonBox(
+                  height: 12.h,
+                  width: double.infinity,
+                  borderRadius: BorderRadius.circular(AppRadius.xs),
+                ),
+                SizedBox(height: 6.h),
+                AppSkeletonBox(
+                  height: 12.h,
+                  width: 80.w,
+                  borderRadius: BorderRadius.circular(AppRadius.xs),
+                ),
+              ],
+            ),
           );
         },
       ),

@@ -1,0 +1,105 @@
+/**
+ * ProductConnector — the generic interface every integration implements.
+ *
+ * A connector is created for ONE affiliate store. It receives:
+ *   - `store`   the affiliateStores document (public config, no secrets)
+ *   - `secrets` a plain object of private values resolved from the
+ *               backend environment (never from Firestore, never sent
+ *               to Flutter). May be empty.
+ *
+ * Adding a new company normally means:  Admin adds a store -> configures
+ * a supported source -> Test Connection -> Save -> Sync.
+ * Adding a brand-new KIND of source means: add one subclass here.
+ * Nothing in the Flutter product UI changes either way.
+ */
+
+import { SyncError, ERROR_CODES } from "../lib/errors.mjs";
+
+export class ProductConnector {
+  /**
+   * @param {object} store    affiliateStores document (must include `id`)
+   * @param {object} [secrets] private values from the backend environment
+   */
+  constructor(store, secrets = {}) {
+    if (!store || !store.id) {
+      throw new SyncError(ERROR_CODES.INVALID_CONFIG, "connector requires a store with an id");
+    }
+    this.store = store;
+    this.secrets = secrets || {};
+  }
+
+  /** Stable identifier for logs. */
+  get name() {
+    return `${this.constructor.name}(${this.store.slug || this.store.id})`;
+  }
+
+  /**
+   * Validate config + reach the source + fetch a tiny sample.
+   * MUST NOT throw for an expected failure — return the shape below.
+   *
+   * @return {Promise<{
+   *   ok: boolean,
+   *   productsDetected: number|null,   // total available, if the source reports it
+   *   sample: object[],                // up to 5 RAW products
+   *   error?: { code: string, userMessage: string, technical: string }
+   * }>}
+   */
+  async testConnection() {
+    throw new SyncError(ERROR_CODES.NOT_SUPPORTED, "testConnection not implemented");
+  }
+
+  /**
+   * Async iterator over pages of RAW products. Each yielded value is an
+   * array. Implementations MUST paginate / stream — never buffer a
+   * whole catalog in memory.
+   *
+   * @param {object} [opts]
+   * @param {number} [opts.pageSize]
+   * @yields {object[]}  a page of raw products
+   */
+  // eslint-disable-next-line require-yield
+  async *fetchProductPages() {
+    throw new SyncError(ERROR_CODES.NOT_SUPPORTED, "fetchProductPages not implemented");
+  }
+
+  /**
+   * Convenience: flatten fetchProductPages() into one async iterator of
+   * individual raw products. Prefer the paged form in the sync engine.
+   */
+  async *fetchProducts(opts) {
+    for await (const page of this.fetchProductPages(opts)) {
+      for (const item of page) yield item;
+    }
+  }
+
+  /**
+   * Map ONE source record to a loose "raw product" object the
+   * Normalizer understands. Keep this dumb: field plumbing only, no
+   * category/commission decisions (the Normalizer owns those).
+   *
+   * @param {object} record
+   * @return {object} raw product
+   */
+  normalizeProduct(record) {
+    return record;
+  }
+
+  /**
+   * Return the click-out URL for a product. Prefer an official deep
+   * link the source/network already provides. NEVER fabricate tracking
+   * parameters.
+   *
+   * @param {object} record
+   * @return {string|null}
+   */
+  buildAffiliateUrl(record) {
+    return (
+      record.affiliateUrl ||
+      record.deepLink ||
+      record.aw_deep_link ||
+      record.productUrl ||
+      record.url ||
+      null
+    );
+  }
+}

@@ -5,7 +5,9 @@ import 'package:rosivia/l10n/app_localizations.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 
 import '../../data/models/admin_product_query.dart';
+import '../../data/models/affiliate_store_model.dart';
 import '../../data/repositories/admin_repository.dart';
+import '../../data/repositories/affiliate_store_repository.dart';
 import '../../provider/admin_config_provider.dart';
 import '../../../products/data/models/product_model.dart';
 import '../widgets/admin_product_tile.dart';
@@ -305,6 +307,8 @@ class _AdminProductsScreenState extends State<AdminProductsScreen> {
                         .toList(),
                     onChanged: _updateQuery,
                   ),
+                  const SizedBox(height: 6),
+                  _StoreFilter(query: _query, onChanged: _updateQuery),
                   const SizedBox(height: 16),
                   _buildBody(theme, lang),
                 ],
@@ -442,6 +446,55 @@ class _CountryCurrencyFilters extends StatelessWidget {
                 : query.copyWith(currency: v)),
           ),
       ],
+    );
+  }
+}
+
+/// "Filter by Store" dropdown — lists the configured affiliate stores
+/// plus an "Admin / legacy" pseudo option. Purely additive to the
+/// existing admin product filters.
+class _StoreFilter extends StatefulWidget {
+  final AdminProductQuery query;
+  final ValueChanged<AdminProductQuery> onChanged;
+
+  const _StoreFilter({required this.query, required this.onChanged});
+
+  @override
+  State<_StoreFilter> createState() => _StoreFilterState();
+}
+
+class _StoreFilterState extends State<_StoreFilter> {
+  final _repo = AffiliateStoreRepository();
+
+  @override
+  void dispose() {
+    _repo.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lang = AppLocalizations.of(context)!;
+    return StreamBuilder<List<AffiliateStore>>(
+      stream: _repo.watchStores(),
+      builder: (context, snapshot) {
+        final stores = snapshot.data ?? const <AffiliateStore>[];
+        if (stores.isEmpty) return const SizedBox.shrink();
+        return DropdownButton<String?>(
+          value: widget.query.storeId,
+          hint: Text(lang.affiliateStores),
+          items: [
+            DropdownMenuItem(value: null, child: Text(lang.allProducts)),
+            for (final s in stores)
+              DropdownMenuItem(value: s.id, child: Text(s.name)),
+          ],
+          onChanged: (v) => widget.onChanged(
+            v == null
+                ? widget.query.copyWith(clearStoreId: true)
+                : widget.query.copyWith(storeId: v),
+          ),
+        );
+      },
     );
   }
 }

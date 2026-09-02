@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/core/styles/text_style.dart';
+import 'package:rosivia/core/widgets/motion/pressable_scale.dart';
 
 class MainButton extends StatelessWidget {
   const MainButton({
@@ -18,19 +19,23 @@ class MainButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor:
-            backgroundColor ?? AppColors.primary, // 👈 default color
-        minimumSize: const Size(double.infinity, 70),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-      onPressed: onpress,
-      child: Text(
-        text,
-        style: TextStyles.body.copyWith(
-          color: color ?? Colors.white, // 👈 default text color
-          fontWeight: FontWeight.bold,
+    return PressableScale(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor:
+              backgroundColor ?? AppColors.primary, // 👈 default color
+          minimumSize: const Size(double.infinity, 70),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        onPressed: onpress,
+        child: Text(
+          text,
+          style: TextStyles.body.copyWith(
+            color: color ?? Colors.white, // 👈 default text color
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

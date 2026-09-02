@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/functions/navigations.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
+import 'package:rosivia/core/widgets/motion/app_fade_in.dart';
+import 'package:rosivia/core/widgets/motion/pressable_scale.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../../auth/data/models/user_model.dart';
@@ -60,77 +62,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
               physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.all(20.w),
               children: [
-                _ProfileHeader(userData: _userData, loading: _loading),
-                SizedBox(height: 24.h),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: _QuickAction(
-                        icon: Icons.face_retouching_natural_rounded,
-                        title: lang.myBeautyProfile,
-                        subtitle: lang.myBeautyProfileDesc,
-                        onTap: () =>
-                            pushTo(context, const MyBeautyProfileScreen()),
-                      ),
-                    ),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: _QuickAction(
-                        icon: Icons.favorite_rounded,
-                        title: lang.favoritesAndCollections,
-                        subtitle: lang.favoritesSubtitle,
-                        onTap: widget.onShowFavorites,
-                      ),
-                    ),
-                  ],
+                AppFadeIn(
+                  child: _ProfileHeader(userData: _userData, loading: _loading),
                 ),
                 SizedBox(height: 24.h),
 
-                _ProfileSectionLabel(lang.accountSettings),
-                _ProfileCard(
-                  children: [
-                    _ProfileTile(
-                      icon: Icons.person_outline_rounded,
-                      title: lang.editProfile,
-                      onTap: () => pushTo(context, const EditProfileScreen()),
-                    ),
-                    _ProfileTile(
-                      icon: Icons.lock_outline_rounded,
-                      title: lang.security,
-                      onTap: () => pushTo(context, const SecurityScreen()),
-                    ),
-                  ],
+                AppFadeIn(
+                  delay: const Duration(milliseconds: 60),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _QuickAction(
+                          icon: Icons.face_retouching_natural_rounded,
+                          title: lang.myBeautyProfile,
+                          subtitle: lang.myBeautyProfileDesc,
+                          onTap: () =>
+                              pushTo(context, const MyBeautyProfileScreen()),
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: _QuickAction(
+                          icon: Icons.favorite_rounded,
+                          title: lang.favoritesAndCollections,
+                          subtitle: lang.favoritesSubtitle,
+                          onTap: widget.onShowFavorites,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: 24.h),
 
-                _ProfileSectionLabel(lang.preferences),
-                _ProfileCard(
-                  children: [
-                    _ProfileTile(
-                      icon: Icons.settings_outlined,
-                      title: lang.settings,
-                      subtitle: lang.settingsSubtitle,
-                      onTap: () => pushTo(context, const SettingsScreen()),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-
-                _ProfileSectionLabel(lang.support),
-                _ProfileCard(
-                  children: [
-                    _ProfileTile(
-                      icon: Icons.help_outline_rounded,
-                      title: lang.helpCenter,
-                      onTap: () => pushTo(context, const HelpCenterScreen()),
-                    ),
-                    _ProfileTile(
-                      icon: Icons.mail_outline_rounded,
-                      title: lang.contactUs,
-                      onTap: () => pushTo(context, const ContactUsScreen()),
-                    ),
-                  ],
+                AppFadeIn(
+                  delay: const Duration(milliseconds: 120),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _ProfileSectionLabel(lang.accountSettings),
+                      _ProfileCard(
+                        children: [
+                          _ProfileTile(
+                            icon: Icons.person_outline_rounded,
+                            title: lang.editProfile,
+                            onTap: () =>
+                                pushTo(context, const EditProfileScreen()),
+                          ),
+                          _ProfileTile(
+                            icon: Icons.lock_outline_rounded,
+                            title: lang.security,
+                            onTap: () =>
+                                pushTo(context, const SecurityScreen()),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20.h),
+                      _ProfileSectionLabel(lang.preferences),
+                      _ProfileCard(
+                        children: [
+                          _ProfileTile(
+                            icon: Icons.settings_outlined,
+                            title: lang.settings,
+                            subtitle: lang.settingsSubtitle,
+                            onTap: () =>
+                                pushTo(context, const SettingsScreen()),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20.h),
+                      _ProfileSectionLabel(lang.support),
+                      _ProfileCard(
+                        children: [
+                          _ProfileTile(
+                            icon: Icons.help_outline_rounded,
+                            title: lang.helpCenter,
+                            onTap: () =>
+                                pushTo(context, const HelpCenterScreen()),
+                          ),
+                          _ProfileTile(
+                            icon: Icons.mail_outline_rounded,
+                            title: lang.contactUs,
+                            onTap: () =>
+                                pushTo(context, const ContactUsScreen()),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 28.h),
 
@@ -271,39 +289,41 @@ class _QuickAction extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Material(
-      color: theme.cardColor,
-      borderRadius: BorderRadius.circular(18.r),
-      child: InkWell(
+    return PressableScale(
+      child: Material(
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(18.r),
-        onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18.r),
-            border: Border.all(
-              color: colorScheme.outline.withValues(alpha: 0.15),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(18.r),
+          onTap: onTap,
+          child: Container(
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18.r),
+              border: Border.all(
+                color: colorScheme.outline.withValues(alpha: 0.15),
+              ),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, color: colorScheme.primary, size: 24.sp),
-              SizedBox(height: 10.h),
-              Text(
-                title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleSmall,
-              ),
-              SizedBox(height: 2.h),
-              Text(
-                subtitle,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodySmall,
-              ),
-            ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(icon, color: colorScheme.primary, size: 24.sp),
+                SizedBox(height: 10.h),
+                Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleSmall,
+                ),
+                SizedBox(height: 2.h),
+                Text(
+                  subtitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodySmall,
+                ),
+              ],
+            ),
           ),
         ),
       ),

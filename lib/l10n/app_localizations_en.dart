@@ -1548,4 +1548,323 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pushNotConfigured => 'Push notifications aren\'t available in this build.';
+
+  @override
+  String get navAffiliateStores => 'Affiliate Stores';
+
+  @override
+  String get affiliateStores => 'Affiliate Stores';
+
+  @override
+  String get affiliateStoresSubtitle => 'Add a store once — the backend imports its products automatically.';
+
+  @override
+  String get affiliateAddStore => 'Add Store';
+
+  @override
+  String get affiliateEditStore => 'Edit Store';
+
+  @override
+  String get affiliateNoStoresTitle => 'No affiliate stores yet';
+
+  @override
+  String get affiliateNoStoresDesc => 'Add your first store to start importing products automatically.';
+
+  @override
+  String get affiliateStoreLoadError => 'Couldn\'t load affiliate stores.';
+
+  @override
+  String get affiliateColNetwork => 'Network';
+
+  @override
+  String get affiliateColIntegration => 'Integration';
+
+  @override
+  String get affiliateColProducts => 'Products';
+
+  @override
+  String get affiliateColCommission => 'Commission';
+
+  @override
+  String get affiliateColLastSync => 'Last sync';
+
+  @override
+  String get affiliateColSyncStatus => 'Sync status';
+
+  @override
+  String get affiliateColStatus => 'Status';
+
+  @override
+  String get affiliateStatusActive => 'Active';
+
+  @override
+  String get affiliateStatusInactive => 'Inactive';
+
+  @override
+  String get affiliateSyncIdle => 'Idle';
+
+  @override
+  String get affiliateSyncQueuedShort => 'Queued';
+
+  @override
+  String get affiliateSyncRunningShort => 'Running';
+
+  @override
+  String get affiliateSyncSuccessShort => 'Success';
+
+  @override
+  String get affiliateSyncFailedShort => 'Failed';
+
+  @override
+  String get affiliateSyncNeedsReviewShort => 'Review';
+
+  @override
+  String get affiliateActionView => 'View';
+
+  @override
+  String get affiliateActionEdit => 'Edit';
+
+  @override
+  String get affiliateActionSyncNow => 'Sync Now';
+
+  @override
+  String get affiliateActionEnable => 'Enable';
+
+  @override
+  String get affiliateActionDisable => 'Disable';
+
+  @override
+  String get affiliateActionDelete => 'Delete';
+
+  @override
+  String get affiliateActionHistory => 'Sync History';
+
+  @override
+  String get affiliateDeleteConfirmTitle => 'Delete this store?';
+
+  @override
+  String get affiliateDeleteConfirmBody => 'The store configuration is removed. Imported products are kept but stop refreshing. This cannot be undone.';
+
+  @override
+  String get affiliateSyncStarted => 'Sync started…';
+
+  @override
+  String get affiliateSyncQueuedMsg => 'Sync queued. Large feeds are processed by the scheduled worker — check Sync History.';
+
+  @override
+  String get affiliateSyncDoneMsg => 'Sync completed';
+
+  @override
+  String affiliateSyncResult(int added, int updated, int deactivated, int failed) {
+    return 'New $added · Updated $updated · Unavailable $deactivated · Errors $failed';
+  }
+
+  @override
+  String get affiliateSyncFailedMsg => 'Sync failed';
+
+  @override
+  String get affiliatePlatformStatusLink => 'Legacy Awin platform status';
+
+  @override
+  String get affiliateTestConnection => 'Test Connection';
+
+  @override
+  String get affiliateTesting => 'Testing…';
+
+  @override
+  String get affiliateTestOkTitle => 'Connection successful';
+
+  @override
+  String affiliateTestOkBody(String detected, int sample) {
+    return '$detected detected · $sample sample product(s)';
+  }
+
+  @override
+  String get affiliateTestFailTitle => 'Connection failed';
+
+  @override
+  String get affiliateDataSourceRequired => 'Product data source required';
+
+  @override
+  String get affiliateDataSourceRequiredBody => 'A plain website URL can\'t provide a product catalog. Configure a product feed, REST API, or affiliate-network feed.';
+
+  @override
+  String get affiliateBackendMissing => 'Test Connection and Sync Now need the backend URL (AI_BACKEND_URL) configured for this build.';
+
+  @override
+  String get affiliateSectionBasic => 'Basic information';
+
+  @override
+  String get affiliateSectionAffiliate => 'Affiliate';
+
+  @override
+  String get affiliateSectionIntegration => 'Integration';
+
+  @override
+  String get affiliateSectionSync => 'Sync';
+
+  @override
+  String get affiliateFieldStoreName => 'Store name';
+
+  @override
+  String get affiliateFieldLogoUrl => 'Logo URL';
+
+  @override
+  String get affiliateFieldDescription => 'Description';
+
+  @override
+  String get affiliateFieldWebsiteUrl => 'Website URL';
+
+  @override
+  String get affiliateFieldCountry => 'Country';
+
+  @override
+  String get affiliateFieldCurrency => 'Currency';
+
+  @override
+  String get affiliateFieldNetwork => 'Affiliate network';
+
+  @override
+  String get affiliateFieldProgramId => 'Program ID';
+
+  @override
+  String get affiliateFieldAffiliateId => 'Affiliate ID';
+
+  @override
+  String get affiliateFieldDefaultCommission => 'Default commission rate';
+
+  @override
+  String get affiliateFieldCommissionType => 'Commission type';
+
+  @override
+  String get affiliateFieldIntegrationType => 'Integration type';
+
+  @override
+  String get affiliateIntegrationProductFeed => 'Product Feed';
+
+  @override
+  String get affiliateIntegrationRestApi => 'REST API';
+
+  @override
+  String get affiliateIntegrationNetwork => 'Affiliate Network';
+
+  @override
+  String get affiliateIntegrationManual => 'Manual';
+
+  @override
+  String get affiliateIntegrationMock => 'Mock (testing)';
+
+  @override
+  String get affiliateMockNote => 'Testing connector — generates a small set of sample beauty products with no third-party credentials. Use it to verify the whole pipeline: Test Connection → Save → Sync Now → products appear.';
+
+  @override
+  String get affiliateTestManualTooltip => 'Manual stores have no data source to test. Choose Product Feed, REST API, Affiliate Network, or Mock.';
+
+  @override
+  String get affiliateFieldFeedUrl => 'Feed URL';
+
+  @override
+  String get affiliateFieldFeedUrlHint => 'Public feed URL. If it needs a password, store that as a backend secret — never here.';
+
+  @override
+  String get affiliateFieldFeedFormat => 'Feed format';
+
+  @override
+  String get affiliateFieldFeedAuth => 'Authentication';
+
+  @override
+  String get affiliateFieldFeedUsername => 'Username (if required)';
+
+  @override
+  String get affiliateFieldFeedLanguage => 'Feed language';
+
+  @override
+  String get affiliateSecretNote => 'Passwords, API keys and tokens are set on the backend, never in this form or in Firestore.';
+
+  @override
+  String get affiliateFieldApiBaseUrl => 'API base URL';
+
+  @override
+  String get affiliateFieldApiProductsPath => 'Products endpoint path';
+
+  @override
+  String get affiliateFieldApiAuth => 'Authentication';
+
+  @override
+  String get affiliateFieldApiHeaderName => 'Auth header name';
+
+  @override
+  String get affiliateFieldApiQueryParam => 'Auth query parameter';
+
+  @override
+  String get affiliateFieldPublicApiId => 'Public API identifier';
+
+  @override
+  String get affiliateFieldApiItemsPath => 'Items path in response';
+
+  @override
+  String get affiliateFieldSyncEnabled => 'Sync enabled';
+
+  @override
+  String get affiliateFieldSyncFrequency => 'Sync frequency';
+
+  @override
+  String get affiliateFreq6h => 'Every 6 hours';
+
+  @override
+  String get affiliateFreq12h => 'Every 12 hours';
+
+  @override
+  String get affiliateFreqDaily => 'Daily';
+
+  @override
+  String get affiliateFreqWeekly => 'Weekly';
+
+  @override
+  String get affiliateCommissionPercentage => 'Percentage';
+
+  @override
+  String get affiliateCommissionFixed => 'Fixed';
+
+  @override
+  String get affiliateAuthNone => 'None';
+
+  @override
+  String get affiliateAuthBasic => 'Basic';
+
+  @override
+  String get affiliateAuthBearer => 'Bearer token';
+
+  @override
+  String get affiliateAuthHeader => 'Custom header';
+
+  @override
+  String get affiliateAuthQuery => 'Query parameter';
+
+  @override
+  String get affiliateFormSaved => 'Store saved';
+
+  @override
+  String get affiliateFormSaveError => 'Couldn\'t save the store.';
+
+  @override
+  String get affiliateRequired => 'Required';
+
+  @override
+  String get affiliateSyncHistoryTitle => 'Sync history';
+
+  @override
+  String get affiliateSyncHistoryEmpty => 'No syncs have run for this store yet.';
+
+  @override
+  String get affiliateNextSync => 'Next sync';
+
+  @override
+  String get affiliateNeverSynced => 'Never synced';
+
+  @override
+  String get affiliateManualNoSync => 'Manual store — automatic import is disabled. Add products from the Products screen.';
+
+  @override
+  String get affiliateDetailsTitle => 'Store details';
 }

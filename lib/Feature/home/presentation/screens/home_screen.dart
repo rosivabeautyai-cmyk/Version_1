@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:rosivia/core/functions/navigations.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/core/widgets/main_button.dart';
+import 'package:rosivia/core/widgets/motion/app_fade_in.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../../ai/presentation/screens/ai_screen.dart';
@@ -98,12 +99,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           physics: const AlwaysScrollableScrollPhysics(),
                           padding: EdgeInsets.all(20.w),
                           children: [
-                            WelcomeCard(userData: _userData),
+                            AppFadeIn(child: WelcomeCard(userData: _userData)),
                             SizedBox(height: 24.h),
-                            _Greeting(lang: lang),
+                            AppFadeIn(
+                              delay: const Duration(milliseconds: 60),
+                              child: _Greeting(lang: lang),
+                            ),
                             SizedBox(height: 20.h),
-                            _AiSearchEntry(
-                              onTap: () => pushTo(context, const AiScreen()),
+                            AppFadeIn(
+                              delay: const Duration(milliseconds: 120),
+                              child: _AiSearchEntry(
+                                onTap: () => pushTo(context, const AiScreen()),
+                              ),
                             ),
                             SizedBox(height: 28.h),
                             ..._buildProductSections(
@@ -137,8 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
       if (provider.state.isLoading) {
         return [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 40.h),
-            child: const HomeLoading(),
+            padding: EdgeInsets.only(top: 8.h),
+            child: const HomeLoading(shrinkWrap: true),
           ),
         ];
       }
@@ -156,21 +163,45 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return [
       if (data.categories.isNotEmpty) ...[
-        HomeSectionTitle(title: lang.categories),
-        SizedBox(height: 12.h),
-        _CategoriesRow(categories: data.categories),
+        AppFadeIn(
+          delay: const Duration(milliseconds: 180),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HomeSectionTitle(title: lang.categories),
+              SizedBox(height: 12.h),
+              _CategoriesRow(categories: data.categories),
+            ],
+          ),
+        ),
         SizedBox(height: 28.h),
       ],
       if (data.curated.isNotEmpty) ...[
-        HomeSectionTitle(title: lang.curatedEssentials),
-        SizedBox(height: 12.h),
-        _ProductsRow(products: data.curated),
+        AppFadeIn(
+          delay: const Duration(milliseconds: 240),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HomeSectionTitle(title: lang.curatedEssentials),
+              SizedBox(height: 12.h),
+              _ProductsRow(products: data.curated),
+            ],
+          ),
+        ),
         SizedBox(height: 28.h),
       ],
       if (data.trending.isNotEmpty) ...[
-        HomeSectionTitle(title: lang.trendingNow),
-        SizedBox(height: 12.h),
-        _ProductsGrid(products: data.trending),
+        AppFadeIn(
+          delay: const Duration(milliseconds: 300),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HomeSectionTitle(title: lang.trendingNow),
+              SizedBox(height: 12.h),
+              _ProductsGrid(products: data.trending),
+            ],
+          ),
+        ),
         SizedBox(height: 28.h),
       ],
     ];

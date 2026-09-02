@@ -1,0 +1,77 @@
+name: Affiliate product sync
+
+# Generalized, multi-store product sync. Runs entirely on GitHub Actions
+# (not Firebase Cloud Functions), so it needs no Firebase Blaze plan —
+# only GitHub repo secrets. See scripts/affiliate-sync/ for the engine.
+#
+# This runs ALONGSIDE the older single-store "Awin product sync"
+# workflow (.github/workflows/awin-sync.yml). Keep both until the
+# generalized path is verified against real data; then the old one can
+# be removed.
+#
+# Every 6 hours it:
+#   1. drains the on-demand queue (affiliateSyncJobs) filled by the
+#      Admin "Sync Now" button, then
+#   2. syncs every store whose nextSyncAt is due (6h / 12h / daily /
+#      weekly spacing is derived from each store's syncFrequency).
+
+on:
+  workflow_dispatch:
+    inputs:
+      store:
+        description: "Sync a single store id now (leave blank for the scheduled set)"
+        required: false
+        default: ""
+  schedule:
+    - cron: "15 */6 * * *"
+
+concurrency:
+  group: affiliate-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: scripts/affiliate-sync/package-lock.json
+
+      - name: Install dependencies
+        working-directory: scripts/affiliate-sync
+        run: npm ci || npm install
+
+      - name: Verify vendored backend copy is in sync
+        run: node scripts/sync-vendor.mjs --check
+
+      - name: Run affiliate sync
+        working-directory: scripts/affiliate-sync
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          # --- single-store / global fallbacks (optional) ---
+          AWIN_FEED_URL: ${{ secrets.AWIN_FEED_URL }}
+          FEED_URL: ${{ secrets.FEED_URL }}
+          FEED_USERNAME: ${{ secrets.FEED_USERNAME }}
+          FEED_PASSWORD: ${{ secrets.FEED_PASSWORD }}
+          FEED_TOKEN: ${{ secrets.FEED_TOKEN }}
+          API_KEY: ${{ secrets.API_KEY }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+          # --- per-store credentials ---
+          # Add one line per secret you create, named
+          #   AFFILIATE_<SLUG>_FEED_URL / _FEED_PASSWORD / _API_KEY ...
+          # where <SLUG> is the store's slug uppercased with non-alnum
+          # replaced by "_". Example for a store slug "shein":
+          # AFFILIATE_SHEIN_FEED_URL: ${{ secrets.AFFILIATE_SHEIN_FEED_URL }}
+        run: |
+          if [ -n "${{ github.event.inputs.store }}" ]; then
+            node runScheduledSync.mjs --store "${{ github.event.inputs.store }}"
+          else
+            node runScheduledSync.mjs
+          fi

@@ -23,22 +23,25 @@ class ChatBubble extends StatelessWidget {
     final bubbleColor = message.isError
         ? colorScheme.error.withValues(alpha: 0.08)
         : isUser
-            ? colorScheme.primary
-            : theme.cardColor;
+        ? colorScheme.primary
+        : theme.cardColor;
 
     final textColor = message.isError
         ? colorScheme.error
         : isUser
-            ? Colors.white
-            : theme.textTheme.bodyMedium?.color;
+        ? Colors.white
+        : theme.textTheme.bodyMedium?.color;
 
     final products = message.products;
 
     return Align(
-      alignment:
-          isUser ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
+      alignment: isUser
+          ? AlignmentDirectional.centerEnd
+          : AlignmentDirectional.centerStart,
       child: Column(
-        crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: isUser
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           Container(
             margin: EdgeInsets.only(bottom: 12.h),
@@ -58,7 +61,9 @@ class ChatBubble extends StatelessWidget {
               ),
               border: isUser || message.isError
                   ? null
-                  : Border.all(color: colorScheme.outline.withValues(alpha: 0.12)),
+                  : Border.all(
+                      color: colorScheme.outline.withValues(alpha: 0.12),
+                    ),
             ),
             child: Text(
               message.text,
@@ -101,39 +106,117 @@ class ChatBubble extends StatelessWidget {
   }
 }
 
-/// Small "ROSIVA is typing..." indicator shown while a reply is
-/// pending.
-class TypingIndicatorBubble extends StatelessWidget {
+/// Small "ROSIVA is typing…" indicator shown while a reply is pending:
+/// three dots that rise and fade in sequence — the calm, familiar
+/// "assistant is thinking" cue. Direction-agnostic so it sits on the
+/// start edge in both LTR and RTL.
+class TypingIndicatorBubble extends StatefulWidget {
   const TypingIndicatorBubble({super.key});
+
+  @override
+  State<TypingIndicatorBubble> createState() => _TypingIndicatorBubbleState();
+}
+
+class _TypingIndicatorBubbleState extends State<TypingIndicatorBubble>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1100),
+  )..repeat();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final reduceMotion =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    final dotColor = theme.colorScheme.primary;
 
     return Align(
-      alignment: Alignment.centerLeft,
+      alignment: AlignmentDirectional.centerStart,
       child: Container(
         margin: EdgeInsets.only(bottom: 12.h),
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         decoration: BoxDecoration(
           color: theme.cardColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(18.r),
-            topRight: Radius.circular(18.r),
-            bottomRight: Radius.circular(18.r),
-            bottomLeft: Radius.circular(4.r),
+          borderRadius: BorderRadiusDirectional.only(
+            topStart: Radius.circular(18.r),
+            topEnd: Radius.circular(18.r),
+            bottomEnd: Radius.circular(18.r),
+            bottomStart: Radius.circular(4.r),
           ),
           border: Border.all(
             color: theme.colorScheme.outline.withValues(alpha: 0.12),
           ),
         ),
         child: SizedBox(
-          width: 16.w,
-          height: 16.w,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: theme.colorScheme.primary,
-          ),
+          height: 8.w,
+          child: reduceMotion
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (var i = 0; i < 3; i++) ...[
+                      if (i > 0) SizedBox(width: 5.w),
+                      _Dot(color: dotColor, opacity: 0.6, offsetY: 0),
+                    ],
+                  ],
+                )
+              : AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, _) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (var i = 0; i < 3; i++) ...[
+                          if (i > 0) SizedBox(width: 5.w),
+                          _dot(i, dotColor),
+                        ],
+                      ],
+                    );
+                  },
+                ),
+        ),
+      ),
+    );
+  }
+
+  Widget _dot(int index, Color color) {
+    // Each dot runs the same 0→1 curve, staggered by a third of the
+    // cycle, mapped to a small rise + fade.
+    final phase = (_controller.value - index * 0.18) % 1.0;
+    final t = Curves.easeInOut.transform(
+      phase < 0.5 ? phase * 2 : (1 - phase) * 2,
+    );
+    return _Dot(color: color, opacity: 0.35 + 0.65 * t, offsetY: -3.0 * t);
+  }
+}
+
+class _Dot extends StatelessWidget {
+  final Color color;
+  final double opacity;
+  final double offsetY;
+
+  const _Dot({
+    required this.color,
+    required this.opacity,
+    required this.offsetY,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.translate(
+      offset: Offset(0, offsetY),
+      child: Container(
+        width: 8.w,
+        height: 8.w,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: opacity.clamp(0.0, 1.0)),
+          shape: BoxShape.circle,
         ),
       ),
     );

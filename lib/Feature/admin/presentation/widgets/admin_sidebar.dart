@@ -66,9 +66,9 @@ class AdminSidebar extends StatelessWidget {
               onTap: () => _select(context, 2),
             ),
             _NavItem(
-              icon: Icons.hub_outlined,
-              selectedIcon: Icons.hub_rounded,
-              label: lang.navPlatforms,
+              icon: Icons.storefront_outlined,
+              selectedIcon: Icons.storefront_rounded,
+              label: lang.navAffiliateStores,
               selected: currentIndex == 3,
               onTap: () => _select(context, 3),
             ),

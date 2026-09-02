@@ -9,6 +9,7 @@ import 'package:rosivia/core/network/view_state.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/core/services/snackbar_service.dart';
 import 'package:rosivia/core/widgets/app_network_image.dart';
+import 'package:rosivia/core/widgets/motion/favorite_button.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -52,16 +53,19 @@ class _ProductDetailsView extends StatelessWidget {
               icon: const Icon(Icons.ios_share_rounded),
               onPressed: () => _shareProduct(state.data!),
             ),
-            IconButton(
-              icon: Icon(
-                favorites?.isFavorite(state.data!.id) ?? false
-                    ? Icons.favorite_rounded
-                    : Icons.favorite_border_rounded,
-                color: theme.colorScheme.primary,
+            SizedBox(
+              width: 48,
+              height: 48,
+              child: Center(
+                child: FavoriteButton(
+                  isFavorite: favorites?.isFavorite(state.data!.id) ?? false,
+                  onTap: favorites == null
+                      ? null
+                      : () => favorites.toggle(state.data!.id),
+                  size: 24,
+                  color: theme.colorScheme.primary,
+                ),
               ),
-              onPressed: favorites == null
-                  ? null
-                  : () => favorites.toggle(state.data!.id),
             ),
           ],
         ],

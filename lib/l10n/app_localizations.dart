@@ -3088,6 +3088,636 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Push notifications aren\'t available in this build.'**
   String get pushNotConfigured;
+
+  /// No description provided for @navAffiliateStores.
+  ///
+  /// In en, this message translates to:
+  /// **'Affiliate Stores'**
+  String get navAffiliateStores;
+
+  /// No description provided for @affiliateStores.
+  ///
+  /// In en, this message translates to:
+  /// **'Affiliate Stores'**
+  String get affiliateStores;
+
+  /// No description provided for @affiliateStoresSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a store once — the backend imports its products automatically.'**
+  String get affiliateStoresSubtitle;
+
+  /// No description provided for @affiliateAddStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Store'**
+  String get affiliateAddStore;
+
+  /// No description provided for @affiliateEditStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Store'**
+  String get affiliateEditStore;
+
+  /// No description provided for @affiliateNoStoresTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No affiliate stores yet'**
+  String get affiliateNoStoresTitle;
+
+  /// No description provided for @affiliateNoStoresDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first store to start importing products automatically.'**
+  String get affiliateNoStoresDesc;
+
+  /// No description provided for @affiliateStoreLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load affiliate stores.'**
+  String get affiliateStoreLoadError;
+
+  /// No description provided for @affiliateColNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Network'**
+  String get affiliateColNetwork;
+
+  /// No description provided for @affiliateColIntegration.
+  ///
+  /// In en, this message translates to:
+  /// **'Integration'**
+  String get affiliateColIntegration;
+
+  /// No description provided for @affiliateColProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Products'**
+  String get affiliateColProducts;
+
+  /// No description provided for @affiliateColCommission.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission'**
+  String get affiliateColCommission;
+
+  /// No description provided for @affiliateColLastSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Last sync'**
+  String get affiliateColLastSync;
+
+  /// No description provided for @affiliateColSyncStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync status'**
+  String get affiliateColSyncStatus;
+
+  /// No description provided for @affiliateColStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get affiliateColStatus;
+
+  /// No description provided for @affiliateStatusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get affiliateStatusActive;
+
+  /// No description provided for @affiliateStatusInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get affiliateStatusInactive;
+
+  /// No description provided for @affiliateSyncIdle.
+  ///
+  /// In en, this message translates to:
+  /// **'Idle'**
+  String get affiliateSyncIdle;
+
+  /// No description provided for @affiliateSyncQueuedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Queued'**
+  String get affiliateSyncQueuedShort;
+
+  /// No description provided for @affiliateSyncRunningShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Running'**
+  String get affiliateSyncRunningShort;
+
+  /// No description provided for @affiliateSyncSuccessShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get affiliateSyncSuccessShort;
+
+  /// No description provided for @affiliateSyncFailedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get affiliateSyncFailedShort;
+
+  /// No description provided for @affiliateSyncNeedsReviewShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get affiliateSyncNeedsReviewShort;
+
+  /// No description provided for @affiliateActionView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get affiliateActionView;
+
+  /// No description provided for @affiliateActionEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get affiliateActionEdit;
+
+  /// No description provided for @affiliateActionSyncNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync Now'**
+  String get affiliateActionSyncNow;
+
+  /// No description provided for @affiliateActionEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get affiliateActionEnable;
+
+  /// No description provided for @affiliateActionDisable.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable'**
+  String get affiliateActionDisable;
+
+  /// No description provided for @affiliateActionDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get affiliateActionDelete;
+
+  /// No description provided for @affiliateActionHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync History'**
+  String get affiliateActionHistory;
+
+  /// No description provided for @affiliateDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this store?'**
+  String get affiliateDeleteConfirmTitle;
+
+  /// No description provided for @affiliateDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The store configuration is removed. Imported products are kept but stop refreshing. This cannot be undone.'**
+  String get affiliateDeleteConfirmBody;
+
+  /// No description provided for @affiliateSyncStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync started…'**
+  String get affiliateSyncStarted;
+
+  /// No description provided for @affiliateSyncQueuedMsg.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync queued. Large feeds are processed by the scheduled worker — check Sync History.'**
+  String get affiliateSyncQueuedMsg;
+
+  /// No description provided for @affiliateSyncDoneMsg.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync completed'**
+  String get affiliateSyncDoneMsg;
+
+  /// No description provided for @affiliateSyncResult.
+  ///
+  /// In en, this message translates to:
+  /// **'New {added} · Updated {updated} · Unavailable {deactivated} · Errors {failed}'**
+  String affiliateSyncResult(int added, int updated, int deactivated, int failed);
+
+  /// No description provided for @affiliateSyncFailedMsg.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync failed'**
+  String get affiliateSyncFailedMsg;
+
+  /// No description provided for @affiliatePlatformStatusLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Legacy Awin platform status'**
+  String get affiliatePlatformStatusLink;
+
+  /// No description provided for @affiliateTestConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Connection'**
+  String get affiliateTestConnection;
+
+  /// No description provided for @affiliateTesting.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing…'**
+  String get affiliateTesting;
+
+  /// No description provided for @affiliateTestOkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection successful'**
+  String get affiliateTestOkTitle;
+
+  /// No description provided for @affiliateTestOkBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{detected} detected · {sample} sample product(s)'**
+  String affiliateTestOkBody(String detected, int sample);
+
+  /// No description provided for @affiliateTestFailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection failed'**
+  String get affiliateTestFailTitle;
+
+  /// No description provided for @affiliateDataSourceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Product data source required'**
+  String get affiliateDataSourceRequired;
+
+  /// No description provided for @affiliateDataSourceRequiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A plain website URL can\'t provide a product catalog. Configure a product feed, REST API, or affiliate-network feed.'**
+  String get affiliateDataSourceRequiredBody;
+
+  /// No description provided for @affiliateBackendMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Connection and Sync Now need the backend URL (AI_BACKEND_URL) configured for this build.'**
+  String get affiliateBackendMissing;
+
+  /// No description provided for @affiliateSectionBasic.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic information'**
+  String get affiliateSectionBasic;
+
+  /// No description provided for @affiliateSectionAffiliate.
+  ///
+  /// In en, this message translates to:
+  /// **'Affiliate'**
+  String get affiliateSectionAffiliate;
+
+  /// No description provided for @affiliateSectionIntegration.
+  ///
+  /// In en, this message translates to:
+  /// **'Integration'**
+  String get affiliateSectionIntegration;
+
+  /// No description provided for @affiliateSectionSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync'**
+  String get affiliateSectionSync;
+
+  /// No description provided for @affiliateFieldStoreName.
+  ///
+  /// In en, this message translates to:
+  /// **'Store name'**
+  String get affiliateFieldStoreName;
+
+  /// No description provided for @affiliateFieldLogoUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Logo URL'**
+  String get affiliateFieldLogoUrl;
+
+  /// No description provided for @affiliateFieldDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get affiliateFieldDescription;
+
+  /// No description provided for @affiliateFieldWebsiteUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Website URL'**
+  String get affiliateFieldWebsiteUrl;
+
+  /// No description provided for @affiliateFieldCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get affiliateFieldCountry;
+
+  /// No description provided for @affiliateFieldCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get affiliateFieldCurrency;
+
+  /// No description provided for @affiliateFieldNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Affiliate network'**
+  String get affiliateFieldNetwork;
+
+  /// No description provided for @affiliateFieldProgramId.
+  ///
+  /// In en, this message translates to:
+  /// **'Program ID'**
+  String get affiliateFieldProgramId;
+
+  /// No description provided for @affiliateFieldAffiliateId.
+  ///
+  /// In en, this message translates to:
+  /// **'Affiliate ID'**
+  String get affiliateFieldAffiliateId;
+
+  /// No description provided for @affiliateFieldDefaultCommission.
+  ///
+  /// In en, this message translates to:
+  /// **'Default commission rate'**
+  String get affiliateFieldDefaultCommission;
+
+  /// No description provided for @affiliateFieldCommissionType.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission type'**
+  String get affiliateFieldCommissionType;
+
+  /// No description provided for @affiliateFieldIntegrationType.
+  ///
+  /// In en, this message translates to:
+  /// **'Integration type'**
+  String get affiliateFieldIntegrationType;
+
+  /// No description provided for @affiliateIntegrationProductFeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Feed'**
+  String get affiliateIntegrationProductFeed;
+
+  /// No description provided for @affiliateIntegrationRestApi.
+  ///
+  /// In en, this message translates to:
+  /// **'REST API'**
+  String get affiliateIntegrationRestApi;
+
+  /// No description provided for @affiliateIntegrationNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Affiliate Network'**
+  String get affiliateIntegrationNetwork;
+
+  /// No description provided for @affiliateIntegrationManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get affiliateIntegrationManual;
+
+  /// No description provided for @affiliateIntegrationMock.
+  ///
+  /// In en, this message translates to:
+  /// **'Mock (testing)'**
+  String get affiliateIntegrationMock;
+
+  /// No description provided for @affiliateMockNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Testing connector — generates a small set of sample beauty products with no third-party credentials. Use it to verify the whole pipeline: Test Connection → Save → Sync Now → products appear.'**
+  String get affiliateMockNote;
+
+  /// No description provided for @affiliateTestManualTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual stores have no data source to test. Choose Product Feed, REST API, Affiliate Network, or Mock.'**
+  String get affiliateTestManualTooltip;
+
+  /// No description provided for @affiliateFieldFeedUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Feed URL'**
+  String get affiliateFieldFeedUrl;
+
+  /// No description provided for @affiliateFieldFeedUrlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Public feed URL. If it needs a password, store that as a backend secret — never here.'**
+  String get affiliateFieldFeedUrlHint;
+
+  /// No description provided for @affiliateFieldFeedFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Feed format'**
+  String get affiliateFieldFeedFormat;
+
+  /// No description provided for @affiliateFieldFeedAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication'**
+  String get affiliateFieldFeedAuth;
+
+  /// No description provided for @affiliateFieldFeedUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Username (if required)'**
+  String get affiliateFieldFeedUsername;
+
+  /// No description provided for @affiliateFieldFeedLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Feed language'**
+  String get affiliateFieldFeedLanguage;
+
+  /// No description provided for @affiliateSecretNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords, API keys and tokens are set on the backend, never in this form or in Firestore.'**
+  String get affiliateSecretNote;
+
+  /// No description provided for @affiliateFieldApiBaseUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'API base URL'**
+  String get affiliateFieldApiBaseUrl;
+
+  /// No description provided for @affiliateFieldApiProductsPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Products endpoint path'**
+  String get affiliateFieldApiProductsPath;
+
+  /// No description provided for @affiliateFieldApiAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication'**
+  String get affiliateFieldApiAuth;
+
+  /// No description provided for @affiliateFieldApiHeaderName.
+  ///
+  /// In en, this message translates to:
+  /// **'Auth header name'**
+  String get affiliateFieldApiHeaderName;
+
+  /// No description provided for @affiliateFieldApiQueryParam.
+  ///
+  /// In en, this message translates to:
+  /// **'Auth query parameter'**
+  String get affiliateFieldApiQueryParam;
+
+  /// No description provided for @affiliateFieldPublicApiId.
+  ///
+  /// In en, this message translates to:
+  /// **'Public API identifier'**
+  String get affiliateFieldPublicApiId;
+
+  /// No description provided for @affiliateFieldApiItemsPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Items path in response'**
+  String get affiliateFieldApiItemsPath;
+
+  /// No description provided for @affiliateFieldSyncEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync enabled'**
+  String get affiliateFieldSyncEnabled;
+
+  /// No description provided for @affiliateFieldSyncFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync frequency'**
+  String get affiliateFieldSyncFrequency;
+
+  /// No description provided for @affiliateFreq6h.
+  ///
+  /// In en, this message translates to:
+  /// **'Every 6 hours'**
+  String get affiliateFreq6h;
+
+  /// No description provided for @affiliateFreq12h.
+  ///
+  /// In en, this message translates to:
+  /// **'Every 12 hours'**
+  String get affiliateFreq12h;
+
+  /// No description provided for @affiliateFreqDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get affiliateFreqDaily;
+
+  /// No description provided for @affiliateFreqWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get affiliateFreqWeekly;
+
+  /// No description provided for @affiliateCommissionPercentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Percentage'**
+  String get affiliateCommissionPercentage;
+
+  /// No description provided for @affiliateCommissionFixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed'**
+  String get affiliateCommissionFixed;
+
+  /// No description provided for @affiliateAuthNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get affiliateAuthNone;
+
+  /// No description provided for @affiliateAuthBasic.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic'**
+  String get affiliateAuthBasic;
+
+  /// No description provided for @affiliateAuthBearer.
+  ///
+  /// In en, this message translates to:
+  /// **'Bearer token'**
+  String get affiliateAuthBearer;
+
+  /// No description provided for @affiliateAuthHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom header'**
+  String get affiliateAuthHeader;
+
+  /// No description provided for @affiliateAuthQuery.
+  ///
+  /// In en, this message translates to:
+  /// **'Query parameter'**
+  String get affiliateAuthQuery;
+
+  /// No description provided for @affiliateFormSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Store saved'**
+  String get affiliateFormSaved;
+
+  /// No description provided for @affiliateFormSaveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the store.'**
+  String get affiliateFormSaveError;
+
+  /// No description provided for @affiliateRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get affiliateRequired;
+
+  /// No description provided for @affiliateSyncHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync history'**
+  String get affiliateSyncHistoryTitle;
+
+  /// No description provided for @affiliateSyncHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No syncs have run for this store yet.'**
+  String get affiliateSyncHistoryEmpty;
+
+  /// No description provided for @affiliateNextSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Next sync'**
+  String get affiliateNextSync;
+
+  /// No description provided for @affiliateNeverSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Never synced'**
+  String get affiliateNeverSynced;
+
+  /// No description provided for @affiliateManualNoSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual store — automatic import is disabled. Add products from the Products screen.'**
+  String get affiliateManualNoSync;
+
+  /// No description provided for @affiliateDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Store details'**
+  String get affiliateDetailsTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

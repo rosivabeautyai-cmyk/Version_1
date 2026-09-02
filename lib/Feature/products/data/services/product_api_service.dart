@@ -165,7 +165,7 @@ class ProductApiService {
       // a future classifier change can never silently leak a men's/
       // unisex product through without this local filter catching it.
       items = items
-          .where((p) => p.isRosivaProduct && p.gender == 'women')
+          .where((p) => p.isRosivaProduct && p.gender == 'women' && p.isActive)
           .toList();
 
       // Country-availability visibility (Pass 2): hide products that

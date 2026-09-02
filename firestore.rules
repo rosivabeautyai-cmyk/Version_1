@@ -144,5 +144,45 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow write: if false;
     }
+
+    // ---------------------------------------------------------------
+    // Affiliate Stores + multi-store product sync
+    // ---------------------------------------------------------------
+
+    // Affiliate store / product source configuration. Carries NO
+    // private credentials by construction — feed passwords, API keys
+    // and tokens live only in the backend environment (see
+    // docs/AFFILIATE_STORES.md). A signed-in user may `get` an ACTIVE
+    // store; only an admin may `list` them or write. The generalized
+    // sync engine + the backend use the Admin SDK and bypass this.
+    match /affiliateStores/{storeId} {
+      allow get: if isSignedIn() && (isAdmin() || resource.data.status == 'active');
+      allow list: if isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Sync history — one row per sync run. Written ONLY by the backend
+    // (Admin SDK, bypasses rules). Admins read; nobody writes from a
+    // client.
+    match /affiliateSyncLogs/{logId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // On-demand sync job queue. The Flutter Admin app calls a secure
+    // backend endpoint which enqueues the job with the Admin SDK — a
+    // client never writes here. Admins may read to show job status.
+    match /affiliateSyncJobs/{jobId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // Configurable category mappings (external category -> one of
+    // ROSIVA's 3 canonical slugs). Any signed-in user may read (the
+    // resolver could run client-side later); only an admin writes.
+    match /categoryMappings/{mappingId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
   }
 }

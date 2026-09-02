@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:rosivia/Feature/settings/provider/regional_prefs_provider.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
+import 'package:rosivia/core/widgets/motion/app_fade_in.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -160,7 +161,10 @@ class _AiViewState extends State<_AiView> {
         ),
         SizedBox(height: 8.h),
         if (showWelcome) ...[
-          ChatBubble(message: _welcomeMessage(lang)),
+          AppFadeIn(
+            key: const ValueKey('ai_welcome'),
+            child: ChatBubble(message: _welcomeMessage(lang)),
+          ),
           _SuggestedQuestions(
             suggestions: [
               lang.aiSuggestionMascara,
@@ -173,7 +177,14 @@ class _AiViewState extends State<_AiView> {
             onTap: (suggestion) => _send(provider, lang, suggestion),
           ),
         ] else
-          ...provider.messages.map((m) => ChatBubble(message: m)),
+          // Keyed by message id so each bubble's entrance plays once,
+          // when it first arrives — not on every provider rebuild.
+          ...provider.messages.map(
+            (m) => AppFadeIn(
+              key: ValueKey('ai_msg_${m.id}'),
+              child: ChatBubble(message: m),
+            ),
+          ),
         if (provider.isSending) const TypingIndicatorBubble(),
       ],
     );

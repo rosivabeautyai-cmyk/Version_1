@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 import 'package:rosivia/core/functions/navigations.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
+import 'package:rosivia/core/widgets/motion/app_fade_in.dart';
+import 'package:rosivia/core/widgets/motion/pressable_scale.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
 import '../../../products/data/models/category_model.dart';
@@ -67,8 +69,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
               child: Column(
                 children: [
-                  _SearchBar(
-                    onTap: () => pushTo(context, const SearchScreen()),
+                  AppFadeIn(
+                    child: _SearchBar(
+                      onTap: () => pushTo(context, const SearchScreen()),
+                    ),
                   ),
                   SizedBox(height: 18.h),
                   if (!_loadingCategories && _categories.isNotEmpty) ...[
@@ -99,7 +103,7 @@ class _SearchBar extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final lang = AppLocalizations.of(context)!;
 
-    return GestureDetector(
+    return PressableScale(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),

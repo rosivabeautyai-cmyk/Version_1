@@ -12,6 +12,7 @@ import 'package:rosivia/core/constants/app_fonts.dart';
 import 'package:rosivia/core/providers/theme_provider.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/core/services/notification_service.dart';
+import 'package:rosivia/core/styles/app_dimens.dart';
 import 'package:rosivia/core/styles/colors.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
@@ -126,6 +127,21 @@ ThemeData buildAppTheme(Brightness brightness) {
     // ==============================
     useMaterial3: true,
     brightness: brightness,
+
+    // ==============================
+    // PAGE TRANSITIONS — one calm fade+rise everywhere (RTL-safe:
+    // no horizontal direction), instead of the default platform mix.
+    // ==============================
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: _RosivaPageTransitionsBuilder(),
+        TargetPlatform.iOS: _RosivaPageTransitionsBuilder(),
+        TargetPlatform.macOS: _RosivaPageTransitionsBuilder(),
+        TargetPlatform.windows: _RosivaPageTransitionsBuilder(),
+        TargetPlatform.linux: _RosivaPageTransitionsBuilder(),
+        TargetPlatform.fuchsia: _RosivaPageTransitionsBuilder(),
+      },
+    ),
 
     // ==============================
     // FONT
@@ -297,4 +313,43 @@ ThemeData buildAppTheme(Brightness brightness) {
       hintStyle: TextStyle(color: mutedTextColor, fontSize: 14),
     ),
   );
+}
+
+/// ROSIVA's single page transition: a quick fade with a small upward
+/// rise and a barely-there scale. Direction-agnostic, so it behaves
+/// identically in RTL and LTR. Duration/curve come from [AppDuration]/
+/// [AppCurve] so it stays on-system.
+class _RosivaPageTransitionsBuilder extends PageTransitionsBuilder {
+  const _RosivaPageTransitionsBuilder();
+
+  @override
+  Duration get transitionDuration => AppDuration.page;
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    final curved = CurvedAnimation(
+      parent: animation,
+      curve: AppCurve.enter,
+      reverseCurve: AppCurve.standard,
+    );
+    return FadeTransition(
+      opacity: curved,
+      child: SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, 0.02),
+          end: Offset.zero,
+        ).animate(curved),
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.995, end: 1).animate(curved),
+          child: child,
+        ),
+      ),
+    );
+  }
 }

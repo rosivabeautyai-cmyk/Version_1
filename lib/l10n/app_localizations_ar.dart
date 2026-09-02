@@ -1557,4 +1557,323 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pushNotConfigured => 'الإشعارات الفورية غير متاحة في هذه النسخة.';
+
+  @override
+  String get navAffiliateStores => 'متاجر الأفلييت';
+
+  @override
+  String get affiliateStores => 'متاجر الأفلييت';
+
+  @override
+  String get affiliateStoresSubtitle => 'أضِف المتجر مرة واحدة — ويستورد الخادم منتجاته تلقائيًا.';
+
+  @override
+  String get affiliateAddStore => 'إضافة متجر';
+
+  @override
+  String get affiliateEditStore => 'تعديل المتجر';
+
+  @override
+  String get affiliateNoStoresTitle => 'لا توجد متاجر أفلييت بعد';
+
+  @override
+  String get affiliateNoStoresDesc => 'أضِف أول متجر لبدء استيراد المنتجات تلقائيًا.';
+
+  @override
+  String get affiliateStoreLoadError => 'تعذّر تحميل متاجر الأفلييت.';
+
+  @override
+  String get affiliateColNetwork => 'الشبكة';
+
+  @override
+  String get affiliateColIntegration => 'نوع التكامل';
+
+  @override
+  String get affiliateColProducts => 'المنتجات';
+
+  @override
+  String get affiliateColCommission => 'العمولة';
+
+  @override
+  String get affiliateColLastSync => 'آخر مزامنة';
+
+  @override
+  String get affiliateColSyncStatus => 'حالة المزامنة';
+
+  @override
+  String get affiliateColStatus => 'الحالة';
+
+  @override
+  String get affiliateStatusActive => 'مُفعّل';
+
+  @override
+  String get affiliateStatusInactive => 'غير مُفعّل';
+
+  @override
+  String get affiliateSyncIdle => 'خامل';
+
+  @override
+  String get affiliateSyncQueuedShort => 'في قائمة الانتظار';
+
+  @override
+  String get affiliateSyncRunningShort => 'جارٍ التشغيل';
+
+  @override
+  String get affiliateSyncSuccessShort => 'نجحت';
+
+  @override
+  String get affiliateSyncFailedShort => 'فشلت';
+
+  @override
+  String get affiliateSyncNeedsReviewShort => 'مراجعة';
+
+  @override
+  String get affiliateActionView => 'عرض';
+
+  @override
+  String get affiliateActionEdit => 'تعديل';
+
+  @override
+  String get affiliateActionSyncNow => 'مزامنة الآن';
+
+  @override
+  String get affiliateActionEnable => 'تفعيل';
+
+  @override
+  String get affiliateActionDisable => 'تعطيل';
+
+  @override
+  String get affiliateActionDelete => 'حذف';
+
+  @override
+  String get affiliateActionHistory => 'سجل المزامنة';
+
+  @override
+  String get affiliateDeleteConfirmTitle => 'حذف هذا المتجر؟';
+
+  @override
+  String get affiliateDeleteConfirmBody => 'ستُحذف إعدادات المتجر. تبقى المنتجات المستوردة لكنها تتوقف عن التحديث. لا يمكن التراجع.';
+
+  @override
+  String get affiliateSyncStarted => 'بدأت المزامنة…';
+
+  @override
+  String get affiliateSyncQueuedMsg => 'تمت جدولة المزامنة. تُعالَج الخلاصات الكبيرة عبر المُشغّل المجدول — راجع سجل المزامنة.';
+
+  @override
+  String get affiliateSyncDoneMsg => 'اكتملت المزامنة';
+
+  @override
+  String affiliateSyncResult(int added, int updated, int deactivated, int failed) {
+    return 'جديد $added · محدّث $updated · غير متاح $deactivated · أخطاء $failed';
+  }
+
+  @override
+  String get affiliateSyncFailedMsg => 'فشلت المزامنة';
+
+  @override
+  String get affiliatePlatformStatusLink => 'حالة منصة Awin القديمة';
+
+  @override
+  String get affiliateTestConnection => 'اختبار الاتصال';
+
+  @override
+  String get affiliateTesting => 'جارٍ الاختبار…';
+
+  @override
+  String get affiliateTestOkTitle => 'نجح الاتصال';
+
+  @override
+  String affiliateTestOkBody(String detected, int sample) {
+    return '$detected مُكتشَف · $sample منتج عيّنة';
+  }
+
+  @override
+  String get affiliateTestFailTitle => 'فشل الاتصال';
+
+  @override
+  String get affiliateDataSourceRequired => 'مطلوب مصدر بيانات للمنتجات';
+
+  @override
+  String get affiliateDataSourceRequiredBody => 'رابط موقع عادي لا يوفّر كتالوج منتجات. اضبط خلاصة منتجات أو واجهة REST أو خلاصة شبكة أفلييت.';
+
+  @override
+  String get affiliateBackendMissing => 'يتطلب اختبار الاتصال والمزامنة الآن ضبط رابط الخادم (AI_BACKEND_URL) لهذه النسخة.';
+
+  @override
+  String get affiliateSectionBasic => 'المعلومات الأساسية';
+
+  @override
+  String get affiliateSectionAffiliate => 'الأفلييت';
+
+  @override
+  String get affiliateSectionIntegration => 'التكامل';
+
+  @override
+  String get affiliateSectionSync => 'المزامنة';
+
+  @override
+  String get affiliateFieldStoreName => 'اسم المتجر';
+
+  @override
+  String get affiliateFieldLogoUrl => 'رابط الشعار';
+
+  @override
+  String get affiliateFieldDescription => 'الوصف';
+
+  @override
+  String get affiliateFieldWebsiteUrl => 'رابط الموقع';
+
+  @override
+  String get affiliateFieldCountry => 'الدولة';
+
+  @override
+  String get affiliateFieldCurrency => 'العملة';
+
+  @override
+  String get affiliateFieldNetwork => 'شبكة الأفلييت';
+
+  @override
+  String get affiliateFieldProgramId => 'معرّف البرنامج';
+
+  @override
+  String get affiliateFieldAffiliateId => 'معرّف الأفلييت';
+
+  @override
+  String get affiliateFieldDefaultCommission => 'نسبة العمولة الافتراضية';
+
+  @override
+  String get affiliateFieldCommissionType => 'نوع العمولة';
+
+  @override
+  String get affiliateFieldIntegrationType => 'نوع التكامل';
+
+  @override
+  String get affiliateIntegrationProductFeed => 'خلاصة منتجات';
+
+  @override
+  String get affiliateIntegrationRestApi => 'واجهة REST';
+
+  @override
+  String get affiliateIntegrationNetwork => 'شبكة أفلييت';
+
+  @override
+  String get affiliateIntegrationManual => 'يدوي';
+
+  @override
+  String get affiliateIntegrationMock => 'وهمي (اختبار)';
+
+  @override
+  String get affiliateMockNote => 'موصّل اختباري — يُنشئ مجموعة صغيرة من منتجات تجميل نموذجية بدون أي بيانات اعتماد خارجية. استخدميه للتحقق من المسار كاملًا: اختبار الاتصال ← حفظ ← مزامنة الآن ← ظهور المنتجات.';
+
+  @override
+  String get affiliateTestManualTooltip => 'المتاجر اليدوية لا تحتوي على مصدر بيانات للاختبار. اختاري خلاصة منتجات أو واجهة REST أو شبكة أفلييت أو وهمي.';
+
+  @override
+  String get affiliateFieldFeedUrl => 'رابط الخلاصة';
+
+  @override
+  String get affiliateFieldFeedUrlHint => 'رابط خلاصة عام. إذا احتاج كلمة مرور فاحفظها كسرّ في الخادم — وليس هنا.';
+
+  @override
+  String get affiliateFieldFeedFormat => 'صيغة الخلاصة';
+
+  @override
+  String get affiliateFieldFeedAuth => 'المصادقة';
+
+  @override
+  String get affiliateFieldFeedUsername => 'اسم المستخدم (إن لزم)';
+
+  @override
+  String get affiliateFieldFeedLanguage => 'لغة الخلاصة';
+
+  @override
+  String get affiliateSecretNote => 'تُضبط كلمات المرور ومفاتيح وواجهات API والرموز في الخادم، وليس في هذا النموذج أو في Firestore.';
+
+  @override
+  String get affiliateFieldApiBaseUrl => 'الرابط الأساسي للواجهة';
+
+  @override
+  String get affiliateFieldApiProductsPath => 'مسار نقطة نهاية المنتجات';
+
+  @override
+  String get affiliateFieldApiAuth => 'المصادقة';
+
+  @override
+  String get affiliateFieldApiHeaderName => 'اسم ترويسة المصادقة';
+
+  @override
+  String get affiliateFieldApiQueryParam => 'معامل استعلام المصادقة';
+
+  @override
+  String get affiliateFieldPublicApiId => 'معرّف API العام';
+
+  @override
+  String get affiliateFieldApiItemsPath => 'مسار العناصر في الاستجابة';
+
+  @override
+  String get affiliateFieldSyncEnabled => 'المزامنة مُفعّلة';
+
+  @override
+  String get affiliateFieldSyncFrequency => 'تكرار المزامنة';
+
+  @override
+  String get affiliateFreq6h => 'كل 6 ساعات';
+
+  @override
+  String get affiliateFreq12h => 'كل 12 ساعة';
+
+  @override
+  String get affiliateFreqDaily => 'يوميًا';
+
+  @override
+  String get affiliateFreqWeekly => 'أسبوعيًا';
+
+  @override
+  String get affiliateCommissionPercentage => 'نسبة مئوية';
+
+  @override
+  String get affiliateCommissionFixed => 'ثابتة';
+
+  @override
+  String get affiliateAuthNone => 'بدون';
+
+  @override
+  String get affiliateAuthBasic => 'أساسية';
+
+  @override
+  String get affiliateAuthBearer => 'رمز Bearer';
+
+  @override
+  String get affiliateAuthHeader => 'ترويسة مخصّصة';
+
+  @override
+  String get affiliateAuthQuery => 'معامل استعلام';
+
+  @override
+  String get affiliateFormSaved => 'تم حفظ المتجر';
+
+  @override
+  String get affiliateFormSaveError => 'تعذّر حفظ المتجر.';
+
+  @override
+  String get affiliateRequired => 'مطلوب';
+
+  @override
+  String get affiliateSyncHistoryTitle => 'سجل المزامنة';
+
+  @override
+  String get affiliateSyncHistoryEmpty => 'لم تُجرَ أي مزامنة لهذا المتجر بعد.';
+
+  @override
+  String get affiliateNextSync => 'المزامنة التالية';
+
+  @override
+  String get affiliateNeverSynced => 'لم تتم المزامنة';
+
+  @override
+  String get affiliateManualNoSync => 'متجر يدوي — الاستيراد التلقائي معطّل. أضِف المنتجات من شاشة المنتجات.';
+
+  @override
+  String get affiliateDetailsTitle => 'تفاصيل المتجر';
 }
