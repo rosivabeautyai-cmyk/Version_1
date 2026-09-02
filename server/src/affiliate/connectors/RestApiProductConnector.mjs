@@ -152,6 +152,19 @@ export class RestApiProductConnector extends ProductConnector {
     return raw;
   }
 
+  async estimateProductCount() {
+    try {
+      this._assertConfigured();
+      const body = await this._fetchJson(this._buildUrl({ page: 1, offset: 0 }));
+      const total = getPath(body, this.pag.totalPath || "meta.total");
+      if (Number.isFinite(total)) return total;
+      // No total in the response — fall back to the streaming count.
+      return super.estimateProductCount();
+    } catch {
+      return null;
+    }
+  }
+
   async testConnection() {
     try {
       this._assertConfigured();

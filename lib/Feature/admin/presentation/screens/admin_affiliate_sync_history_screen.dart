@@ -145,11 +145,21 @@ class _LogTile extends StatelessWidget {
               color: colorScheme.onSurfaceVariant,
             ),
           ),
+          if (log.excludedProducts > 0) ...[
+            const SizedBox(height: 4),
+            Text(
+              lang.affiliateExcludedLine(log.excludedProducts),
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: colorScheme.tertiary),
+            ),
+          ],
           if (log.errorSummary.isNotEmpty) ...[
             const SizedBox(height: 8),
             Text(
               log.errorSummary,
-              style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.error),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: log.isNeedsReview ? colorScheme.tertiary : colorScheme.error,
+              ),
             ),
           ],
           if (log.failureSamples.isNotEmpty) ...[
@@ -157,6 +167,16 @@ class _LogTile extends StatelessWidget {
             for (final s in log.failureSamples.take(5))
               Text(
                 '• ${s['code']}: ${s['detail']}',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+          ],
+          if (log.excludedSamples.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            for (final s in log.excludedSamples.take(5))
+              Text(
+                '– ${s['detail']}  (${s['code']})',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                 ),

@@ -1649,7 +1649,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get affiliateSyncStarted => 'Sync started…';
 
   @override
-  String get affiliateSyncQueuedMsg => 'Sync queued. Large feeds are processed by the scheduled worker — check Sync History.';
+  String get affiliateSyncQueuedMsg => 'Queued — this store\'s feed is large, so it runs on the scheduled worker. Products will appear after the next worker run (or run the workflow manually). Track it in Sync History.';
+
+  @override
+  String get affiliateSyncQueuedShortMsg => 'Queued — not run yet. Products appear after the next worker run.';
+
+  @override
+  String affiliateExcludedLine(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count products written but hidden from shoppers — see the Ineligible filter',
+      one: '1 product written but hidden from shoppers — see the Ineligible filter',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String affiliateExcludedTag(String reason) {
+    return 'Hidden from shoppers: $reason';
+  }
 
   @override
   String get affiliateSyncDoneMsg => 'Sync completed';

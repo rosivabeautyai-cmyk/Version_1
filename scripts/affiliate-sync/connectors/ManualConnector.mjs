@@ -29,6 +29,10 @@ export class ManualConnector extends ProductConnector {
     };
   }
 
+  async estimateProductCount() {
+    return 0;
+  }
+
   // eslint-disable-next-line require-yield
   async *fetchProductPages() {
     return; // nothing to import

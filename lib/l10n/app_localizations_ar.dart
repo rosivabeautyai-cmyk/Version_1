@@ -1658,7 +1658,26 @@ class AppLocalizationsAr extends AppLocalizations {
   String get affiliateSyncStarted => 'بدأت المزامنة…';
 
   @override
-  String get affiliateSyncQueuedMsg => 'تمت جدولة المزامنة. تُعالَج الخلاصات الكبيرة عبر المُشغّل المجدول — راجع سجل المزامنة.';
+  String get affiliateSyncQueuedMsg => 'في قائمة الانتظار — خلاصة هذا المتجر كبيرة، لذا تُشغَّل عبر المُشغّل المجدول. ستظهر المنتجات بعد التشغيل التالي للمُشغّل (أو شغّلي سير العمل يدويًا). تابعي الحالة في سجل المزامنة.';
+
+  @override
+  String get affiliateSyncQueuedShortMsg => 'في قائمة الانتظار — لم تُشغَّل بعد. تظهر المنتجات بعد التشغيل التالي للمُشغّل.';
+
+  @override
+  String affiliateExcludedLine(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count منتجات مكتوبة لكنها مخفية عن المتسوقين — راجعي فلتر \"غير مؤهّل\"',
+      one: 'مُنتَج واحد مكتوب لكنه مخفي عن المتسوقين — راجعي فلتر \"غير مؤهّل\"',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String affiliateExcludedTag(String reason) {
+    return 'مخفي عن المتسوقين: $reason';
+  }
 
   @override
   String get affiliateSyncDoneMsg => 'اكتملت المزامنة';

@@ -19,6 +19,7 @@
 import { AVAILABILITY, PRODUCT_SOURCE } from "./constants.mjs";
 import { SyncError, ERROR_CODES } from "./errors.mjs";
 import { resolveCommission } from "./commission.mjs";
+import { isMensProduct } from "./mensFilter.mjs";
 
 /**
  * Deterministic Firestore document id for an imported product.
@@ -143,18 +144,42 @@ export function normalizeProduct({ raw, store, resolveCategory, nowIso } = {}) {
   // A connector that has ALREADY done proper ROSIVA women's-beauty
   // classification (currently only the Awin connector, using the same
   // classifier the legacy sync uses) passes the verdict through here.
-  // Everything else stays `isRosivaProduct: false` (excluded from the
-  // AI catalog) and relies purely on category resolution.
   const passthrough =
     raw.rosivaClassification && typeof raw.rosivaClassification === "object"
       ? raw.rosivaClassification
       : null;
 
-  const rosivaCategory = passthrough?.rosivaCategory
-    ? passthrough.rosivaCategory
-    : resolveCategory
-      ? resolveCategory(raw.categoryName ?? raw.category ?? raw.merchantCategory, store.id)
-      : null;
+  // Category resolution. Passthrough wins. Otherwise resolve from the
+  // source category first, then fall back to the product NAME (a "Beauty"
+  // category with "Vitamin C Serum" in the name should still land in
+  // skincare — the same way Awin's classifier reads the name).
+  const sourceCat = raw.categoryName ?? raw.category ?? raw.merchantCategory;
+  let rosivaCategory = passthrough?.rosivaCategory ?? null;
+  if (!rosivaCategory && resolveCategory) {
+    rosivaCategory =
+      resolveCategory(sourceCat, store.id) || resolveCategory(name, store.id) || null;
+  }
+
+  // Non-Awin eligibility: shopper-visible BY DEFAULT (like Awin's own
+  // products), minus a keyword men's-exclusion and minus anything whose
+  // category can't be resolved to one of ROSIVA's 3. Excluded products
+  // are still WRITTEN, with `exclusionReason`, visible under the admin
+  // "Ineligible" filter — never silently dropped.
+  const mens = passthrough ? { excluded: false, matched: null } : isMensProduct({ name, categoryName: sourceCat });
+  const included = passthrough
+    ? passthrough.isRosivaProduct === true
+    : !mens.excluded && rosivaCategory != null;
+  const gender = passthrough
+    ? passthrough.gender || "unknown"
+    : mens.excluded
+      ? "men"
+      : "women";
+  let exclusionReason = null;
+  if (!passthrough && !included) {
+    exclusionReason = mens.excluded
+      ? `men's product (matched "${mens.matched}")`
+      : "no category match";
+  }
 
   const oldPrice = toNumberOrNull(raw.oldPrice ?? raw.rrpPrice ?? raw.rrp_price);
   const salePrice = toNumberOrNull(raw.salePrice);
@@ -195,13 +220,13 @@ export function normalizeProduct({ raw, store, resolveCategory, nowIso } = {}) {
     category: rosivaCategory,
     rosivaCategory,
     categoryName: toStringOrNull(raw.categoryName ?? raw.category),
-    // Imported affiliate products are NOT run through the women's-beauty
-    // classifier, so they are excluded from the AI catalog by default —
-    // exactly like admin-authored products. A rosivaCategory match still
-    // lets them show in the category screens via the shopper query.
-    isRosivaProduct: passthrough ? passthrough.isRosivaProduct === true : false,
-    gender: passthrough?.gender || toStringOrNull(raw.gender) || "unknown",
+    // Shopper-visible by default (same as Awin products): included ==
+    // true unless the men's filter or an unresolved category excluded
+    // it. Excluded products are still written, with `exclusionReason`.
+    isRosivaProduct: included,
+    gender,
     classificationReason: passthrough?.classificationReason ?? null,
+    exclusionReason,
 
     price,
     oldPrice,

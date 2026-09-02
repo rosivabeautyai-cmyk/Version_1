@@ -77,6 +77,12 @@ class ProductModel {
   /// has no `isActive` key — behaves exactly as before.
   final bool isActive;
 
+  /// Why a synced product is NOT shopper-visible (`isRosivaProduct ==
+  /// false`): e.g. `men's product (matched "homme")` or `no category
+  /// match`. Null for shopper-visible products and for legacy docs.
+  /// Shown in the admin Products screen under the "Ineligible" filter.
+  final String? exclusionReason;
+
   /// Whether this product is in ROSIVA's beauty scope at all — set by
   /// the Awin sync/backfill classifier, completely separate from
   /// [category]. Defaults to `true` for any document that predates
@@ -137,6 +143,7 @@ class ProductModel {
     this.availability,
     this.commissionRate,
     this.isActive = true,
+    this.exclusionReason,
     this.isRosivaProduct = true,
     this.gender = 'unknown',
     this.productType,
@@ -196,6 +203,7 @@ class ProductModel {
       availability: json['availability'] as String?,
       commissionRate: json['commissionRate'] as num?,
       isActive: json['isActive'] as bool? ?? true,
+      exclusionReason: json['exclusionReason'] as String?,
       isRosivaProduct: json['isRosivaProduct'] as bool? ?? true,
       gender: json['gender'] as String? ?? 'unknown',
       productType: json['productType'] as String?,

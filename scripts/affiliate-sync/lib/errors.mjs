@@ -23,6 +23,7 @@ export const ERROR_CODES = Object.freeze({
   DUPLICATE_PRODUCT: "duplicate_product",
   EMPTY_FEED: "empty_feed",
   CATALOG_DROP: "catalog_drop",
+  WRITE_BUDGET: "write_budget",
   SERVICE_UNAVAILABLE: "service_unavailable",
   NOT_SUPPORTED: "not_supported",
   DATA_SOURCE_REQUIRED: "data_source_required",
@@ -46,6 +47,8 @@ const DEFAULT_USER_MESSAGES = {
     "The product source returned zero products. Nothing was deactivated — the existing catalog was left untouched. Check the feed/API before the next sync.",
   [ERROR_CODES.CATALOG_DROP]:
     "The product source returned far fewer products than expected, so no products were deactivated. Review the source, then re-run the sync to apply changes.",
+  [ERROR_CODES.WRITE_BUDGET]:
+    "This sync was stopped to protect the daily Firestore write budget. Nothing was broken. Re-run after 00:00 UTC, raise AFFILIATE_DAILY_WRITE_BUDGET, or split the feed into smaller stores.",
   [ERROR_CODES.SERVICE_UNAVAILABLE]: "The product source is currently unavailable.",
   [ERROR_CODES.NOT_SUPPORTED]: "This integration type does not support automatic import.",
   [ERROR_CODES.DATA_SOURCE_REQUIRED]:

@@ -3290,8 +3290,26 @@ abstract class AppLocalizations {
   /// No description provided for @affiliateSyncQueuedMsg.
   ///
   /// In en, this message translates to:
-  /// **'Sync queued. Large feeds are processed by the scheduled worker — check Sync History.'**
+  /// **'Queued — this store\'s feed is large, so it runs on the scheduled worker. Products will appear after the next worker run (or run the workflow manually). Track it in Sync History.'**
   String get affiliateSyncQueuedMsg;
+
+  /// No description provided for @affiliateSyncQueuedShortMsg.
+  ///
+  /// In en, this message translates to:
+  /// **'Queued — not run yet. Products appear after the next worker run.'**
+  String get affiliateSyncQueuedShortMsg;
+
+  /// No description provided for @affiliateExcludedLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 product written but hidden from shoppers — see the Ineligible filter} other{{count} products written but hidden from shoppers — see the Ineligible filter}}'**
+  String affiliateExcludedLine(int count);
+
+  /// No description provided for @affiliateExcludedTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden from shoppers: {reason}'**
+  String affiliateExcludedTag(String reason);
 
   /// No description provided for @affiliateSyncDoneMsg.
   ///

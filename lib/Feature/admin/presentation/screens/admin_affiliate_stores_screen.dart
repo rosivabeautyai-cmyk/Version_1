@@ -74,17 +74,17 @@ class _AdminAffiliateStoresScreenState
     setState(() => _busyStoreId = null);
 
     if (res.mode == 'queued') {
-      SnackbarService.success(
-        context,
-        res.message ?? lang.affiliateSyncQueuedMsg,
-      );
+      // Deliberately NOT a success toast — the sync has NOT run yet.
+      _showQueuedDialog(res.message ?? lang.affiliateSyncQueuedMsg);
       return;
     }
     if (res.mode == 'inline' && res.log != null) {
       final l = res.log!;
       final msg = '${lang.affiliateSyncDoneMsg} · '
           '${lang.affiliateSyncResult(l.newProducts, l.updatedProducts, l.deactivatedProducts, l.failedProducts)}';
-      if (res.ok) {
+      if (l.isNeedsReview) {
+        SnackbarService.warning(context, l.errorSummary.isNotEmpty ? l.errorSummary : msg);
+      } else if (res.ok) {
         SnackbarService.success(context, msg);
       } else {
         SnackbarService.error(context, res.message ?? lang.affiliateSyncFailedMsg);
@@ -118,6 +118,24 @@ class _AdminAffiliateStoresScreenState
     pushTo(
       context,
       AdminAffiliateSyncHistoryScreen(repository: _repo, store: store),
+    );
+  }
+
+  void _showQueuedDialog(String message) {
+    final theme = Theme.of(context);
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        icon: Icon(Icons.schedule_rounded, color: theme.colorScheme.tertiary),
+        title: Text(AppLocalizations.of(ctx)!.affiliateSyncQueuedShort),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(MaterialLocalizations.of(ctx).okButtonLabel),
+          ),
+        ],
+      ),
     );
   }
 

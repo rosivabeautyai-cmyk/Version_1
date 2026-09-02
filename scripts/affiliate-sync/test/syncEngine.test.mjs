@@ -139,11 +139,41 @@ test("commission priority: product rate on the doc beats the store default", asy
 
   const products = db.dump(COLLECTIONS.PRODUCTS);
   const serum = products[`${STORE_ID}:SERUM-001`];
-  const other = products[`${STORE_ID}:CREAM-002`];
+  const other = products[`${STORE_ID}:LIP-004`];
   assert.equal(serum.commissionRate, 15);
   assert.equal(serum.commissionSource, "product");
   assert.equal(other.commissionRate, 8);
   assert.equal(other.commissionSource, "store");
+});
+
+test("non-Awin products are shopper-visible by default; men's + uncategorised are excluded with a reason", async () => {
+  const db = seedDb();
+  const log = await syncAffiliateStore({
+    db,
+    storeId: STORE_ID,
+    connector: new MockConnector({ id: STORE_ID, slug: "mock-beauty", currency: "USD" }),
+  });
+
+  const products = db.dump(COLLECTIONS.PRODUCTS);
+  assert.equal(Object.keys(products).length, 8, "all 8 written, nothing dropped");
+
+  const visible = Object.values(products).filter((p) => p.isRosivaProduct === true);
+  const excluded = Object.values(products).filter((p) => p.isRosivaProduct === false);
+  assert.equal(visible.length, 6);
+  assert.equal(excluded.length, 2);
+  for (const p of visible) assert.equal(p.gender, "women");
+
+  const mens = products[`${STORE_ID}:MENS-006`];
+  assert.equal(mens.isRosivaProduct, false);
+  assert.equal(mens.gender, "men");
+  assert.match(mens.exclusionReason, /men's product/);
+
+  const gift = products[`${STORE_ID}:GIFT-007`];
+  assert.equal(gift.isRosivaProduct, false);
+  assert.equal(gift.exclusionReason, "no category match");
+
+  assert.equal(log.excludedProducts, 2);
+  assert.equal(log.excludedSamples.length, 2);
 });
 
 test("inactive store is refused unless forced", async () => {
@@ -245,6 +275,72 @@ test("catalog-safety guard: a moderate drop (<=80%) still deactivates normally",
   assert.equal(log.sweepSkipped, null);
   assert.equal(log.status, "success");
   assert.equal(log.deactivatedProducts, 2);
+});
+
+test("write-budget pre-flight: refuses to start when the estimate would exceed today's remaining budget", async () => {
+  const db = seedDb();
+  const today = "2026-04-01";
+  // 12 of a 15 budget already used today -> only 3 left.
+  await db.collection(COLLECTIONS.SYNC_BUDGET).doc(today).set({ writesUsed: 12 });
+
+  const log = await syncAffiliateStore({
+    db,
+    storeId: STORE_ID,
+    connector: new MockConnector({ id: STORE_ID, slug: "mock-beauty", currency: "USD" }),
+    env: { AFFILIATE_DAILY_WRITE_BUDGET: "15" },
+    clock: () => `${today}T09:00:00.000Z`,
+  });
+
+  assert.equal(log.status, "needs_review");
+  assert.equal(log.errorCode, "write_budget");
+  assert.equal(log.budgetStopped, true);
+  assert.equal(Object.keys(db.dump(COLLECTIONS.PRODUCTS)).length, 0, "nothing written");
+  const store = db.dump(COLLECTIONS.STORES)[STORE_ID];
+  assert.equal(store.syncStatus, "needs_review");
+  assert.equal(store.pendingReview, true);
+});
+
+test("write-budget hard stop: unknown feed size -> stops mid-run without exceeding the budget", async () => {
+  const db = seedDb();
+  const today = "2026-04-02";
+  await db.collection(COLLECTIONS.SYNC_BUDGET).doc(today).set({ writesUsed: 0 });
+
+  // 40 products, in pages of 10, and NO estimateProductCount (unknown size).
+  const rows = Array.from({ length: 40 }, (_, i) => ({
+    externalProductId: `P${i}`,
+    name: `Vitamin C Face Serum ${i}`,
+    categoryName: "Serum",
+    price: 10,
+    productUrl: `https://s/${i}`,
+    affiliateUrl: `https://go/${i}`,
+  }));
+  const connector = {
+    name: "UnknownSizeConnector",
+    normalizeProduct: (r) => r,
+    async *fetchProductPages() {
+      for (let i = 0; i < rows.length; i += 10) yield rows.slice(i, i + 10);
+    },
+    // no estimateProductCount -> engine relies on the mid-run guard
+  };
+
+  const log = await syncAffiliateStore({
+    db,
+    storeId: STORE_ID,
+    connector,
+    env: { AFFILIATE_DAILY_WRITE_BUDGET: "20" }, // room for ~12 product writes (reserve 8)
+    clock: () => `${today}T09:00:00.000Z`,
+  });
+
+  assert.equal(log.status, "needs_review");
+  assert.equal(log.errorCode, "write_budget");
+  assert.equal(log.sweepSkipped, "write_budget");
+
+  const written = Object.keys(db.dump(COLLECTIONS.PRODUCTS)).length;
+  assert.ok(written > 0 && written <= 12, `wrote ${written}, expected 1..12`);
+  assert.equal(written, log.newProducts, "counts match actual writes");
+
+  const budgetAfter = db.dump(COLLECTIONS.SYNC_BUDGET)[today].writesUsed;
+  assert.ok(budgetAfter <= 20, `budget doc shows ${budgetAfter}, must be <= 20`);
 });
 
 test("malformed products are counted as failed, the rest still sync", async () => {

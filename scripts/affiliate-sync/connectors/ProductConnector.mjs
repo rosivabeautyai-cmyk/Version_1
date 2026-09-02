@@ -73,6 +73,35 @@ export class ProductConnector {
   }
 
   /**
+   * Best-effort count of how many products this source will return,
+   * used by the sync engine's daily write-budget guard BEFORE any
+   * Firestore write. Return `null` if the count can't be known cheaply
+   * (the engine then relies on its mid-run hard stop instead).
+   *
+   * The default implementation streams the pages and counts — safe
+   * (zero Firestore writes) but re-downloads the feed. Connectors with
+   * a cheaper way (a total in an API response, a fixed dataset)
+   * override this.
+   *
+   * @param {object} [opts]
+   * @param {number} [opts.timeoutMs]
+   * @return {Promise<number|null>}
+   */
+  async estimateProductCount({ timeoutMs = 120000 } = {}) {
+    const deadline = Date.now() + timeoutMs;
+    let n = 0;
+    try {
+      for await (const page of this.fetchProductPages()) {
+        n += page.length;
+        if (Date.now() > deadline) return null; // too slow to be sure
+      }
+      return n;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
    * Map ONE source record to a loose "raw product" object the
    * Normalizer understands. Keep this dumb: field plumbing only, no
    * category/commission decisions (the Normalizer owns those).

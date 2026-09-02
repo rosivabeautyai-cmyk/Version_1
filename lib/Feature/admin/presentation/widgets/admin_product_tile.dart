@@ -94,6 +94,28 @@ class AdminProductTile extends StatelessWidget {
                         _AvailabilityBadge(inStock: product.inStock, lang: lang),
                       ],
                     ),
+                    if (!product.isRosivaProduct &&
+                        product.exclusionReason != null &&
+                        product.exclusionReason!.isNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [
+                          Icon(Icons.visibility_off_rounded,
+                              size: 13, color: colorScheme.tertiary),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              lang.affiliateExcludedTag(product.exclusionReason!),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: colorScheme.tertiary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),

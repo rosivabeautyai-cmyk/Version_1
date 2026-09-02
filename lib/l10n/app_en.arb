@@ -630,7 +630,12 @@
   "affiliateDeleteConfirmTitle": "Delete this store?",
   "affiliateDeleteConfirmBody": "The store configuration is removed. Imported products are kept but stop refreshing. This cannot be undone.",
   "affiliateSyncStarted": "Sync started…",
-  "affiliateSyncQueuedMsg": "Sync queued. Large feeds are processed by the scheduled worker — check Sync History.",
+  "affiliateSyncQueuedMsg": "Queued — this store's feed is large, so it runs on the scheduled worker. Products will appear after the next worker run (or run the workflow manually). Track it in Sync History.",
+  "affiliateSyncQueuedShortMsg": "Queued — not run yet. Products appear after the next worker run.",
+  "affiliateExcludedLine": "{count, plural, one{1 product written but hidden from shoppers — see the Ineligible filter} other{{count} products written but hidden from shoppers — see the Ineligible filter}}",
+  "@affiliateExcludedLine": { "placeholders": { "count": { "type": "int" } } },
+  "affiliateExcludedTag": "Hidden from shoppers: {reason}",
+  "@affiliateExcludedTag": { "placeholders": { "reason": { "type": "String" } } },
   "affiliateSyncDoneMsg": "Sync completed",
   "affiliateSyncResult": "New {added} · Updated {updated} · Unavailable {deactivated} · Errors {failed}",
   "@affiliateSyncResult": {

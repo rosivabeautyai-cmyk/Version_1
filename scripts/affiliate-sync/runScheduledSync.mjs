@@ -17,6 +17,8 @@
  * a run without blocking the UI on a large feed — this worker drains it.
  */
 
+import { FieldValue } from "firebase-admin/firestore";
+
 import { initFirebase } from "./lib/firestore.mjs";
 import { syncAffiliateStore } from "./syncEngine.mjs";
 import { COLLECTIONS, STORE_STATUS, TRIGGERED_BY, SYNC_STATUS } from "./lib/constants.mjs";
@@ -55,6 +57,7 @@ async function drainJobs(db) {
         storeId: job.storeId,
         triggeredBy: TRIGGERED_BY.ADMIN,
         force: true,
+        fieldValue: FieldValue,
       });
       await jobDoc.ref.set(
         { status: log.status === "error" ? "error" : "done", finishedAt: new Date().toISOString(), logId: log.id },
@@ -108,6 +111,7 @@ async function main() {
         storeId: id,
         triggeredBy: args.storeId ? TRIGGERED_BY.ADMIN : TRIGGERED_BY.SCHEDULED,
         force: Boolean(args.storeId),
+        fieldValue: FieldValue,
       });
       summary.push({
         storeId: id,

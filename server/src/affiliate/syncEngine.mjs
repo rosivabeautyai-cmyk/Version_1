@@ -38,12 +38,19 @@ import {
   WRITE_BATCH_SIZE,
   MAX_PRODUCTS_PER_RUN,
   MAX_CATALOG_DROP_RATIO,
+  BUDGET_BOOKKEEPING_RESERVE,
 } from "./lib/constants.mjs";
 import { SyncError, ERROR_CODES, toSafeError, redact } from "./lib/errors.mjs";
 import { buildCategoryResolver } from "./lib/categoryMapping.mjs";
 import { normalizeProduct } from "./lib/normalizer.mjs";
 import { resolveStoreSecrets } from "./lib/secrets.mjs";
 import { getConnector } from "./connectors/index.mjs";
+import {
+  utcDayKey,
+  dailyWriteBudget,
+  writesUsedToday,
+  addWritesToday,
+} from "./lib/writeBudget.mjs";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -86,6 +93,7 @@ function nextSyncIso(frequency, fromIso) {
  * @param {object} [args.logger]       { info, warn, error }
  * @param {number} [args.overallTimeoutMs]
  * @param {boolean} [args.force]       run even if store inactive / sync disabled
+ * @param {object} [args.fieldValue]   firebase-admin FieldValue (for the write-budget counter's `.increment`)
  * @return {Promise<object>}  the sync log record that was written
  */
 export async function syncAffiliateStore({
@@ -98,6 +106,7 @@ export async function syncAffiliateStore({
   logger = console,
   overallTimeoutMs = 25 * 60 * 1000,
   force = false,
+  fieldValue = null,
 } = {}) {
   if (!db) throw new SyncError(ERROR_CODES.INVALID_CONFIG, "db is required");
   if (!storeId) throw new SyncError(ERROR_CODES.INVALID_CONFIG, "storeId is required");
@@ -127,10 +136,18 @@ export async function syncAffiliateStore({
     errorSummary: "",
     errorCode: null,
     failureSamples: [],
+    // Non-Awin eligibility: products written but hidden from shoppers,
+    // with a reason (men's filter / unresolved category).
+    excludedProducts: 0,
+    excludedSamples: [],
     // Catalog-safety guard bookkeeping (see MAX_CATALOG_DROP_RATIO).
     sweepSkipped: null, // null | "empty_feed" | "catalog_drop"
     seenCount: 0,
     existingActiveCount: 0,
+    // Firestore write-budget guard (see DEFAULT_DAILY_WRITE_BUDGET).
+    writesCommitted: 0,
+    budgetStopped: false,
+    estimatedWrites: null,
   };
 
   try {
@@ -187,23 +204,94 @@ export async function syncAffiliateStore({
       logger.warn?.(`[affiliate-sync] ${storeId}: could not list existing products: ${redact(String(err?.message || err))}`);
     }
     result.existingActiveCount = existingActiveCount;
+
+    // ---- Firestore write-budget pre-flight (Spark plan safety) --------
+    // Estimate this run's writes and refuse to start if it would push
+    // the day's total past the budget. A feed I don't control must never
+    // be able to burn the 20k/day quota and break Awin + the app.
+    const dayKey = utcDayKey(new Date(clock()));
+    const budget = dailyWriteBudget(env);
+    const usedToday = await writesUsedToday(db, dayKey);
+    const remaining = budget - usedToday;
+
+    let estimate = null;
+    try {
+      estimate = await connector.estimateProductCount?.();
+    } catch {
+      estimate = null;
+    }
+    result.estimatedWrites = estimate == null ? null : estimate + existingIds.size;
+
+    if (estimate != null) {
+      // worst case: every incoming product is a write, AND every
+      // existing product not returned this run is a deactivation write.
+      const worstCase = estimate + existingIds.size + BUDGET_BOOKKEEPING_RESERVE;
+      if (worstCase > remaining) {
+        const msg =
+          `Estimated ~${worstCase} Firestore writes would exceed today's remaining ` +
+          `budget (${remaining} of ${budget} left). Sync NOT started — catalog untouched. ` +
+          `Re-run after 00:00 UTC, raise AFFILIATE_DAILY_WRITE_BUDGET, or split the feed.`;
+        logger.warn?.(`[affiliate-sync] ${storeId}: WRITE-BUDGET pre-flight blocked. ${msg}`);
+        result.status = "needs_review";
+        result.errorCode = ERROR_CODES.WRITE_BUDGET;
+        result.errorSummary = msg;
+        result.budgetStopped = true;
+        result.completedAt = clock();
+        await storeRef.set(
+          {
+            syncStatus: SYNC_STATUS.NEEDS_REVIEW,
+            lastSyncStatus: "needs_review",
+            lastSyncAt: result.completedAt,
+            lastSyncError: msg,
+            pendingReview: true,
+            nextSyncAt: nextSyncIso(store.syncFrequency, result.completedAt),
+            updatedAt: result.completedAt,
+          },
+          { merge: true },
+        );
+        const preLogRef = db.collection(COLLECTIONS.SYNC_LOGS).doc();
+        const preLog = { id: preLogRef.id, ...result };
+        await preLogRef.set(preLog);
+        await addWritesToday(db, BUDGET_BOOKKEEPING_RESERVE, fieldValue, dayKey);
+        return preLog;
+      }
+    }
+    // If estimate is null (unknown feed size) we still proceed, but the
+    // per-batch hard stop below caps the damage.
+    const budgetCeiling = usedToday + remaining; // == budget; kept explicit
+    // -----------------------------------------------------------------
+
     const seenIds = new Set();
 
     // 6–9 — paginated fetch + normalize + validate + upsert
     let batch = db.batch();
     let batchCount = 0;
+    let budgetHit = false;
     const nowIso = clock();
 
     const flush = async () => {
       if (batchCount === 0) return;
       const toCommit = batch;
+      const n = batchCount;
       batch = db.batch();
       batchCount = 0;
       await withRetry(() => toCommit.commit(), { label: "batch.commit", logger });
+      result.writesCommitted += n;
     };
+
+    // Would writing ONE more product push today's total past the
+    // budget? Checked BEFORE the row is added to the batch, so whatever
+    // is already staged always fits and can be safely flushed. When it
+    // trips we stop cleanly: products written so far are fine
+    // (merge:true), the sweep is skipped, the run is flagged
+    // needs_review.
+    const oneMoreWouldExceed = () =>
+      usedToday + result.writesCommitted + batchCount + 1 + BUDGET_BOOKKEEPING_RESERVE >
+      budgetCeiling;
 
     let pageNo = 0;
     for await (const page of connector.fetchProductPages()) {
+      if (budgetHit) break;
       if (Date.now() > deadline) {
         throw new SyncError(ERROR_CODES.TIMEOUT, "overall sync time budget exceeded");
       }
@@ -236,7 +324,29 @@ export async function syncAffiliateStore({
           }
           continue;
         }
+        if (oneMoreWouldExceed()) {
+          budgetHit = true;
+          logger.warn?.(
+            `[affiliate-sync] ${storeId}: WRITE-BUDGET hard stop after ${result.writesCommitted + batchCount} writes ` +
+              `(day total ~${usedToday + result.writesCommitted + batchCount}/${budget}). Remaining products NOT written; sweep skipped.`,
+          );
+          break;
+        }
+
         seenIds.add(norm.docId);
+
+        // Written-but-hidden (men's filter / unresolved category). Still
+        // upserted below so it's visible under the admin Ineligible
+        // filter with `exclusionReason`.
+        if (norm.doc.isRosivaProduct === false && norm.doc.exclusionReason) {
+          result.excludedProducts += 1;
+          if (result.excludedSamples.length < 10) {
+            result.excludedSamples.push({
+              code: norm.doc.exclusionReason,
+              detail: `${norm.doc.name}`.slice(0, 120),
+            });
+          }
+        }
 
         const isNew = !existingIds.has(norm.docId);
         if (isNew) result.newProducts += 1;
@@ -249,17 +359,23 @@ export async function syncAffiliateStore({
         batchCount += 1;
         if (batchCount >= WRITE_BATCH_SIZE) await flush();
       }
+      if (budgetHit) break;
     }
+    // Whatever is staged fits the budget by construction — commit it.
     await flush();
 
     // 10 — deactivate the products the source stopped returning —
-    // UNLESS the catalog-safety guard trips (see MAX_CATALOG_DROP_RATIO).
+    // UNLESS a safety guard trips: the write-budget hard stop, an empty
+    // feed, or a >80% catalog drop.
     const seenCount = seenIds.size;
     result.seenCount = seenCount;
     const dropRatio =
       existingActiveCount > 0 ? (existingActiveCount - seenCount) / existingActiveCount : 0;
 
-    if (seenCount === 0) {
+    if (budgetHit) {
+      result.sweepSkipped = "write_budget";
+      // no logging here — already warned at the stop point
+    } else if (seenCount === 0) {
       result.sweepSkipped = "empty_feed";
       logger.warn?.(
         `[affiliate-sync] ${storeId}: deactivation sweep SKIPPED — source returned 0 products ` +
@@ -276,6 +392,18 @@ export async function syncAffiliateStore({
       const goneIds = [...existingIds].filter((id) => !seenIds.has(id));
       for (let i = 0; i < goneIds.length; i += WRITE_BATCH_SIZE) {
         const slice = goneIds.slice(i, i + WRITE_BATCH_SIZE);
+        // Same budget ceiling applies to deactivation writes.
+        if (
+          usedToday + result.writesCommitted + result.deactivatedProducts + slice.length + BUDGET_BOOKKEEPING_RESERVE >
+          budgetCeiling
+        ) {
+          budgetHit = true;
+          result.sweepSkipped = "write_budget";
+          logger.warn?.(
+            `[affiliate-sync] ${storeId}: WRITE-BUDGET stop during deactivation after ${result.deactivatedProducts} of ${goneIds.length}.`,
+          );
+          break;
+        }
         const b = db.batch();
         for (const id of slice) {
           b.set(
@@ -294,7 +422,36 @@ export async function syncAffiliateStore({
     result.completedAt = completedAt;
     const nextSyncAt = nextSyncIso(store.syncFrequency, completedAt);
 
-    if (result.sweepSkipped === "empty_feed") {
+    if (result.sweepSkipped === "write_budget") {
+      result.status = "needs_review";
+      result.errorCode = ERROR_CODES.WRITE_BUDGET;
+      result.errorSummary =
+        `Stopped after ~${result.writesCommitted} Firestore writes to stay within today's ` +
+        `budget (~${usedToday + result.writesCommitted}/${budget}). ${result.newProducts + result.updatedProducts} ` +
+        `product(s) written before stopping; the rest were not, and nothing was deactivated. ` +
+        `Re-run after 00:00 UTC or raise AFFILIATE_DAILY_WRITE_BUDGET.`;
+      await storeRef.set(
+        {
+          syncStatus: SYNC_STATUS.NEEDS_REVIEW,
+          lastSyncStatus: "needs_review",
+          lastSyncAt: completedAt,
+          lastSyncError: result.errorSummary,
+          pendingReview: true,
+          nextSyncAt,
+          // productCount NOT changed — the run is incomplete.
+          lastSyncSummary: {
+            newProducts: result.newProducts,
+            updatedProducts: result.updatedProducts,
+            deactivatedProducts: 0,
+            failedProducts: result.failedProducts,
+            excludedProducts: result.excludedProducts,
+            totalFetched: result.totalFetched,
+          },
+          updatedAt: completedAt,
+        },
+        { merge: true },
+      );
+    } else if (result.sweepSkipped === "empty_feed") {
       result.status = "error";
       result.errorCode = ERROR_CODES.EMPTY_FEED;
       result.errorSummary =
@@ -333,6 +490,7 @@ export async function syncAffiliateStore({
             updatedProducts: result.updatedProducts,
             deactivatedProducts: 0,
             failedProducts: result.failedProducts,
+            excludedProducts: result.excludedProducts,
             totalFetched: result.totalFetched,
           },
           updatedAt: completedAt,
@@ -354,6 +512,7 @@ export async function syncAffiliateStore({
             updatedProducts: result.updatedProducts,
             deactivatedProducts: result.deactivatedProducts,
             failedProducts: result.failedProducts,
+            excludedProducts: result.excludedProducts,
             totalFetched: result.totalFetched,
           },
           updatedAt: completedAt,
@@ -389,6 +548,22 @@ export async function syncAffiliateStore({
   const logRef = db.collection(COLLECTIONS.SYNC_LOGS).doc();
   const logDoc = { id: logRef.id, ...result };
   await logRef.set(logDoc);
+
+  // 15 — charge today's Firestore-write budget with what this run
+  // actually committed (+ a small bookkeeping reserve). Best-effort;
+  // never fails the sync.
+  try {
+    const dk = utcDayKey(new Date((result.completedAt || result.startedAt)));
+    await addWritesToday(
+      db,
+      (result.writesCommitted || 0) + (result.deactivatedProducts || 0) + BUDGET_BOOKKEEPING_RESERVE,
+      fieldValue,
+      dk,
+    );
+  } catch {
+    /* accounting is best-effort */
+  }
+
   return logDoc;
 }
 

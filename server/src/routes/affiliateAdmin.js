@@ -18,6 +18,7 @@
  */
 
 import express from 'express';
+import { FieldValue } from 'firebase-admin/firestore';
 
 import { verifyAdmin } from '../middleware/verifyAdmin.js';
 import { getDb } from '../firebase.js';
@@ -109,6 +110,7 @@ router.post('/:id/sync', async (req, res) => {
       env: process.env,
       force: true,
       overallTimeoutMs: 60 * 1000, // inline runs are bounded
+      fieldValue: FieldValue,
     });
     return safe(res, 200, { mode: 'inline', log });
   } catch (err) {

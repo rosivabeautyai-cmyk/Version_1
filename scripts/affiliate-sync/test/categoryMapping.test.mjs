@@ -48,3 +48,35 @@ test("resolver: unknown category still falls through to keyword normalizer", () 
   assert.equal(resolve("Skin care serums"), "skincare");
   assert.equal(resolve("random hardware"), null);
 });
+
+test("resolver: built-in beauty vocabulary resolves without any Firestore rows", () => {
+  const resolve = buildCategoryResolver([]);
+  assert.equal(resolve("Serums"), "skincare");
+  assert.equal(resolve("Moisturizers"), "skincare");
+  assert.equal(resolve("Foundation"), "makeup");
+  assert.equal(resolve("Lipstick"), "makeup");
+  assert.equal(resolve("Mascara"), "makeup");
+  assert.equal(resolve("Eau de Toilette"), "perfume");
+  // name fallback style input
+  assert.equal(resolve("Vitamin C Face Serum"), "skincare");
+  // genuinely out of scope
+  assert.equal(resolve("Body Lotion"), null);
+  assert.equal(resolve("Shampoo & Conditioner"), null);
+});
+
+test("resolver: longest term wins on a substring match", () => {
+  const resolve = buildCategoryResolver([]);
+  // "tinted moisturizer" (makeup) must beat "moisturizer" (skincare)
+  assert.equal(resolve("Tinted Moisturizer"), "makeup");
+  // "eau de parfum" (perfume) contains "parfum" (also perfume) — same result, but exercises ordering
+  assert.equal(resolve("Eau de Parfum Intense"), "perfume");
+  // hyphen / underscore normalization
+  assert.equal(resolve("anti-aging"), "skincare");
+});
+
+test("resolver: a Firestore row can override a built-in", () => {
+  const resolve = buildCategoryResolver([
+    { sourceCategory: "lip balm", rosivaCategory: "skincare" }, // builtin says makeup
+  ]);
+  assert.equal(resolve("Lip Balm"), "skincare");
+});

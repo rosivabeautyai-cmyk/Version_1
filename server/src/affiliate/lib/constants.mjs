@@ -71,6 +71,9 @@ export const COLLECTIONS = Object.freeze({
   SYNC_LOGS: "affiliateSyncLogs",
   SYNC_JOBS: "affiliateSyncJobs",
   CATEGORY_MAPPINGS: "categoryMappings",
+  // Per-UTC-day Firestore write accounting (affiliateSyncBudget/{YYYY-MM-DD}).
+  // Written by the Admin SDK only; no client rule -> default-deny.
+  SYNC_BUDGET: "affiliateSyncBudget",
   PRODUCTS: "products",
   CATEGORIES: "categories",
 });
@@ -107,6 +110,23 @@ export const MAX_PRODUCTS_PER_RUN = 200000;
  * (0 active) is never affected.
  */
 export const MAX_CATALOG_DROP_RATIO = 0.8;
+
+/**
+ * Firestore-write safety budget for a single UTC day, across ALL
+ * affiliate syncs combined. The Firebase Spark (free) plan hard-caps
+ * Firestore at 20,000 writes/day; blowing it breaks the Awin sync and
+ * the whole app for ~24h. Before a sync starts, the engine estimates
+ * its write count and REFUSES to run (marking the run needs_review) if
+ * it would push the day's total past this budget. It also hard-stops
+ * mid-run if it gets close.
+ *
+ * Deliberately well under 20,000. Override with the env var
+ * AFFILIATE_DAILY_WRITE_BUDGET (e.g. much higher on the Blaze plan).
+ */
+export const DEFAULT_DAILY_WRITE_BUDGET = 15000;
+
+/** Reserve for per-run bookkeeping writes (store doc, log doc, budget doc). */
+export const BUDGET_BOOKKEEPING_RESERVE = 8;
 
 /** Firestore hard limit per batched write. */
 export const WRITE_BATCH_SIZE = 400;

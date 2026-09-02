@@ -57,7 +57,10 @@ test("happy path: normalized doc shape", () => {
   assert.equal(doc.rosivaCategory, "makeup");
   assert.equal(doc.category, "makeup");
   assert.equal(doc.source, "affiliate");
-  assert.equal(doc.isRosivaProduct, false); // affiliate imports excluded from AI catalog
+  // Shopper-visible by default (resolved category, not a men's product).
+  assert.equal(doc.isRosivaProduct, true);
+  assert.equal(doc.gender, "women");
+  assert.equal(doc.exclusionReason, null);
   assert.equal(doc.availability, "in_stock");
   assert.equal(doc.affiliateUrl, "https://go.aff.test/click?u=987654");
   assert.equal(doc.storeUrl, "https://go.aff.test/click?u=987654"); // "Shop Now" keeps working
@@ -98,9 +101,10 @@ test("discountPercentage derived from oldPrice > price", () => {
   assert.equal(doc.discountPercentage, 20);
 });
 
-test("classifier passthrough is honored when present", () => {
+test("classifier passthrough is honored when present (Awin path)", () => {
   const { doc } = normalizeProduct({
     raw: raw({
+      name: "Beard Oil for Men", // would be excluded by the men's filter...
       rosivaClassification: {
         isRosivaProduct: true,
         rosivaCategory: "skincare",
@@ -111,7 +115,52 @@ test("classifier passthrough is honored when present", () => {
     store,
     resolveCategory,
   });
+  // ...but passthrough short-circuits the generalized eligibility logic.
   assert.equal(doc.isRosivaProduct, true);
   assert.equal(doc.rosivaCategory, "skincare");
   assert.equal(doc.gender, "women");
+  assert.equal(doc.exclusionReason, null);
+});
+
+test("men's product -> written, excluded, gender men, reason set", () => {
+  const { ok, doc } = normalizeProduct({
+    raw: raw({ name: "Homme Sport Aftershave Balm", categoryName: "Fragrance" }),
+    store,
+    resolveCategory,
+  });
+  assert.ok(ok, "still normalized + written");
+  assert.equal(doc.isRosivaProduct, false);
+  assert.equal(doc.gender, "men");
+  assert.match(doc.exclusionReason, /men's product/);
+});
+
+test("women's mascara is NOT caught by the men's filter", () => {
+  const { doc } = normalizeProduct({
+    raw: raw({ name: "Volume Lash Mascara Waterproof", categoryName: "Mascara" }),
+    store,
+    resolveCategory,
+  });
+  assert.equal(doc.isRosivaProduct, true);
+  assert.equal(doc.gender, "women");
+});
+
+test("unresolved category -> written, excluded, reason 'no category match'", () => {
+  const { ok, doc } = normalizeProduct({
+    raw: raw({ name: "Luxury Beauty Gift Set", categoryName: "Gift Sets" }),
+    store,
+    resolveCategory,
+  });
+  assert.ok(ok);
+  assert.equal(doc.isRosivaProduct, false);
+  assert.equal(doc.exclusionReason, "no category match");
+});
+
+test("category resolves from the product NAME when the category field is generic", () => {
+  const { doc } = normalizeProduct({
+    raw: raw({ name: "Vitamin C Face Serum", categoryName: "Beauty" }),
+    store,
+    resolveCategory,
+  });
+  assert.equal(doc.rosivaCategory, "skincare");
+  assert.equal(doc.isRosivaProduct, true);
 });

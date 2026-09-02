@@ -17,14 +17,20 @@
 import { ProductConnector } from "./ProductConnector.mjs";
 import { toSafeError } from "../lib/errors.mjs";
 
+// A deliberately mixed feed, like a real beauty affiliate feed:
+//  - 6 clean women's products that resolve to skincare/makeup/perfume
+//  - 1 men's product  -> excluded by the men's keyword filter
+//  - 1 uncategorisable -> excluded "no category match"
+// So a mock sync produces 6 shopper-visible + 2 written-but-ineligible,
+// which is exactly what an admin needs to verify the whole behaviour.
 const SKUS = [
-  { sku: "SERUM-001", name: "Hydra Boost Vitamin C Serum", brand: "Lumea", cat: "Serums", price: 29.99, rrp: 39.99 },
-  { sku: "CREAM-002", name: "Night Repair Moisturizer", brand: "Lumea", cat: "Moisturizers", price: 42.0, rrp: 42.0 },
+  { sku: "SERUM-001", name: "Hydra Boost Vitamin C Face Serum", brand: "Lumea", cat: "Serum", price: 29.99, rrp: 39.99 },
   { sku: "FND-003", name: "Second Skin Foundation SPF20", brand: "Velvet", cat: "Foundation", price: 33.5, rrp: 38.0 },
   { sku: "LIP-004", name: "Matte Ink Lipstick — Rosewood", brand: "Velvet", cat: "Lipstick", price: 18.0, rrp: 18.0 },
-  { sku: "EDP-005", name: "Amber Oud Eau de Parfum 50ml", brand: "Maison N", cat: "Fragrance", price: 74.0, rrp: 89.0 },
-  { sku: "CLNZ-006", name: "Gentle Gel Cleanser", brand: "Lumea", cat: "Face Care", price: 21.0, rrp: 21.0 },
-  { sku: "MASC-007", name: "Volume Lash Mascara", brand: "Velvet", cat: "Mascara", price: 22.5, rrp: 25.0 },
+  { sku: "EDP-005", name: "Amber Oud Eau de Parfum 50ml", brand: "Maison N", cat: "Eau de Parfum", price: 74.0, rrp: 89.0 },
+  { sku: "MENS-006", name: "Homme Sport Aftershave Balm", brand: "Velvet", cat: "Men's Grooming", price: 24.0, rrp: 24.0 },
+  { sku: "GIFT-007", name: "Luxury Beauty Gift Set", brand: "Lumea", cat: "Gift Sets", price: 60.0, rrp: 75.0 },
+  { sku: "MASC-002", name: "Volume Lash Mascara Waterproof", brand: "Velvet", cat: "Mascara", price: 22.5, rrp: 25.0 },
   { sku: "PERF-008", name: "Rose Petal Perfume 30ml", brand: "Maison N", cat: "Perfume", price: 55.0, rrp: 55.0 },
 ];
 
@@ -74,6 +80,10 @@ export class MockConnector extends ProductConnector {
       reviewCount: 128,
       updatedAt: new Date().toISOString(),
     };
+  }
+
+  async estimateProductCount() {
+    return this._dataset().length;
   }
 
   async testConnection() {

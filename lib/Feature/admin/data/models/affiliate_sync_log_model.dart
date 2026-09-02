@@ -31,8 +31,16 @@ class AffiliateSyncLog {
   final int seenCount;
   final int existingActiveCount;
 
+  /// Products written but hidden from shoppers (men's filter / no
+  /// category match). They are visible under the admin "Ineligible"
+  /// filter with a per-product `exclusionReason`.
+  final int excludedProducts;
+
   /// Up to ~10 { code, detail } entries for skipped products.
   final List<Map<String, dynamic>> failureSamples;
+
+  /// Up to ~10 { code (reason), detail (name) } entries for excluded products.
+  final List<Map<String, dynamic>> excludedSamples;
 
   const AffiliateSyncLog({
     required this.id,
@@ -51,7 +59,9 @@ class AffiliateSyncLog {
     this.sweepSkipped,
     this.seenCount = 0,
     this.existingActiveCount = 0,
+    this.excludedProducts = 0,
     this.failureSamples = const [],
+    this.excludedSamples = const [],
   });
 
   bool get isError => statusValue == 'error';
@@ -70,8 +80,11 @@ class AffiliateSyncLog {
   ) =>
       AffiliateSyncLog.fromJson(doc.id, doc.data() ?? const <String, dynamic>{});
 
+  static List<Map<String, dynamic>> _samples(Object? v) => v is List
+      ? v.whereType<Map>().map((e) => e.cast<String, dynamic>()).toList()
+      : const [];
+
   factory AffiliateSyncLog.fromJson(String id, Map<String, dynamic> d) {
-    final samples = d['failureSamples'];
     return AffiliateSyncLog(
       id: id,
       storeId: d['storeId'] as String? ?? '',
@@ -89,12 +102,9 @@ class AffiliateSyncLog {
       sweepSkipped: d['sweepSkipped'] as String?,
       seenCount: (d['seenCount'] as num?)?.toInt() ?? 0,
       existingActiveCount: (d['existingActiveCount'] as num?)?.toInt() ?? 0,
-      failureSamples: samples is List
-          ? samples
-              .whereType<Map>()
-              .map((e) => e.cast<String, dynamic>())
-              .toList()
-          : const [],
+      excludedProducts: (d['excludedProducts'] as num?)?.toInt() ?? 0,
+      failureSamples: _samples(d['failureSamples']),
+      excludedSamples: _samples(d['excludedSamples']),
     );
   }
 }
