@@ -3,27 +3,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:rosivia/core/functions/navigations.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
+import 'package:rosivia/core/styles/app_dimens.dart';
 import 'package:rosivia/core/widgets/main_button.dart';
 import 'package:rosivia/core/widgets/motion/app_fade_in.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
+import '../widgets/home_bottom_nav_bar.dart';
+
 import '../../../ai/presentation/screens/ai_screen.dart';
-import '../../../auth/data/models/user_model.dart';
 import '../../../auth/provider/auth_provider.dart';
 import '../../../favorites/provider/favorites_provider.dart';
 import '../../../products/data/models/category_model.dart';
 import '../../../products/data/models/product_model.dart';
 import '../../../products/presentation/screens/category_products_screen.dart';
 import '../../../products/presentation/screens/product_details_screen.dart';
-import '../../../products/presentation/widgets/category_card.dart';
 import '../../../products/presentation/widgets/product_card.dart';
+import '../../../products/presentation/widgets/category_image_card.dart';
 import '../../../products/provider/home_products_provider.dart';
 import 'package:rosivia/Feature/settings/provider/regional_prefs_provider.dart';
 import '../../../settings/presentation/screens/settings_screen.dart';
 import '../widgets/home_app_bar.dart';
 import '../widgets/home_loading.dart';
 import '../widgets/home_section_title.dart';
-import '../widgets/welcome_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,9 +34,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  UserModel? _userData;
-  bool _loading = true;
-
   late final HomeProductsProvider _productsProvider;
 
   @override
@@ -44,10 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _productsProvider = HomeProductsProvider(
       country: context.read<RegionalPrefsProvider>().countryCode,
     )..load();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadUser();
-    });
   }
 
   @override
@@ -56,22 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  Future<void> _loadUser() async {
-    final auth = context.read<AuthProvider>();
-
-    final data = await auth.fetchUserData();
-
-    if (!mounted) return;
-
-    setState(() {
-      _userData = data;
-      _loading = false;
-    });
-  }
-
-  Future<void> _refresh() async {
-    await Future.wait([_loadUser(), _productsProvider.load()]);
-  }
+  Future<void> _refresh() => _productsProvider.load();
 
   @override
   Widget build(BuildContext context) {
@@ -88,46 +67,39 @@ class _HomeScreenState extends State<HomeScreen> {
           onNotificationsTap: () => pushTo(context, const SettingsScreen()),
         ),
         body: SafeArea(
-          child: _loading
-              ? const HomeLoading()
-              : RefreshIndicator(
-                  onRefresh: _refresh,
-                  child: Consumer<HomeProductsProvider>(
-                    builder: (context, productsProvider, _) {
-                      return PageContainer(
-                        child: ListView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          padding: EdgeInsets.all(20.w),
-                          children: [
-                            AppFadeIn(child: WelcomeCard(userData: _userData)),
-                            SizedBox(height: 24.h),
-                            AppFadeIn(
-                              delay: const Duration(milliseconds: 60),
-                              child: _Greeting(lang: lang),
-                            ),
-                            SizedBox(height: 20.h),
-                            AppFadeIn(
-                              delay: const Duration(milliseconds: 120),
-                              child: _AiSearchEntry(
-                                onTap: () => pushTo(context, const AiScreen()),
-                              ),
-                            ),
-                            SizedBox(height: 28.h),
-                            ..._buildProductSections(
-                              context,
-                              lang,
-                              productsProvider,
-                            ),
-                            _AffiliateDisclosure(
-                              text: lang.affiliateDisclosureShort,
-                            ),
-                            SizedBox(height: 24.h),
-                          ],
+          child: RefreshIndicator(
+            onRefresh: _refresh,
+            child: Consumer<HomeProductsProvider>(
+              builder: (context, productsProvider, _) {
+                return PageContainer(
+                  child: ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.fromLTRB(
+                      AppSpace.xl.w,
+                      AppSpace.xl.h,
+                      AppSpace.xl.w,
+                      HomeBottomNavBar.bottomInset(context) + AppSpace.sm.h,
+                    ),
+                    children: [
+                      AppFadeIn(child: _Greeting(lang: lang)),
+                      SizedBox(height: AppSpace.xl.h),
+                      AppFadeIn(
+                        delay: const Duration(milliseconds: 60),
+                        child: _AiSearchEntry(
+                          onTap: () => pushTo(context, const AiScreen()),
                         ),
-                      );
-                    },
+                      ),
+                      SizedBox(height: AppSpace.xxxl.h),
+                      ..._buildProductSections(context, lang, productsProvider),
+                      _AffiliateDisclosure(
+                        text: lang.affiliateDisclosureShort,
+                      ),
+                    ],
                   ),
-                ),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
@@ -224,9 +196,11 @@ class _Greeting extends StatelessWidget {
           lang.helloBeautiful,
           style: theme.textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.w700,
+            letterSpacing: -0.2,
+            height: 1.15,
           ),
         ),
-        SizedBox(height: 4.h),
+        SizedBox(height: AppSpace.xs.h),
         Text(lang.elevateYourRitual, style: theme.textTheme.bodyMedium),
       ],
     );
@@ -303,16 +277,19 @@ class _CategoriesRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40.h,
+      // A little taller than the 150×200 card so its soft shadow isn't
+      // clipped by the enclosing vertical list.
+      height: 214.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        clipBehavior: Clip.none, // keep the card shadows
         itemCount: categories.length,
-        separatorBuilder: (_, _) => SizedBox(width: 10.w),
+        separatorBuilder: (_, _) => SizedBox(width: AppSpace.md.w),
         itemBuilder: (context, index) {
           final category = categories[index];
-          return CategoryChip(
-            label: category.name,
-            selected: false,
+          return CategoryImageCard(
+            category: category,
+            width: 150.w,
             onTap: () => pushTo(
               context,
               CategoryProductsScreen(
@@ -337,11 +314,12 @@ class _ProductsRow extends StatelessWidget {
     final favorites = context.watch<FavoritesProvider?>();
 
     return SizedBox(
-      height: 250.h,
+      height: 268.h,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        clipBehavior: Clip.none,
         itemCount: products.length,
-        separatorBuilder: (_, _) => SizedBox(width: 14.w),
+        separatorBuilder: (_, _) => SizedBox(width: AppSpace.md.w),
         itemBuilder: (context, index) {
           final product = products[index];
           return ProductCard(
@@ -379,7 +357,7 @@ class _ProductsGrid extends StatelessWidget {
             crossAxisCount: columns,
             mainAxisSpacing: 16.h,
             crossAxisSpacing: 16.w,
-            childAspectRatio: columns >= 4 ? 0.72 : 0.62,
+            childAspectRatio: columns >= 4 ? 0.68 : 0.56,
           ),
           itemCount: products.length,
           itemBuilder: (context, index) {

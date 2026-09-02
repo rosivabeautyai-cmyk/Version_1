@@ -5,12 +5,13 @@ import 'package:rosivia/core/functions/navigations.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
 import 'package:rosivia/core/styles/app_dimens.dart';
 import 'package:rosivia/core/widgets/motion/app_shimmer.dart';
-import 'package:rosivia/core/widgets/motion/pressable_scale.dart';
 import 'package:rosivia/core/widgets/state_views.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
 
+import '../../../home/presentation/widgets/home_bottom_nav_bar.dart';
 import '../../data/models/category_model.dart';
 import '../../data/repositories/product_repository.dart';
+import '../widgets/category_image_card.dart';
 import 'category_products_screen.dart';
 
 class CategoriesScreen extends StatefulWidget {
@@ -100,111 +101,33 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       );
     }
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final columns = responsiveGridColumns(
-          constraints.maxWidth,
-          min: 2,
-          max: 4,
-        );
-        return GridView.builder(
-          physics: const AlwaysScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: columns,
-            mainAxisSpacing: 16.h,
-            crossAxisSpacing: 16.w,
-            childAspectRatio: 1.1,
+    // Just three categories — a vertical stack of large editorial image
+    // cards (Net-a-Porter style) reads more premium than a cramped grid.
+    return ListView.separated(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: EdgeInsets.only(
+        top: AppSpace.xs.h,
+        bottom: HomeBottomNavBar.bottomInset(context),
+      ),
+      itemCount: _categories.length,
+      separatorBuilder: (_, _) => SizedBox(height: AppSpace.lg.h),
+      itemBuilder: (context, index) {
+        final category = _categories[index];
+        return CategoryImageCard(
+          category: category,
+          aspectRatio: 16 / 10,
+          countLabel: category.productCount != null && category.productCount! > 0
+              ? '${category.productCount} ${lang.navProducts}'
+              : null,
+          onTap: () => pushTo(
+            context,
+            CategoryProductsScreen(
+              categorySlug: category.slug,
+              title: category.name,
+            ),
           ),
-          itemCount: _categories.length,
-          itemBuilder: (context, index) {
-            final category = _categories[index];
-            return _CategoryTile(
-              category: category,
-              onTap: () => pushTo(
-                context,
-                CategoryProductsScreen(
-                  categorySlug: category.slug,
-                  title: category.name,
-                ),
-              ),
-            );
-          },
         );
       },
-    );
-  }
-}
-
-class _CategoryTile extends StatelessWidget {
-  final CategoryModel category;
-  final VoidCallback onTap;
-
-  const _CategoryTile({required this.category, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final lang = AppLocalizations.of(context)!;
-
-    return PressableScale(
-      child: Material(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(20.r),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20.r),
-          onTap: onTap,
-          child: Container(
-            padding: EdgeInsets.all(16.w),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(
-                color: colorScheme.outline.withValues(alpha: 0.15),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 44.w,
-                  height: 44.w,
-                  decoration: BoxDecoration(
-                    color: colorScheme.primary.withValues(alpha: 0.10),
-                    borderRadius: BorderRadius.circular(14.r),
-                  ),
-                  child: Icon(
-                    Icons.spa_rounded,
-                    color: colorScheme.primary,
-                    size: 22.sp,
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                Text(
-                  category.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleSmall,
-                ),
-                if (category.productCount != null) ...[
-                  SizedBox(height: 4.h),
-                  Text(
-                    // This is a product count, not a category count — reuse
-                    // the existing bare "Products"/"المنتجات" nav label
-                    // rather than the "Categories" string (a real bug: the
-                    // tile was showing e.g. "378 Categories" instead of
-                    // "378 Products").
-                    '${category.productCount} ${lang.navProducts}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.bodySmall,
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

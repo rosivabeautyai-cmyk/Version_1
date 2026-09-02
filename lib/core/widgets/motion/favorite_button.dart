@@ -29,14 +29,20 @@ class FavoriteButton extends StatefulWidget {
 
 class _FavoriteButtonState extends State<FavoriteButton>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _pop = AnimationController(
-    vsync: this,
-    duration: AppDuration.short,
-  );
+  // Eager construction in initState — a lazy `late final` initializer
+  // can be triggered by dispose() on a widget that was never built,
+  // constructing a Ticker on a deactivated element.
+  late final AnimationController _pop;
   late final Animation<double> _scale = TweenSequence<double>([
     TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.28), weight: 40),
     TweenSequenceItem(tween: Tween(begin: 1.28, end: 1.0), weight: 60),
   ]).animate(CurvedAnimation(parent: _pop, curve: AppCurve.standard));
+
+  @override
+  void initState() {
+    super.initState();
+    _pop = AnimationController(vsync: this, duration: AppDuration.short);
+  }
 
   bool get _reduceMotion =>
       MediaQuery.maybeOf(context)?.disableAnimations ?? false;

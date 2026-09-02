@@ -56,19 +56,19 @@ class AppFadeIn extends StatefulWidget {
 
 class _AppFadeInState extends State<AppFadeIn>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: widget.duration,
-  );
-  late final Animation<double> _t = CurvedAnimation(
-    parent: _controller,
-    curve: AppCurve.enter,
-  );
+  // Constructed eagerly in initState. With a delayed start, initState
+  // would otherwise never touch a lazily-initialized controller, and a
+  // dispose before the delay elapsed (or under "reduce motion") would
+  // build it on a deactivated element.
+  late final AnimationController _controller;
+  late final Animation<double> _t;
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(vsync: this, duration: widget.duration);
+    _t = CurvedAnimation(parent: _controller, curve: AppCurve.enter);
     if (widget.delay == Duration.zero) {
       _controller.forward();
     } else {
@@ -81,7 +81,7 @@ class _AppFadeInState extends State<AppFadeIn>
   @override
   void dispose() {
     _timer?.cancel();
-    _controller.dispose();
+    _controller.dispose(); // also tears down the CurvedAnimation _t
     super.dispose();
   }
 

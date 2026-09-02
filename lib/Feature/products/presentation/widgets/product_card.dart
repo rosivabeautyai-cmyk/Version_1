@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:rosivia/core/styles/app_dimens.dart';
 import 'package:rosivia/core/widgets/app_network_image.dart';
 import 'package:rosivia/core/widgets/motion/favorite_button.dart';
 import 'package:rosivia/core/widgets/motion/pressable_scale.dart';
@@ -8,6 +9,10 @@ import 'package:rosivia/core/widgets/motion/pressable_scale.dart';
 import '../../data/models/product_model.dart';
 import 'product_price_text.dart';
 
+/// Editorial product card: image on a soft shadow, then BRAND (small
+/// caps) → product name (up to two lines, reserved height so cards in a
+/// row align) → price + rating. Consistent radii and typography with
+/// the rest of the catalog.
 class ProductCard extends StatelessWidget {
   final ProductModel product;
   final bool isFavorite;
@@ -28,6 +33,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final radius = BorderRadius.circular(AppRadius.lg.r);
 
     return PressableScale(
       onTap: onTap,
@@ -36,94 +42,114 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: AppNetworkImage(
-                    url: product.imageUrl,
-                    borderRadius: BorderRadius.circular(18.r),
-                  ),
-                ),
-                if (onFavoriteTap != null)
-                  Positioned(
-                    top: 6.h,
-                    right: 6.w,
-                    child: Container(
-                      padding: EdgeInsets.all(6.w),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: FavoriteButton(
-                        isFavorite: isFavorite,
-                        onTap: onFavoriteTap,
-                        size: 16.sp,
-                        color: colorScheme.primary,
-                      ),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: radius,
+                boxShadow: AppShadow.low(colorScheme.primary),
+              ),
+              child: Stack(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: AppNetworkImage(
+                      url: product.imageUrl,
+                      borderRadius: radius,
                     ),
                   ),
-                if (product.isEditorsChoice)
-                  Positioned(
-                    left: 6.w,
-                    top: 6.h,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 8.w,
-                        vertical: 3.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: colorScheme.primary,
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Text(
-                        '★',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.bold,
+                  if (onFavoriteTap != null)
+                    PositionedDirectional(
+                      top: AppSpace.sm.h,
+                      end: AppSpace.sm.w,
+                      child: Container(
+                        padding: EdgeInsets.all(AppSpace.xs.w),
+                        decoration: BoxDecoration(
+                          color: theme.cardColor,
+                          shape: BoxShape.circle,
+                          boxShadow: AppShadow.low(colorScheme.shadow),
+                        ),
+                        child: FavoriteButton(
+                          isFavorite: isFavorite,
+                          onTap: onFavoriteTap,
+                          size: 16.sp,
+                          color: colorScheme.primary,
                         ),
                       ),
                     ),
-                  ),
-              ],
+                  if (product.isEditorsChoice)
+                    PositionedDirectional(
+                      start: AppSpace.sm.w,
+                      top: AppSpace.sm.h,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSpace.sm.w,
+                          vertical: 3.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: colorScheme.primary,
+                          borderRadius: BorderRadius.circular(AppRadius.pill),
+                        ),
+                        child: Text(
+                          '★',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
-            SizedBox(height: 8.h),
-            Text(
-              product.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.titleSmall,
-            ),
-            if (product.brand != null) ...[
-              SizedBox(height: 2.h),
+            SizedBox(height: AppSpace.md.h),
+            if (product.brand != null && product.brand!.isNotEmpty) ...[
               Text(
-                product.brand!,
+                product.brand!.toUpperCase(),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodySmall,
-              ),
-            ],
-            SizedBox(height: 4.h),
-            Row(
-              children: [
-                ProductPriceText(
-                  product: product,
-                  showApprox: false,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: colorScheme.primary,
-                  ),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  letterSpacing: 0.6,
+                  fontWeight: FontWeight.w600,
                 ),
-                const Spacer(),
-                if (product.rating != null) ...[
-                  Icon(Icons.star_rounded, size: 14.sp, color: Colors.amber),
-                  SizedBox(width: 2.w),
-                  Text(
-                    product.rating!.toStringAsFixed(1),
-                    style: theme.textTheme.bodySmall,
-                  ),
-                ],
-              ],
+              ),
+              SizedBox(height: AppSpace.xxs.h),
+            ],
+            Text(
+              product.name,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.titleSmall?.copyWith(
+                height: 1.32,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: AppSpace.xs.h),
+            // Exact price + rating on one line; the "≈ N XXX" estimate
+            // (when a different currency is in effect) sits below it,
+            // small and muted, so it's never mistaken for the checkout
+            // amount.
+            ProductPriceText(
+              product: product,
+              showApprox: true,
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: colorScheme.primary,
+                fontWeight: FontWeight.w700,
+              ),
+              trailing: product.rating != null
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.star_rounded,
+                            size: 13.sp, color: Colors.amber),
+                        SizedBox(width: 2.w),
+                        Text(
+                          product.rating!.toStringAsFixed(1),
+                          style: theme.textTheme.bodySmall,
+                        ),
+                      ],
+                    )
+                  : null,
             ),
           ],
         ),

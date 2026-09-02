@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:rosivia/Feature/favorites/provider/favorites_provider.dart';
 import 'package:rosivia/core/network/view_state.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
+import 'package:rosivia/core/styles/app_dimens.dart';
 import 'package:rosivia/core/services/snackbar_service.dart';
 import 'package:rosivia/core/widgets/app_network_image.dart';
 import 'package:rosivia/core/widgets/motion/favorite_button.dart';
@@ -159,14 +160,17 @@ class _ProductDetailsContent extends StatelessWidget {
       Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ProductPriceText(
-            product: product,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: colorScheme.primary,
+          Expanded(
+            child: ProductPriceText(
+              product: product,
+              showCaption: true,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: colorScheme.primary,
+              ),
             ),
           ),
-          const Spacer(),
           if (product.rating != null) ...[
+            SizedBox(width: 8.w),
             const Icon(Icons.star_rounded, color: Colors.amber, size: 18),
             SizedBox(width: 4.w),
             Text(
@@ -235,10 +239,29 @@ class _ProductDetailsContent extends StatelessWidget {
           final canBuy = buyUrl != null && buyUrl.isNotEmpty;
           return SizedBox(
             width: double.infinity,
+            height: 52.h,
             child: ElevatedButton.icon(
               onPressed: canBuy ? () => _openStore(context, buyUrl) : null,
-              icon: const Icon(Icons.open_in_new_rounded),
-              label: Text(lang.openStore),
+              icon: Icon(Icons.shopping_bag_outlined, size: 18.sp),
+              label: Text(
+                lang.openStore,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.3,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppRadius.md.r),
+                ),
+              ).copyWith(
+                shadowColor: WidgetStatePropertyAll(
+                  colorScheme.primary.withValues(alpha: 0.35),
+                ),
+                elevation: const WidgetStatePropertyAll(6),
+              ),
             ),
           );
         },

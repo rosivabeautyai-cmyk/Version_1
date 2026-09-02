@@ -66,6 +66,11 @@ class ProductModel {
   /// / `unknown`. Separate from [inStock] (a bool) for round-tripping.
   final String? availability;
 
+  /// True when the sync had to DEFAULT [currency] (the source row had no
+  /// currency) rather than read a real value. An approximate converted
+  /// price is suppressed for these — a wrong number is worse than none.
+  final bool currencyIsAssumed;
+
   /// Configured commission metadata for this product (NOT confirmed
   /// earnings). Resolved by priority product > store > system in the
   /// backend normalizer.
@@ -141,6 +146,7 @@ class ProductModel {
     this.storeId,
     this.externalProductId,
     this.availability,
+    this.currencyIsAssumed = false,
     this.commissionRate,
     this.isActive = true,
     this.exclusionReason,
@@ -201,6 +207,7 @@ class ProductModel {
       storeId: json['storeId'] as String?,
       externalProductId: json['externalProductId'] as String?,
       availability: json['availability'] as String?,
+      currencyIsAssumed: json['currencyAssumed'] as bool? ?? false,
       commissionRate: json['commissionRate'] as num?,
       isActive: json['isActive'] as bool? ?? true,
       exclusionReason: json['exclusionReason'] as String?,

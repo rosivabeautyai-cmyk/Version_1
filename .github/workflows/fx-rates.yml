@@ -1,0 +1,42 @@
+name: FX rates refresh
+
+# Refreshes the approximate currency-conversion rates on the Firestore
+# `currencies` docs from open.er-api.com (free, keyless). Display-only —
+# it never touches product prices or the affiliate checkout. Runs on
+# GitHub Actions so it needs no Firebase Blaze plan, only the
+# FIREBASE_SERVICE_ACCOUNT_JSON repo secret.
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    # 04:20 UTC daily — after open.er-api.com's own daily refresh.
+    - cron: "20 4 * * *"
+
+concurrency:
+  group: fx-rates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: scripts/fx-rates/package-lock.json
+
+      - name: Install dependencies
+        working-directory: scripts/fx-rates
+        run: npm ci || npm install
+
+      - name: Update rates
+        working-directory: scripts/fx-rates
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+        run: npm run update

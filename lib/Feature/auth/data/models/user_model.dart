@@ -7,7 +7,17 @@ class UserModel {
   final String uid;
   final String fullName;
   final String email;
+
+  /// The provider (Google/Apple) profile photo, captured at sign-in.
+  /// Kept for reference only — the app's UI never shows it.
   final String? photoUrl;
+
+  /// A photo the user uploaded themselves (Firebase Storage URL at
+  /// `users/{uid}/avatar.jpg`). This is the ONLY image the profile
+  /// avatar shows; when it's null the app falls back to the bundled
+  /// model portrait, never to [photoUrl].
+  final String? avatarUrl;
+
   final String? country;
   final String? language;
   final String? skinType;
@@ -50,6 +60,7 @@ class UserModel {
     required this.fullName,
     required this.email,
     this.photoUrl,
+    this.avatarUrl,
     this.country,
     this.language,
     this.skinType,
@@ -105,6 +116,7 @@ class UserModel {
       fullName: map['fullName'] as String? ?? '',
       email: map['email'] as String? ?? '',
       photoUrl: map['photoUrl'] as String?,
+      avatarUrl: map['avatarUrl'] as String?,
       country: map['country'] as String?,
       language: map['language'] as String?,
       skinType: map['skinType'] as String?,
@@ -168,6 +180,7 @@ class UserModel {
       'fullName': fullName,
       'email': email,
       'photoUrl': photoUrl,
+      'avatarUrl': avatarUrl,
       'country': country,
       'language': language,
       'skinType': skinType,
@@ -188,6 +201,7 @@ class UserModel {
     String? fullName,
     String? email,
     String? photoUrl,
+    String? avatarUrl,
     String? country,
     String? language,
     String? skinType,
@@ -205,6 +219,7 @@ class UserModel {
       fullName: fullName ?? this.fullName,
       email: email ?? this.email,
       photoUrl: photoUrl ?? this.photoUrl,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
       country: country ?? this.country,
       language: language ?? this.language,
       skinType: skinType ?? this.skinType,

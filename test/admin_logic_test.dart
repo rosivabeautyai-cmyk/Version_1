@@ -175,14 +175,25 @@ void main() {
   });
 
   group('CurrencyService', () {
-    final svc = CurrencyService(currencies: {
-      'USD': const CurrencyConfig(
-          code: 'USD', symbol: r'$', nameEn: 'US Dollar', nameAr: '', rateToUsd: 1),
-      'EGP': const CurrencyConfig(
-          code: 'EGP', symbol: 'ج.م', nameEn: 'Egyptian Pound', nameAr: '', rateToUsd: 0.02),
-      'GBP': const CurrencyConfig(
-          code: 'GBP', symbol: '£', nameEn: 'Pound', nameAr: '', rateToUsd: null),
-    });
+    final clock = DateTime(2026, 6, 1, 12);
+    final fresh = clock.subtract(const Duration(days: 1));
+    final stale = clock.subtract(const Duration(days: 30));
+    final svc = CurrencyService(
+      now: () => clock,
+      currencies: {
+        'USD': CurrencyConfig(
+            code: 'USD', symbol: r'$', nameEn: 'US Dollar', nameAr: '',
+            rateToUsd: 1, rateUpdatedAt: fresh),
+        'EGP': CurrencyConfig(
+            code: 'EGP', symbol: 'ج.م', nameEn: 'Egyptian Pound', nameAr: '',
+            rateToUsd: 0.02, rateUpdatedAt: fresh),
+        'GBP': const CurrencyConfig(
+            code: 'GBP', symbol: '£', nameEn: 'Pound', nameAr: '', rateToUsd: null),
+        'SAR': CurrencyConfig(
+            code: 'SAR', symbol: 'ر.س', nameEn: 'Riyal', nameAr: '',
+            rateToUsd: 0.27, rateUpdatedAt: stale),
+      },
+    );
 
     test('format: prefix symbol for USD/GBP/EUR, suffix otherwise', () {
       expect(svc.format(25, 'USD'), r'$25.00');
@@ -200,6 +211,12 @@ void main() {
       expect(svc.convert(100, 'EGP', 'USD'), closeTo(2, 0.001)); // 100 * 0.02
       expect(svc.convert(5, 'USD', 'GBP'), isNull); // GBP has no rate
       expect(svc.convert(5, 'USD', 'USD'), 5); // same currency
+    });
+
+    test('convert: a stale rate (> 7 days) is treated as absent', () {
+      expect(svc.convert(10, 'USD', 'SAR'), isNull);
+      expect(svc.convert(10, 'SAR', 'USD'), isNull);
+      expect(svc.approx(10, 'USD', 'SAR'), isNull);
     });
 
     test('approx: "≈ N CODE" or null', () {

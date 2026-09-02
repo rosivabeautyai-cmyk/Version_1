@@ -17,6 +17,7 @@ import '../../../products/presentation/screens/search_screen.dart';
 import '../../../products/presentation/widgets/category_card.dart';
 import '../../../products/presentation/widgets/product_grid.dart';
 import '../../../products/provider/product_list_provider.dart';
+import '../widgets/home_bottom_nav_bar.dart';
 import 'package:rosivia/Feature/settings/provider/regional_prefs_provider.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -215,6 +216,7 @@ class _ProductsSection extends StatelessWidget {
         state: provider.state,
         onLoadMore: provider.loadMore,
         onRetry: () => provider.load(refresh: true),
+        bottomPadding: HomeBottomNavBar.bottomInset(context),
         onProductTap: (ProductModel product) {
           pushTo(context, ProductDetailsScreen(productId: product.id));
         },

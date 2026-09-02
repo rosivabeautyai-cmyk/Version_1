@@ -70,6 +70,9 @@ class _MainScreenState extends State<MainScreen> {
     }
 
     return Scaffold(
+      // The catalog scrolls behind the floating glass nav; each screen
+      // reserves HomeBottomNavBar.bottomInset() of trailing space.
+      extendBody: true,
       body: body,
       bottomNavigationBar: HomeBottomNavBar(
         currentIndex: _currentIndex,

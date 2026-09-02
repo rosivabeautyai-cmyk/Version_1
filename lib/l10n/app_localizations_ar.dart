@@ -524,6 +524,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get priceAvailabilityDisclaimer => 'قد تختلف الأسعار والتوفر على المواقع الخارجية. بصفتها منصة تسويق بالعمولة، قد تحصل روزيفيا على عمولة صغيرة عن عمليات الشراء المؤهلة.';
 
   @override
+  String priceApproxCaption(String currency) {
+    return 'تقديري — يتقاضى المتجر السعر بعملة $currency، وقد يختلف سعر صرف بنكك ورسومه.';
+  }
+
+  @override
   String get patchTestDisclaimer => 'يحتوي هذا المنتج على مكونات فعالة. نوصي بإجراء اختبار حساسية قبل الاستخدام الكامل. استشيري طبيب الجلدية إذا كانت لديكِ مشكلات جلدية محددة.';
 
   @override
@@ -654,6 +659,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get accountSettings => 'إعدادات الحساب';
+
+  @override
+  String get avatarUploadSoon => 'سيتاح تغيير صورتكِ قريبًا.';
 
   @override
   String get editProfile => 'تعديل الملف الشخصي';

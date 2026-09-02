@@ -30,14 +30,20 @@ class AppShimmer extends StatefulWidget {
 
 class _AppShimmerState extends State<AppShimmer>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: AppDuration.shimmer,
-  );
+  // Constructed eagerly in initState — never lazily. A `late final` with
+  // an inline initializer would let dispose() build the controller on an
+  // already-deactivated element ("Looking up a deactivated widget's
+  // ancestor is unsafe") when `enabled` was false for this widget's
+  // whole lifetime.
+  late final AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: AppDuration.shimmer,
+    );
     if (widget.enabled) _controller.repeat();
   }
 

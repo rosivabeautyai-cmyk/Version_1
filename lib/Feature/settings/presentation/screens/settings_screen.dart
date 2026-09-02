@@ -73,13 +73,17 @@ class _SettingsView extends StatelessWidget {
                     icon: Icons.public_rounded,
                     title: lang.country,
                     trailing: Text(
-                      regionalPrefs.countryCode == null
-                          ? lang.autoBasedOnLocation
-                          : regionalPrefs.countryName(
+                      regionalPrefs.countryCode != null
+                          ? regionalPrefs.countryName(
                               lang,
                               regionalPrefs.countryCode!,
-                            ),
+                            )
+                          : regionalPrefs.countryIsInferred
+                              ? '${lang.autoBasedOnLocation} · '
+                                  '${regionalPrefs.countryName(lang, regionalPrefs.effectiveCountryCode!)}'
+                              : lang.autoBasedOnLocation,
                       style: theme.textTheme.bodySmall,
+                      textAlign: TextAlign.end,
                     ),
                     onTap: () =>
                         _showCountryPicker(context, regionalPrefs, lang),

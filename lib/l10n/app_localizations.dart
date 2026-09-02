@@ -1109,6 +1109,12 @@ abstract class AppLocalizations {
   /// **'Prices and availability on third-party sites may vary. As an affiliate, ROSIVA may earn a small commission on qualifying purchases.'**
   String get priceAvailabilityDisclaimer;
 
+  /// No description provided for @priceApproxCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Approximate — the store charges in {currency}; your bank\'s rate and any fees may differ.'**
+  String priceApproxCaption(String currency);
+
   /// No description provided for @patchTestDisclaimer.
   ///
   /// In en, this message translates to:
@@ -1372,6 +1378,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account Settings'**
   String get accountSettings;
+
+  /// No description provided for @avatarUploadSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing your photo will be available shortly.'**
+  String get avatarUploadSoon;
 
   /// No description provided for @editProfile.
   ///

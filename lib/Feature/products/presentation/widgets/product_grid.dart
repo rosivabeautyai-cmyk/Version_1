@@ -25,6 +25,11 @@ class ProductGrid extends StatelessWidget {
   final String? emptyDescription;
   final IconData emptyIcon;
 
+  /// Extra trailing space inside the scroll view. Tab-hosted screens
+  /// pass `HomeBottomNavBar.bottomInset(context)` so the last row of
+  /// cards clears the floating glass nav.
+  final double? bottomPadding;
+
   const ProductGrid({
     super.key,
     required this.state,
@@ -34,6 +39,7 @@ class ProductGrid extends StatelessWidget {
     this.emptyTitle,
     this.emptyDescription,
     this.emptyIcon = Icons.spa_outlined,
+    this.bottomPadding,
   });
 
   @override
@@ -81,7 +87,7 @@ class ProductGrid extends StatelessWidget {
         builder: (context, constraints) {
           final columns = responsiveGridColumns(constraints.maxWidth);
           return GridView.builder(
-            padding: EdgeInsets.only(bottom: 24.h),
+            padding: EdgeInsets.only(bottom: bottomPadding ?? 24.h),
             physics: const AlwaysScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: columns,
@@ -90,7 +96,7 @@ class ProductGrid extends StatelessWidget {
               // Wider cards (fewer columns / larger screens) need a
               // slightly taller ratio; on desktop the narrower 4–5 col
               // cards would otherwise leave dead space under each tile.
-              childAspectRatio: columns >= 4 ? 0.72 : 0.62,
+              childAspectRatio: columns >= 4 ? 0.68 : 0.56,
             ),
             itemCount: items.length + (state.isLoadingMore ? columns : 0),
             itemBuilder: (context, index) {
@@ -139,7 +145,7 @@ class _ProductGridSkeleton extends StatelessWidget {
               crossAxisCount: columns,
               mainAxisSpacing: 16.h,
               crossAxisSpacing: 16.w,
-              childAspectRatio: columns >= 4 ? 0.72 : 0.62,
+              childAspectRatio: columns >= 4 ? 0.68 : 0.56,
             ),
             itemCount: columns * 3,
             itemBuilder: (context, index) => Column(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:rosivia/core/constants/app_images.dart';
 import 'package:rosivia/core/functions/navigations.dart';
 import 'package:rosivia/core/responsive/responsive.dart';
+import 'package:rosivia/core/services/snackbar_service.dart';
 import 'package:rosivia/core/widgets/motion/app_fade_in.dart';
 import 'package:rosivia/core/widgets/motion/pressable_scale.dart';
 import 'package:rosivia/l10n/app_localizations.dart';
@@ -12,6 +14,7 @@ import '../../../auth/provider/auth_provider.dart';
 import '../../../settings/presentation/screens/contact_us_screen.dart';
 import '../../../settings/presentation/screens/help_center_screen.dart';
 import '../../../settings/presentation/screens/settings_screen.dart';
+import '../widgets/home_bottom_nav_bar.dart';
 import 'edit_profile_screen.dart';
 import 'my_beauty_profile_screen.dart';
 import 'security_screen.dart';
@@ -44,6 +47,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  void _editAvatar() {
+    // The pick → compress → upload-to-Storage flow needs the
+    // image_picker + firebase_storage packages and Storage rules, which
+    // aren't set up yet. Wired to a real handler once those land.
+    SnackbarService.info(context, AppLocalizations.of(context)!.avatarUploadSoon);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -60,10 +70,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
             maxWidth: 720,
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.all(20.w),
+              padding: EdgeInsets.fromLTRB(
+                20.w,
+                20.w,
+                20.w,
+                HomeBottomNavBar.bottomInset(context),
+              ),
               children: [
                 AppFadeIn(
-                  child: _ProfileHeader(userData: _userData, loading: _loading),
+                  child: _ProfileHeader(
+                    userData: _userData,
+                    loading: _loading,
+                    onEditAvatar: _editAvatar,
+                  ),
                 ),
                 SizedBox(height: 24.h),
 
@@ -205,8 +224,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 class _ProfileHeader extends StatelessWidget {
   final UserModel? userData;
   final bool loading;
+  final VoidCallback onEditAvatar;
 
-  const _ProfileHeader({required this.userData, required this.loading});
+  const _ProfileHeader({
+    required this.userData,
+    required this.loading,
+    required this.onEditAvatar,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -217,9 +241,6 @@ class _ProfileHeader extends StatelessWidget {
     final name = userData?.fullName.isNotEmpty == true
         ? userData!.fullName
         : lang.rosivaUserFallback;
-    final email = userData?.email ?? '';
-    final photoUrl = userData?.photoUrl;
-    final hasPhoto = photoUrl != null && photoUrl.isNotEmpty;
     final createdAt = userData?.createdAt;
 
     return Container(
@@ -231,17 +252,10 @@ class _ProfileHeader extends StatelessWidget {
       ),
       child: Column(
         children: [
-          CircleAvatar(
-            radius: 38.r,
-            backgroundColor: colorScheme.primary.withValues(alpha: 0.10),
-            backgroundImage: hasPhoto ? NetworkImage(photoUrl) : null,
-            child: hasPhoto
-                ? null
-                : Icon(
-                    Icons.person_rounded,
-                    size: 40.sp,
-                    color: colorScheme.primary,
-                  ),
+          ProfileAvatar(
+            avatarUrl: userData?.avatarUrl,
+            radius: 40.r,
+            onEdit: onEditAvatar,
           ),
           SizedBox(height: 16.h),
           Text(
@@ -249,14 +263,6 @@ class _ProfileHeader extends StatelessWidget {
             style: theme.textTheme.titleMedium,
             textAlign: TextAlign.center,
           ),
-          if (email.isNotEmpty) ...[
-            SizedBox(height: 4.h),
-            Text(
-              email,
-              style: theme.textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
-          ],
           if (createdAt != null) ...[
             SizedBox(height: 6.h),
             Text(
@@ -266,6 +272,104 @@ class _ProfileHeader extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+/// Circular avatar with a soft brand ring and a tap-to-change edit
+/// badge. Shows the user's own uploaded photo when present, otherwise
+/// the bundled model portrait — never a provider (Google/Apple) photo.
+class ProfileAvatar extends StatelessWidget {
+  final String? avatarUrl;
+  final double radius;
+  final VoidCallback? onEdit;
+  final bool busy;
+
+  const ProfileAvatar({
+    super.key,
+    required this.avatarUrl,
+    required this.radius,
+    this.onEdit,
+    this.busy = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final uploaded = avatarUrl != null && avatarUrl!.trim().isNotEmpty;
+
+    final inner = ClipOval(
+      child: SizedBox(
+        width: radius * 2,
+        height: radius * 2,
+        child: busy
+            ? ColoredBox(
+                color: colorScheme.primary.withValues(alpha: 0.08),
+                child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+              )
+            : uploaded
+                ? Image.network(
+                    avatarUrl!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, error, stack) => const _AssetAvatar(),
+                    loadingBuilder: (context, child, progress) =>
+                        progress == null ? child : const _AssetAvatar(),
+                  )
+                : const _AssetAvatar(),
+      ),
+    );
+
+    return GestureDetector(
+      onTap: busy ? null : onEdit,
+      behavior: HitTestBehavior.opaque,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: colorScheme.primary.withValues(alpha: 0.35),
+                width: 2,
+              ),
+            ),
+            child: inner,
+          ),
+          if (onEdit != null)
+            PositionedDirectional(
+              end: 0,
+              bottom: 0,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Theme.of(context).cardColor, width: 2),
+                ),
+                child: const Icon(Icons.camera_alt_rounded,
+                    size: 14, color: Colors.white),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AssetAvatar extends StatelessWidget {
+  const _AssetAvatar();
+
+  @override
+  Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+    return Image.asset(
+      AppImages.profileAvatar,
+      fit: BoxFit.cover,
+      errorBuilder: (_, error, stack) => ColoredBox(
+        color: primary.withValues(alpha: 0.10),
+        child: Icon(Icons.person_rounded, color: primary, size: 34.sp),
       ),
     );
   }

@@ -1,0 +1,16 @@
+{
+  "name": "rosiva-fx-rates",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily FX-rate refresh for ROSIVA's approximate price conversion. Fetches open.er-api.com (free, keyless, once-daily data) and writes rateToUsd + rateUpdatedAt onto the Firestore `currencies` docs. Runs from GitHub Actions (see .github/workflows/fx-rates.yml), NOT Firebase Functions.",
+  "scripts": {
+    "update": "node update-rates.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.6.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

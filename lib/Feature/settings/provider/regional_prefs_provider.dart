@@ -73,11 +73,38 @@ class RegionalPrefsProvider extends ChangeNotifier {
   ];
 
   String? _countryCode;
+  String? _deviceCountry;
   List<CountryConfig> _remoteCountries = const [];
   Map<String, CurrencyConfig> _currencies = const {};
 
-  /// Null means "auto based on location" (the existing default).
+  /// The user's EXPLICIT choice. Null means "auto" — country offers and
+  /// the affiliate checkout URL only ever use this (never the inferred
+  /// value), so a device-region guess can never change what a shopper
+  /// is charged.
   String? get countryCode => _countryCode;
+
+  /// The country used for CURRENCY DISPLAY only: the explicit choice,
+  /// else the device's OS region when it maps to a supported country,
+  /// else null (prices then show in their original currency).
+  String? get effectiveCountryCode => _countryCode ?? _deviceCountry;
+
+  /// True when the effective country came from the device region rather
+  /// than an explicit pick — for the Settings "Auto" row.
+  bool get countryIsInferred => _countryCode == null && _deviceCountry != null;
+
+  /// The device OS region, if it maps to one of the supported
+  /// countries. Read once at [load]; safe (no permission, offline).
+  static String? _inferDeviceCountry() {
+    try {
+      for (final loc in WidgetsBinding.instance.platformDispatcher.locales) {
+        final cc = loc.countryCode?.toUpperCase();
+        if (cc != null && kCountryToCurrency.containsKey(cc)) return cc;
+      }
+    } catch (_) {
+      // headless / test context — no binding
+    }
+    return null;
+  }
 
   List<String> get resolvedCountryCodes => _remoteCountries.isNotEmpty
       ? _remoteCountries.map((c) => c.code).toList()
@@ -87,13 +114,14 @@ class RegionalPrefsProvider extends ChangeNotifier {
   List<CountryConfig> get countries => _remoteCountries;
 
   String? get currencyCode {
-    if (_countryCode == null) return null;
+    final code = effectiveCountryCode;
+    if (code == null) return null;
     for (final c in _remoteCountries) {
-      if (c.code == _countryCode && c.currencyCode.isNotEmpty) {
+      if (c.code == code && c.currencyCode.isNotEmpty) {
         return c.currencyCode;
       }
     }
-    return kCountryToCurrency[_countryCode];
+    return kCountryToCurrency[code];
   }
 
   /// Ready-to-use formatter/converter backed by the loaded `currencies`
@@ -113,6 +141,7 @@ class RegionalPrefsProvider extends ChangeNotifier {
   Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
     _countryCode = prefs.getString(_countryKey);
+    _deviceCountry = _inferDeviceCountry();
     notifyListeners();
     await _loadConfig();
   }

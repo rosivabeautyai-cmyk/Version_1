@@ -11,6 +11,7 @@ import '../../../favorites/provider/favorites_provider.dart';
 import '../../../products/data/models/product_model.dart';
 import '../../../products/presentation/screens/product_details_screen.dart';
 import '../../../products/presentation/widgets/product_grid.dart';
+import '../widgets/home_bottom_nav_bar.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
@@ -47,6 +48,7 @@ class FavoritesScreen extends StatelessWidget {
                       emptyIcon: Icons.favorite_border_rounded,
                       emptyTitle: lang.noFavoritesYetTitle,
                       emptyDescription: lang.noFavoritesYetDesc,
+                      bottomPadding: HomeBottomNavBar.bottomInset(context),
                       onRetry: favorites.refresh,
                       onProductTap: (ProductModel product) {
                         pushTo(

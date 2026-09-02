@@ -524,6 +524,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get priceAvailabilityDisclaimer => 'Prices and availability on third-party sites may vary. As an affiliate, ROSIVA may earn a small commission on qualifying purchases.';
 
   @override
+  String priceApproxCaption(String currency) {
+    return 'Approximate — the store charges in $currency; your bank\'s rate and any fees may differ.';
+  }
+
+  @override
   String get patchTestDisclaimer => 'This product contains active ingredients. We recommend a patch test before full application. Consult a dermatologist if you have specific skin concerns.';
 
   @override
@@ -654,6 +659,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountSettings => 'Account Settings';
+
+  @override
+  String get avatarUploadSoon => 'Changing your photo will be available shortly.';
 
   @override
   String get editProfile => 'Edit Profile';
