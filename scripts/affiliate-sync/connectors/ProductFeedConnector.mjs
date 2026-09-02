@@ -37,6 +37,7 @@ import { ProductConnector } from "./ProductConnector.mjs";
 import { openFeedStream, buildFeedAuthHeaders } from "./feedStream.mjs";
 import { SyncError, ERROR_CODES, toSafeError } from "../lib/errors.mjs";
 import { FEED_FORMATS } from "../lib/constants.mjs";
+import { detectColumns } from "../lib/detectColumns.mjs";
 
 const DEFAULT_FIELD_MAP = {
   externalProductId: "id",
@@ -106,9 +107,12 @@ export class ProductFeedConnector extends ProductConnector {
 
   async testConnection() {
     try {
+      // RAW rows (per the ProductConnector contract) so the orchestrator
+      // normalizes exactly once and the Admin UI can read the real feed
+      // column names for auto-mapping.
       const sample = [];
       let count = 0;
-      for await (const page of this.fetchProductPages({ sampleLimit: 5 })) {
+      for await (const page of this.fetchProductPages({ sampleLimit: 5, raw: true })) {
         for (const rec of page) {
           count += 1;
           if (sample.length < 5) sample.push(rec);
@@ -120,6 +124,7 @@ export class ProductFeedConnector extends ProductConnector {
           ok: false,
           productsDetected: 0,
           sample: [],
+          detectedColumns: [],
           error: {
             code: ERROR_CODES.MALFORMED_PRODUCT,
             userMessage: "Connected to the feed, but no products could be read from it.",
@@ -127,9 +132,20 @@ export class ProductFeedConnector extends ProductConnector {
           },
         };
       }
-      return { ok: true, productsDetected: null, sample };
+      return {
+        ok: true,
+        productsDetected: null,
+        sample,
+        detectedColumns: detectColumns(sample),
+      };
     } catch (err) {
-      return { ok: false, productsDetected: null, sample: [], error: toSafeError(err) };
+      return {
+        ok: false,
+        productsDetected: null,
+        sample: [],
+        detectedColumns: [],
+        error: toSafeError(err),
+      };
     }
   }
 
@@ -173,7 +189,7 @@ export class ProductFeedConnector extends ProductConnector {
     let page = [];
     let total = 0;
     for await (const record of parser) {
-      page.push(this.normalizeProduct(record));
+      page.push(opts.raw ? record : this.normalizeProduct(record));
       total += 1;
       if (page.length >= this.pageSize) {
         yield page;
@@ -237,7 +253,7 @@ export class ProductFeedConnector extends ProductConnector {
     let page = [];
     let total = 0;
     for (const record of items) {
-      page.push(this.normalizeProduct(record));
+      page.push(opts.raw ? record : this.normalizeProduct(record));
       total += 1;
       if (page.length >= this.pageSize) {
         yield page;

@@ -128,6 +128,12 @@ export class AwinProductFeedConnector extends ProductFeedConnector {
   }
 
   async *fetchProductPages(opts = {}) {
+    // Raw mode (Test Connection column detection) yields untouched feed
+    // rows — the classifier reads normalized fields, so it can't run here.
+    if (opts.raw) {
+      yield* super.fetchProductPages(opts);
+      return;
+    }
     for await (const page of super.fetchProductPages(opts)) {
       const processed = await this._classifyPage(page);
       if (processed.length) yield processed;

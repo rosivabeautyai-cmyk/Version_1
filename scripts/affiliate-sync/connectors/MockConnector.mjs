@@ -16,6 +16,7 @@
 
 import { ProductConnector } from "./ProductConnector.mjs";
 import { toSafeError } from "../lib/errors.mjs";
+import { detectColumns } from "../lib/detectColumns.mjs";
 
 // A deliberately mixed feed, like a real beauty affiliate feed:
 //  - 6 clean women's products that resolve to skincare/makeup/perfume
@@ -89,13 +90,15 @@ export class MockConnector extends ProductConnector {
   async testConnection() {
     try {
       const rows = this._dataset();
+      const sample = rows.slice(0, 5).map((r) => this._toRecord(r));
       return {
         ok: true,
         productsDetected: rows.length,
-        sample: rows.slice(0, 5).map((r) => this._toRecord(r)),
+        sample,
+        detectedColumns: detectColumns(sample),
       };
     } catch (err) {
-      return { ok: false, productsDetected: null, sample: [], error: toSafeError(err) };
+      return { ok: false, productsDetected: null, sample: [], detectedColumns: [], error: toSafeError(err) };
     }
   }
 

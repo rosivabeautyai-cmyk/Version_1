@@ -31,6 +31,7 @@ import { getConnector } from "./connectors/index.mjs";
  *   productsDetected: number|null,
  *   sampleCount: number,
  *   sample: object[],          // normalized preview (safe: name/price/url/category)
+ *   detectedColumns: string[], // raw source column/field names (for the mapping UI)
  *   validation: { validated: number, invalid: {code:string,detail:string}[] },
  *   error?: { code:string, userMessage:string, technical:string }
  * }>}
@@ -48,6 +49,7 @@ export async function testAffiliateStoreConnection({ db, storeId, storeOverride,
         productsDetected: null,
         sampleCount: 0,
         sample: [],
+        detectedColumns: [],
         validation: { validated: 0, invalid: [] },
         error: { code: ERROR_CODES.INVALID_CONFIG, userMessage: "Store not found.", technical: `affiliateStores/${storeId} missing` },
       };
@@ -61,6 +63,7 @@ export async function testAffiliateStoreConnection({ db, storeId, storeOverride,
     productsDetected: null,
     sampleCount: 0,
     sample: [],
+    detectedColumns: [],
     validation: { validated: 0, invalid: [] },
   };
 
@@ -121,6 +124,9 @@ export async function testAffiliateStoreConnection({ db, storeId, storeOverride,
     productsDetected: res.productsDetected ?? null,
     sampleCount: preview.length,
     sample: preview,
+    detectedColumns: Array.isArray(res.detectedColumns)
+      ? res.detectedColumns.slice(0, 100)
+      : [],
     validation: { validated: rawSample.length, invalid },
     error: res.error || (preview.length === 0
       ? { code: ERROR_CODES.MALFORMED_PRODUCT, userMessage: "Connected, but no valid products were found in the sample.", technical: "0 valid sample products" }

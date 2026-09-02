@@ -163,9 +163,9 @@ ThemeData buildAppTheme(Brightness brightness) {
     // APP BAR
     // ==============================
     appBarTheme: AppBarTheme(
-      backgroundColor: surface,
-      foregroundColor: textColor,
+      backgroundColor: Colors.transparent,
       elevation: 0,
+      foregroundColor: textColor,
       centerTitle: true,
       iconTheme: IconThemeData(color: AppColors.primary),
     ),

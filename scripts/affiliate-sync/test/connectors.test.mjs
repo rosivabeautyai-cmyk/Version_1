@@ -59,6 +59,14 @@ test("ProductFeedConnector: parses a CSV feed with a field map", async () => {
     const testRes = await conn.testConnection();
     assert.equal(testRes.ok, true);
     assert.ok(testRes.sample.length > 0 && testRes.sample.length <= 5);
+    // sample rows are RAW feed records (not pre-normalized) so the
+    // orchestrator normalizes exactly once.
+    assert.equal(testRes.sample[0].sku, "A1");
+    assert.equal(testRes.sample[0].title, "Vitamin C Serum");
+    // detectedColumns exposes the real CSV headers for the mapping UI.
+    assert.deepEqual(testRes.detectedColumns, [
+      "sku", "title", "brand", "cat", "price", "rrp", "link", "deep", "stock",
+    ]);
   } finally {
     srv.close();
   }

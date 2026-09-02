@@ -31,6 +31,7 @@
 
 import { ProductConnector } from "./ProductConnector.mjs";
 import { SyncError, ERROR_CODES, toSafeError } from "../lib/errors.mjs";
+import { detectColumns } from "../lib/detectColumns.mjs";
 
 function getPath(obj, path) {
   if (!path) return undefined;
@@ -170,10 +171,14 @@ export class RestApiProductConnector extends ProductConnector {
       const items = getPath(body, this.itemsPath);
       const arr = Array.isArray(items) ? items : Array.isArray(body) ? body : [];
       const total = getPath(body, this.pag.totalPath);
+      // RAW API items (not normalized) so the orchestrator normalizes
+      // once and the Admin UI sees the real field names for auto-mapping.
+      const sample = arr.slice(0, 5);
       return {
         ok: arr.length > 0,
         productsDetected: Number.isFinite(total) ? total : arr.length || null,
-        sample: arr.slice(0, 5).map((r) => this.normalizeProduct(r)),
+        sample,
+        detectedColumns: detectColumns(sample),
         error:
           arr.length === 0
             ? {
@@ -184,7 +189,7 @@ export class RestApiProductConnector extends ProductConnector {
             : undefined,
       };
     } catch (err) {
-      return { ok: false, productsDetected: null, sample: [], error: toSafeError(err) };
+      return { ok: false, productsDetected: null, sample: [], detectedColumns: [], error: toSafeError(err) };
     }
   }
 
