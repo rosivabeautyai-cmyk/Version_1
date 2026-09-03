@@ -5,6 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter/services.dart' show PlatformException;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -203,6 +204,18 @@ class AuthService {
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
+      // TEMP diagnostic: a missing ID token is the usual symptom of a
+      // build without `default_web_client_id` (google-services resource
+      // not applied). Surface it instead of failing opaquely later.
+      if (googleAuth.idToken == null) {
+        throw AuthFailure(
+          'google-no-id-token',
+          'Google sign-in returned no ID token '
+              '(accessToken=${googleAuth.accessToken == null ? "null" : "present"}). '
+              'Check default_web_client_id / SHA-1 registration.',
+        );
+      }
+
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
@@ -213,11 +226,27 @@ class AuthService {
       throw _mapException(e);
     } on AuthFailure {
       rethrow;
-    } catch (_) {
-      throw const AuthFailure(
-        'google-sign-in-failed',
-        'Google sign-in failed. Please try again.',
+    } on PlatformException catch (e) {
+      // Native Google Sign-In failure. `sign_in_canceled` = user backed
+      // out. Everything else: surface the REAL code + message TEMPORARILY
+      // (e.g. "ApiException: 10" == DEVELOPER_ERROR == SHA-1 / OAuth
+      // client / package-name mismatch for this signed build). Revert to
+      // a friendly string once sign-in is verified on a Play build.
+      if (e.code == 'sign_in_canceled' || e.code == 'canceled') {
+        throw const AuthFailure(
+          'sign-in-cancelled',
+          'Google sign-in was cancelled.',
+        );
+      }
+      throw AuthFailure(
+        'gsi:${e.code}',
+        'Google sign-in failed — code=${e.code} · '
+            'message=${e.message ?? "(none)"} · '
+            'details=${e.details ?? "(none)"}',
       );
+    } catch (e) {
+      // TEMP diagnostic: include the raw error instead of swallowing it.
+      throw AuthFailure('google-sign-in-failed', 'Google sign-in failed: $e');
     }
   }
 

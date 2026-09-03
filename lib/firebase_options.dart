@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDRO5OnSCIqeIRt-hyKANQwz9I0plu8TMQ',
-    appId: '1:1075173890462:android:65f766344257a2144a9e8f',
+    appId: '1:1075173890462:android:005d077a3c0737144a9e8f',
     messagingSenderId: '1075173890462',
     projectId: 'rosiva-24fa4',
     storageBucket: 'rosiva-24fa4.firebasestorage.app',

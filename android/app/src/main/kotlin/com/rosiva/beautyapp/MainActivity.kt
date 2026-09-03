@@ -1,4 +1,4 @@
-package com.example.rosivia
+package com.rosiva.beautyapp
 
 import io.flutter.embedding.android.FlutterActivity
 
